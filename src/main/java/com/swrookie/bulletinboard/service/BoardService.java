@@ -139,7 +139,7 @@ public class BoardService
 		// Give page numbers
 		for (int val = curPageNum, i = 0; val <= blockLastPageNum; val++, i++)
 		{
-			System.out.println("Page: " + val + "\n");
+			System.out.println("Page: " + val);
 			pageList[i] = val;
 			//pageList.add(val);
 		}
