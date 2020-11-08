@@ -1,6 +1,7 @@
 package com.swrookie.bulletinboard.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,11 +24,19 @@ public class BoardController
 	}
 	
 	// Transfer to home page after logging in
+//	@GetMapping("/go_home_post_read")
+//	public String readPost(Model model, @RequestParam(value= "page", defaultValue = "1") int pageNum)
+//	{
+//		model.addAttribute("boardList", boardService.readPost(pageNum));
+//		model.addAttribute("pageList", boardService.getPageList(pageNum));
+//		
+//		return "home_post_read";
+//	}
+	
 	@GetMapping("/go_home_post_read")
-	public String readPost(Model model, @RequestParam(value= "page", defaultValue = "1") int pageNum)
+	public String readPost(Model model, Pageable pageable)
 	{
-		model.addAttribute("boardList", boardService.readPost(pageNum));
-		model.addAttribute("pageList", boardService.getPageList(pageNum));
+		model.addAttribute("boardList", boardService.readPost(pageable));
 		
 		return "home_post_read";
 	}
@@ -41,11 +50,14 @@ public class BoardController
 	
 	// Create post by clicking button and return to home page
 	@PostMapping("/go_home_post_read")
-	public String createPost(BoardDTO boardDto, Model model)
+	public String createPost(BoardDTO boardDto, Model model, Pageable pageable)
 	{
 		boardService.createPost(boardDto);
-		model.addAttribute("boardList", boardService.readPost(1));
-		model.addAttribute("pageList", boardService.getPageList(1));
+//		model.addAttribute("boardList", boardService.readPost(1));
+//		model.addAttribute("pageList", boardService.getPageList(1));
+		model.addAttribute("boardList", boardService.readPost(pageable));
+		model.addAttribute("startPage", BoardService.getStartPage());
+		model.addAttribute("endPage", BoardService.getEndPage());
 		
 		return "home_post_read";
 	}
@@ -73,7 +85,7 @@ public class BoardController
 	public String updatePost(BoardDTO boardDto, Model model)
 	{
 		boardService.createPost(boardDto);
-		model.addAttribute("boardList", boardService.readPost(1));
+//		model.addAttribute("boardList", boardService.readPost(1));
 		
 		return "home_post_read";
 	}
@@ -83,7 +95,7 @@ public class BoardController
 	public String delete(@PathVariable("boardNo")Long boardNo, Model model)
 	{
 		boardService.deletePost(boardNo);
-		model.addAttribute("boardList", boardService.readPost(1));
+//		model.addAttribute("boardList", boardService.readPost(1));
 		
 		return "home_post_read";
 	}
