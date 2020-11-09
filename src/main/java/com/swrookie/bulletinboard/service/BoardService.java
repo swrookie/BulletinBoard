@@ -48,7 +48,7 @@ public class BoardService
 	}
 	
 	@Transactional
-	public List<BoardDTO> readPost(@PageableDefault (size = 5) Pageable pageable)
+	public List<BoardDTO> readPost(Pageable pageable)
 	{
 //		Page<Board> page = boardRepository.findAll(PageRequest.of(pageNum - 1,
 //																  PAGE_POST_COUNT,
