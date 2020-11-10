@@ -1,7 +1,8 @@
 package com.swrookie.bulletinboard.service;
 
-import javax.transaction.Transactional; 
+import javax.transaction.Transactional;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.swrookie.bulletinboard.entity.Member;
@@ -11,24 +12,28 @@ import com.swrookie.bulletinboard.repository.MemberRepository;
 public class MemberService 
 {
 	private MemberRepository memberRepository;
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	public MemberService(MemberRepository memberRepository)
 	{
 		this.memberRepository = memberRepository;
 	}
 	
-	@Transactional
-	public void createMember(Member newMember)
+	public Member findByUserEmail(String email)
 	{
-//		String firstName = newMember.getFirstName();	
-//		String lastName = newMember.getLastName();		
-//		String birthDate = newMember.getBirthDate();	
-//		String gender = newMember.getGender();
-//		String email = newMember.getEmail();
-//		String password = newMember.getPassword();
-//		
-//		memberRepository.save(new Member(firstName, lastName, birthDate, gender,
-//				  			  email, password, Timestamp.valueOf(LocalDateTime.now())));
-		memberRepository.save(newMember);
+		return memberRepository.findByEmail(email);
+	}
+	
+	public Member findByUserName(String username)
+	{
+		return memberRepository.findByUsername(username);
+	}
+	
+	@Transactional
+	public void createMember(Member member)
+	{
+		member.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));
+		member.setPasswordConfirm(bCryptPasswordEncoder.encode(member.getPasswordConfirm()));
+		memberRepository.save(member);
 	}
 }

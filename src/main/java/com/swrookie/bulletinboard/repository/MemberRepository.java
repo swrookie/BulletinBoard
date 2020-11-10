@@ -6,4 +6,6 @@ import com.swrookie.bulletinboard.entity.Member;
 
 public interface MemberRepository extends CrudRepository<Member, Long>
 {
+	Member findByEmail(String email);
+	Member findByUsername(String username);
 }
