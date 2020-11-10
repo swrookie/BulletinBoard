@@ -46,7 +46,7 @@
         </div>
         <div class="container-login100-form-btn m-t-17">
             <button class="btn btn-primary" type="button"
-                onclick="location.href='${pageContext.request.contextPath}/go_home_post_update/${boardDto.boardNo}'">
+                onclick="location.href='${pageContext.request.contextPath}/go_update/${boardDto.boardNo}'">
                 글 수정
             </button>
             <button class="btn btn-primary pull-right" type="button"

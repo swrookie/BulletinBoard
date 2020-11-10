@@ -75,7 +75,7 @@
 
 					<div class="container-login100-form-btn m-t-17">
 						<button class="login100-form-btn" type="button"
-							onclick="location.href='${pageContext.request.contextPath}/go_home_post_read'">
+							onclick="location.href='${pageContext.request.contextPath}/go_home'">
 							Login
 						</button>
 					</div>

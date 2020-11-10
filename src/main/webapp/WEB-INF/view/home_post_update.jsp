@@ -20,7 +20,7 @@
 
     <div class="container">
         <div class="row">
-            <form method="POST" action="${pageContext.request.contextPath}/post_update_page">
+            <form method="POST" action="${pageContext.request.contextPath}/do_update">
                 <table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">
                     <thead>
                         <tr>

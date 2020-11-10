@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%> <%@ taglib prefix="c"
-uri="http://java.sun.com/jsp/jstl/core"%> <%@ taglib prefix="fmt"
-uri="http://java.sun.com/jsp/jstl/fmt"%>
+pageEncoding="UTF-8"%> 
+<%@ taglib prefix="c"uri="http://java.sun.com/jsp/jstl/core"%> 
+<%@ taglib prefix="fmt"uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!DOCTYPE html>
 <html>
@@ -103,7 +103,7 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
             <tr>
               <td>${post.boardNo}</td>
               <td>
-                <a href="/post_detail_page/${post.boardNo}"> ${post.title} </a>
+                <a href="/go_detail/${post.boardNo}"> ${post.title} </a>
               </td>
               <td>${post.author}</td>
               <td>${post.createDate}</td>
@@ -118,35 +118,68 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         <li class="page-item enabled">
           <a class="page-link" href="?page=0">First</a>
         </li>
-        <li class="page-item enabled">
-          <a
-            class="page-link"
-            href="#"
-            tabindex="-1"
-            aria-disabled="true"
-            aria-label="Previous"
-          >
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-          <%-- <c:forEach var="pageNum" items="${pageList}"> --%>
+        <c:choose>
+          <c:when test="${currentPage != 0}">
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="?page=${currentPage - 1}"
+              tabindex="-1"
+              aria-disabled="true"
+              aria-label="Previous"
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+        </c:when>
+        <c:otherwise>
+          <li class="page-item disabled">
+            <a
+              class="page-link"
+              href="?page=${currentPage - 1}"
+              tabindex="-1"
+              aria-disabled="true"
+              aria-label="Previous"
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+        </c:otherwise>
+        </c:choose>
           <c:forEach var="pageNum" begin="${startPage}" end="${endPage}">
-            <%-- <c:if test="${pageNum gt 0}"> --%>
-              <li class="page-item">
-                <a class="page-link" name="page" href="?page=${pageNum}"
-                  >${pageNum}</a
-                >
-              </li>
-            <%-- </c:if> --%>
+            <c:choose>
+              <c:when test="${currentPage eq pageNum}">
+                <li class="page-item active">
+                  <a class="page-link" name="page" href="?page=${pageNum}">
+                    ${pageNum + 1}
+                  </a>
+              </c:when>
+              <c:otherwise>
+                <li class="page-item">
+                  <a class="page-link" name="page" href="?page=${pageNum}">
+                    ${pageNum + 1}
+                  </a>
+                </li>
+              </c:otherwise>
+            </c:choose>
           </c:forEach>
         </li>
-
+        <c:choose>
+          <c:when test="${currentPage lt lastPage - 1}">
+            <li class="page-item">
+              <a class="page-link" href="?page=${currentPage + 1}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </c:when>
+          <c:otherwise>
+            <li class="page-item disabled">
+              <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </c:otherwise>
+        </c:choose>
         <li class="page-item">
-          <a class="page-link" href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">Last</a>
+          <a class="page-link" href="?page=${lastPage - 1}">Last</a>
         </li>
       </ul>
     </nav>
@@ -155,7 +188,7 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
         <button
           class="btn btn-primary"
           type="button"
-          onclick="location.href='${pageContext.request.contextPath}/go_home_post_create'"
+          onclick="location.href='${pageContext.request.contextPath}/go_create'"
         >
           글쓰기
         </button>

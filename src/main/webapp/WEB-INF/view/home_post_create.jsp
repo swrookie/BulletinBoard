@@ -23,7 +23,7 @@
 
     <div class="container">
         <div class="row">
-            <form method="POST" action="${pageContext.request.contextPath}/go_home_post_read">
+            <form method="POST" action="${pageContext.request.contextPath}/go_home">
                 <table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">
                     <thead>
                         <tr>
