@@ -1,94 +1,90 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Registration</title>
+    <!-- Bootstrap CSS & JS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+      integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+      crossorigin="anonymous"
+    ></script>
+  </head>
 
-    <!-- Font Icon -->
-    <link rel="stylesheet"
-        href="../resources/registrationResources/fonts/material-icon/css/material-design-iconic-font.min.css">
-    <link rel="stylesheet" href="../resources/registrationResources/vendor/jquery-ui/jquery-ui.min.css">
-
-    <!-- Main css -->
-    <link rel="stylesheet" href="../resources/registrationResources/css/style.css">
-</head>
-
-<body>
-
-    <div class="main">
-
-        <section class="signup">
-            <!-- <img src="images/signup-bg.jpg" alt=""> -->
-            <div class="container">
-                <div class="signup-content">
-                    <form method="POST" action="${pageContext.request.contextPath}/registration_page" id="signup-form"
-                        class="signup-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="first_name">First name</label>
-                                <input type="text" class="form-input" name="firstName" id="first_name" />
-                            </div>
-                            <div class="form-group">
-                                <label for="last_name">Last name</label>
-                                <input type="text" class="form-input" name="lastName" id="last_name" />
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group form-icon">
-                                <label for="birth_date">Birth date</label>
-                                <input type="text" class="form-input" name="birthDate" id="birth_date"
-                                    placeholder="MM-DD-YYYY" />
-                            </div>
-                            <div class="form-radio">
-                                <label for="gender">Gender</label>
-                                <div class="form-flex">
-                                    <input type="radio" name="gender" value="male" id="male" checked="checked" />
-                                    <label for="male">Male</label>
-
-                                    <input type="radio" name="gender" value="female" id="female" />
-                                    <label for="female">Female</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone_number">Phone number</label>
-                            <input type="number" class="form-input" name="phone_number" id="phone_number" />
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-input" name="email" id="email" />
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-input" name="password" id="password" />
-                            </div>
-                            <div class="form-group">
-                                <label for="re_password">Repeat your password</label>
-                                <input type="password" class="form-input" name="re_password" id="re_password" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" name="submit" id="submit" class="form-submit" value="Submit" />
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-    </div>
-
-    <!-- JS -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/jquery-ui/jquery-ui.min.js"></script>
-    <script src="vendor/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="vendor/jquery-validation/dist/additional-methods.min.js"></script>
-    <script src="js/main.js"></script>
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
-
+  <body>
+    <form
+      method="POST"
+      action="${pageContext.request.contextPath}/registration_page"
+    >
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputEmail4">Email</label>
+          <input type="email" class="form-control" id="inputEmail4" />
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputPassword4">Password</label>
+          <input type="password" class="form-control" id="inputPassword4" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="inputAddress">Address</label>
+        <input
+          type="text"
+          class="form-control"
+          id="inputAddress"
+          placeholder="1234 Main St"
+        />
+      </div>
+      <div class="form-group">
+        <label for="inputAddress2">Address 2</label>
+        <input
+          type="text"
+          class="form-control"
+          id="inputAddress2"
+          placeholder="Apartment, studio, or floor"
+        />
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputCity">City</label>
+          <input type="text" class="form-control" id="inputCity" />
+        </div>
+        <div class="form-group col-md-4">
+          <label for="inputState">State</label>
+          <select id="inputState" class="form-control">
+            <option selected>Choose...</option>
+            <option>...</option>
+          </select>
+        </div>
+        <div class="form-group col-md-2">
+          <label for="inputZip">Zip</label>
+          <input type="text" class="form-control" id="inputZip" />
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="gridCheck" />
+          <label class="form-check-label" for="gridCheck"> Check me out </label>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Sign in</button>
+    </form>
+  </body>
 </html>

@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,39 +30,54 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	@Override
 	protected void configure(HttpSecurity http) throws Exception
 	{
-		http.authorizeRequests().
-			 antMatchers("/css/**", "/js/**", "/images/**", "/resources/**", "/h2-console/**",
-					 	 "/webjars/**", "/signup", "/home", "/").
-			 permitAll().
-			 anyRequest().authenticated().
-			 and().
-			 headers().
-			 frameOptions().disable().
-			 and().
-			 csrf().ignoringAntMatchers("/h2-console/**").
-			 and().
-			 formLogin().
-			 loginPage("/login").
-			 loginProcessingUrl("/sign-in").
-			 defaultSuccessUrl("/welcome").
-			 failureUrl("/login?error").
-			 usernameParameter("email").
-			 passwordParameter("passwd").
-			 permitAll().and().exceptionHandling().accessDeniedHandler(MemberAccessDeniedHandler()).
-			 and().
-			 rememberMe().
-			 key("jpub").
-			 rememberMeParameter("remember-me").
-			 rememberMeCookieName("jpubcookie").
-			 tokenValiditySeconds(86400).
-			 tokenRepository(rememberMeTokenService()).userDetailsService(myUserService()).
-			 and().
-			 logout().
-			 invalidateHttpSession(true).
-			 clearAuthentication(true).
-			 logoutRequestMatcher(new AntPathRequestMatcher("/logout")).
-			 logoutSuccessUrl("/login?logout").
-			 permitAll();
+		http.csrf().disable().authorizeRequests()
+			.antMatchers("/go_registration").permitAll()
+			.anyRequest().hasRole("ADMIN")
+				.and()
+			.formLogin()
+			.loginPage("/login")
+			.permitAll();
+//			.loginProcessingUrl("/login")
+//			.defaultSuccessUrl("home_post_read");
+		
+		
+//		http.authorizeRequests().
+//			 anyRequest().authenticated().
+//			 and().
+//			 headers().
+//			 frameOptions().disable().
+//			 and().
+//			 csrf().ignoringAntMatchers("/h2-console/**").
+//			 and().
+//			 formLogin().
+//			 loginPage("/login").
+//			 loginProcessingUrl("/registration").
+//			 defaultSuccessUrl("/home_post_read").
+//			 failureUrl("/login?error").
+//			 usernameParameter("email").
+//			 passwordParameter("passwd").
+//			 permitAll().and().exceptionHandling().accessDeniedHandler(MemberAccessDeniedHandler()).
+//			 and().
+//			 logout().
+//			 invalidateHttpSession(true).
+//			 clearAuthentication(true).
+//			 logoutRequestMatcher(new AntPathRequestMatcher("/logout")).
+//			 logoutSuccessUrl("/login?logout").
+//			 permitAll().
+//			 and().
+//			 rememberMe().
+//			 key("jpub").
+//			 rememberMeParameter("remember-me").
+//			 rememberMeCookieName("jpubcookie").
+//			 tokenValiditySeconds(86400).
+//			 tokenRepository(rememberMeTokenService()).userDetailsService(myUserService());
+	}
+	
+	@Override
+	public void configure(WebSecurity web) throws Exception
+	{
+		web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/resources/**", 
+								   "/h2-console/**", "/webjars/**", "/signup", "/home", "/");
 	}
 	
 	@Override

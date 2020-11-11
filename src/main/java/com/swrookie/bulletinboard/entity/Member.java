@@ -1,8 +1,11 @@
 package com.swrookie.bulletinboard.entity;
 
-import java.sql.Timestamp; 
+import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,11 +32,14 @@ public class Member
 	private String lastName;
 	private String gender;
 	private String birthDate;
+	@Column(name = "role_name")
+	@Enumerated(EnumType.STRING)
 	private MemberRole role;
 	private String username;
-	private String email;
 	private String password;
 	private String passwordConfirm;
+	@Column(unique = true)
+	private String email;
 	@CreationTimestamp
 	private Timestamp createDate;
 	@UpdateTimestamp
@@ -43,20 +49,20 @@ public class Member
 	{
 	}
 	
-	public Member(Long memberNo, String firstName, String lastName, String gender, String birthDate,
-			      String username, String email, String password, String passwordConfirm, MemberRole role,
-			      Timestamp createDate)
-	{
-		this.memberNo = memberNo;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.gender = gender;
-		this.birthDate = birthDate;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.passwordConfirm = passwordConfirm;
-		this.role = role;
-		this.createDate = createDate;
-	}
+//	public Member(Long memberNo, String firstName, String lastName, String gender, String birthDate,
+//			      String username, String email, String password, String passwordConfirm, MemberRole role,
+//			      Timestamp createDate)
+//	{
+//		this.memberNo = memberNo;
+//		this.firstName = firstName;
+//		this.lastName = lastName;
+//		this.gender = gender;
+//		this.birthDate = birthDate;
+//		this.username = username;
+//		this.email = email;
+//		this.password = password;
+//		this.passwordConfirm = passwordConfirm;
+//		this.role = role;
+//		this.createDate = createDate;
+//	}
 }
