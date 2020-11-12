@@ -26,21 +26,21 @@ public class MemberValidator implements Validator
 	{
 		Member member = (Member) target;
 		
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
-		if (member.getUsername().length() < 3 || member.getUsername().length() > 32)
-			errors.rejectValue("username", "Size.userForm.username");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userName", "NotEmpty");
+		if (member.getUserName().length() < 3 || member.getUserName().length() > 32)
+			errors.rejectValue("userName", "Size.userForm.userName");
 		
-		if (memberService.findByUserName(member.getUsername()) != null)
-			errors.rejectValue("username", "Duplicate.userForm.username");
+		if (memberService.findByUserName(member.getUserName()) != null)
+			errors.rejectValue("userName", "Duplicate.userForm.userName");
 		
 		if (memberService.findByUserEmail(member.getEmail()) != null)
 			errors.rejectValue("email", "Duplicate.userForm.email");
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
-		if (member.getPassword().length() < 7 || member.getPassword().length() > 32)
+		if (member.getPassword().length() < 5 || member.getPassword().length() > 32)
 			errors.rejectValue("password", "Size.userForm.password");
 		
-		if (member.getPasswordConfirm().equals(member.getPassword()))
+		if (!member.getPasswordConfirm().equals(member.getPassword()))
 			errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
 	}
 }

@@ -31,14 +31,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	protected void configure(HttpSecurity http) throws Exception
 	{
 		http.csrf().disable().authorizeRequests()
-			.antMatchers("/go_registration").permitAll()
-			.anyRequest().hasRole("ADMIN")
+			.antMatchers("/do_login/go_home/**/").hasRole("MEMBER")
+			.antMatchers("/admin/**/").hasRole("ADMIN")
+			.anyRequest().permitAll()
 				.and()
 			.formLogin()
-			.loginPage("/login")
-			.permitAll();
-//			.loginProcessingUrl("/login")
-//			.defaultSuccessUrl("home_post_read");
+			.loginPage("/")
+			.loginProcessingUrl("/do_login")
+			.usernameParameter("userName")
+			.passwordParameter("password")
+			.defaultSuccessUrl("/go_home")
+			.permitAll()
+				.and()
+			.exceptionHandling().accessDeniedHandler(MemberAccessDeniedHandler())
+				.and()
+			.logout()
+			.invalidateHttpSession(true)
+			.clearAuthentication(true)
+        	.logoutRequestMatcher(new AntPathRequestMatcher("/do_logout"))
+        	.logoutSuccessUrl("/")
+        	.permitAll();
 		
 		
 //		http.authorizeRequests().

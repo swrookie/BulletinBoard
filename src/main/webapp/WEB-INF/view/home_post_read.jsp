@@ -1,7 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%> 
-<%@ taglib prefix="c"uri="http://java.sun.com/jsp/jstl/core"%> 
-<%@ taglib prefix="fmt"uri="http://java.sun.com/jsp/jstl/fmt"%>
+pageEncoding="UTF-8" %> <%@ taglib prefix="c"
+uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
+uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%  
+response.setHeader("cache-control","no-store");   
+response.setHeader("Pragma","no-cache"); 
+response.setDateHeader("Expires",0);  
+%> 
 
 <!DOCTYPE html>
 <html>
@@ -64,14 +69,14 @@ pageEncoding="UTF-8"%>
                 <a class="dropdown-item" href="#">Action</a>
                 <a class="dropdown-item" href="#">Another action</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
+                <a class="dropdown-item" location.href="${pageContext.request.contextPath}/do_logout">Logout</a>
               </div>
             </li>
           </ul>
           <form
             class="form-inline my-2 my-lg-0"
             method="GET"
-            action="${pageContext.request.contextPath}/search_posts"
+            action="/go_home/search_posts"
           >
             <input
               class="form-control mr-sm-2"
@@ -103,7 +108,7 @@ pageEncoding="UTF-8"%>
             <tr>
               <td>${post.boardNo}</td>
               <td>
-                <a href="/go_detail/${post.boardNo}"> ${post.title} </a>
+                <a href="/go_home/go_detail/${post.boardNo}"> ${post.title} </a>
               </td>
               <td>${post.author}</td>
               <td>${post.createDate}</td>
@@ -188,7 +193,7 @@ pageEncoding="UTF-8"%>
         <button
           class="btn btn-primary"
           type="button"
-          onclick="location.href='${pageContext.request.contextPath}/go_create'"
+          onclick="location.href='/go_home/go_create'"
         >
           글쓰기
         </button>

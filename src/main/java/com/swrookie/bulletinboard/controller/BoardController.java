@@ -24,6 +24,7 @@ public class BoardController
 		this.boardService = boardService;
 	}
 	
+	// Go to home page and list posts
 	@GetMapping("/go_home")
 	public String readPost(Model model, @PageableDefault (size = 7) Pageable pageable)
 	{
@@ -37,7 +38,7 @@ public class BoardController
 	}
 	
 	// Transfer to post creation page from home page
-	@GetMapping("/go_create")
+	@GetMapping("/go_home/go_create")
 	public String createPost()
 	{
 		return "home_post_create";
@@ -53,7 +54,7 @@ public class BoardController
 	}
 	
 	// View details of the post by clicking link on the title
-	@GetMapping("/go_detail/{boardNo}")
+	@GetMapping("/go_home/go_detail/{boardNo}")
 	public String detailPost(@PathVariable("boardNo") Long boardNo, Model model)
 	{
 		model.addAttribute("boardDto", boardService.updatePost(boardNo));
@@ -62,7 +63,7 @@ public class BoardController
 	}
 	
 	// Transfer to post editing page from post creation page by clicking editing button
-	@GetMapping("/go_update/{boardNo}")
+	@GetMapping("/go_home/go_detail/go_update/{boardNo}")
 	public String editPost(@PathVariable("boardNo") Long boardNo, Model model)
 	{
 		model.addAttribute("boardDto", boardService.updatePost(boardNo));
@@ -80,7 +81,7 @@ public class BoardController
 	}
 	
 	// Delete the post by clicking delete button and return to home page
-	@GetMapping("/delete_post/{boardNo}")
+	@GetMapping("/go_home/go_detail/delete_post/{boardNo}")
 	public String delete(@PathVariable("boardNo")Long boardNo, Model model)
 	{
 		boardService.deletePost(boardNo);
@@ -89,9 +90,12 @@ public class BoardController
 	}
 	
 	// Search for posts
-	@GetMapping("/search_posts")
-	public String searchPost(@RequestParam(value="keyword") String keyword, Model model)
+	@GetMapping("/go_home/search_posts")
+	public String searchPost(@RequestParam(value = "keyword") String keyword, Model model)
 	{
+		if (keyword.isEmpty())
+			return "redirect:/go_home";
+		
 		model.addAttribute("boardList", boardService.searchPost(keyword));
 		
 		return "home_post_read";

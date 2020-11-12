@@ -26,8 +26,8 @@ public class RememberMeToken implements Serializable
 	@Column(name = "series")
 	private String series;
 	
-	@Column(name = "username", nullable = false)
-	private String username;
+	@Column(name = "userName", nullable = false)
+	private String userName;
 	
 	@Column(name = "token", nullable = false)
 	private String token;
@@ -38,7 +38,7 @@ public class RememberMeToken implements Serializable
 	public RememberMeToken(PersistentRememberMeToken token)
 	{
 		this.series = token.getSeries();
-		this.username = token.getUsername();
+		this.userName = token.getUsername();
 		this.token = token.getTokenValue();
 		this.lastUsed = token.getDate();
 	}

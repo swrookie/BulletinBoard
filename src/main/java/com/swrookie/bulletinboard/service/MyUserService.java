@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -23,7 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class MyUserService implements UserDetailsService
 {
+	@Autowired
 	private MemberRepository memberRepository;
+	
 	private static final String Role_PREFIX = "Role_";
 	
 	@PostConstruct
@@ -34,14 +37,14 @@ public class MyUserService implements UserDetailsService
 	
 	@Override
 	@Transactional(readOnly = true)
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException
+	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException
 	{
 		
-		Member member = memberRepository.findByEmail(email);
+		Member member = memberRepository.findByUserName(userName);
 		
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<GrantedAuthority>();
 		grantedAuthorities.add(new SimpleGrantedAuthority(Role_PREFIX + member.getRole().getName()));
 		
-		return new User(member.getUsername(), member.getPassword(), grantedAuthorities);
+		return new User(member.getUserName(), member.getPassword(), grantedAuthorities);
 	}
 }

@@ -2,6 +2,7 @@ package com.swrookie.bulletinboard.service;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,9 @@ import com.swrookie.bulletinboard.repository.MemberRepository;
 @Service
 public class MemberService 
 {
+	@Autowired
 	private MemberRepository memberRepository;
+	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	public MemberService(MemberRepository memberRepository)
@@ -24,9 +27,9 @@ public class MemberService
 		return memberRepository.findByEmail(email);
 	}
 	
-	public Member findByUserName(String username)
+	public Member findByUserName(String userName)
 	{
-		return memberRepository.findByUsername(username);
+		return memberRepository.findByUserName(userName);
 	}
 	
 	@Transactional

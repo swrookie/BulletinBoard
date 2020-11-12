@@ -9,5 +9,5 @@ import com.swrookie.bulletinboard.entity.RememberMeToken;
 public interface RememberMeTokenRepository extends JpaRepository<RememberMeToken, Long>
 {
 	RememberMeToken findBySeries(String series);
-	List<RememberMeToken> findByUsername(String username);
+	List<RememberMeToken> findByUserName(String userName);
 }

@@ -22,7 +22,7 @@ public class BoardService
 	private static int startPage = 0;
 	private static int endPage = 0;
 	private static int currentPage = 0;
-	private static int lastPage;
+	private static int lastPage = 0;
 	
 	private BoardDTO convertEntityToDto(Board board)
 	{
@@ -51,7 +51,7 @@ public class BoardService
 	{		
 		Page<Board> page = boardRepository.findAll(pageable);
 		startPage = (page.getPageable().getPageNumber() / PAGE_BLOCK_COUNT) * PAGE_BLOCK_COUNT;
-		endPage = (page.getTotalPages() <= PAGE_BLOCK_COUNT) ? page.getTotalPages() :
+		endPage = (page.getTotalPages() <= PAGE_BLOCK_COUNT) ? (page.getTotalPages() - 1):
 				  (page.getTotalPages() - PAGE_BLOCK_COUNT > startPage) ? 
 				   startPage + PAGE_BLOCK_COUNT - 1 : page.getTotalPages() - 1; 
 		currentPage = page.getPageable().getPageNumber();
@@ -59,8 +59,9 @@ public class BoardService
 		
 		System.out.println("Current page number in terms of html: " + page.getPageable().getPageNumber());
 		System.out.println("Total Pages: " + page.getTotalPages());
-		System.out.println("Start page: " + (startPage));
-		System.out.println("End page: " + (endPage));
+		System.out.println("Start page of the block: " + startPage);
+		System.out.println("End page of the block: " + endPage);
+		System.out.println("Last page of the total pages: " + lastPage);
 		System.out.println("page of Page<Board> data type: " + page.toString());
 		
 		List<Board> boards = page.getContent();

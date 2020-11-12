@@ -44,14 +44,14 @@ public class RememberMeTokenService implements PersistentTokenRepository
 	{
 		RememberMeToken token = this.rememberMeTokenRepository.findBySeries(seriesId);
 		
-		return new PersistentRememberMeToken(token.getUsername(), token.getSeries(), 
+		return new PersistentRememberMeToken(token.getUserName(), token.getSeries(), 
 											 token.getToken(), token.getLastUsed());
 	}
 	
 	@Override
-	public void removeUserTokens(String username)
+	public void removeUserTokens(String userName)
 	{
-		List<RememberMeToken> tokens = this.rememberMeTokenRepository.findByUsername(username);
+		List<RememberMeToken> tokens = this.rememberMeTokenRepository.findByUserName(userName);
 		this.rememberMeTokenRepository.deleteAll(tokens);
 	}
 }

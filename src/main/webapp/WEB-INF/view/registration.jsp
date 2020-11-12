@@ -1,10 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %> 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8" %> <%@ taglib prefix="c"
+uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
+uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <title>Registration</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
@@ -26,65 +28,96 @@
       integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
       crossorigin="anonymous"
     ></script>
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+
+      html {
+        display: table;
+        margin: auto;
+      }
+
+      body {
+        display: table-cell;
+        vertical-align: middle;
+      }
+    </style>
   </head>
 
   <body>
-    <form
-      method="POST"
-      action="${pageContext.request.contextPath}/registration_page"
-    >
+    <form method="POST" action="${pageContext.request.contextPath}/register">
       <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="inputEmail4">Email</label>
-          <input type="email" class="form-control" id="inputEmail4" />
+        <div class="col-md-6 mb-3">
+          <label for="validationCustom01">First name</label>
+          <input
+            type="text"
+            name="firstName"
+            class="form-control"
+            id="validationCustom01"
+            required
+          />
+          <div class="valid-feedback">Looks good!</div>
         </div>
+        <div class="col-md-6 mb-3">
+          <label for="validationCustom02">Last name</label>
+          <input
+            type="text"
+            name="lastName"
+            class="form-control"
+            id="validationCustom02"
+            required
+          />
+          <div class="valid-feedback">Looks good!</div>
+        </div>
+      </div>
+      <div class="form-row"></div>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="inputEmail4">Username</label>
+          <input
+            type="text"
+            name="userName"
+            class="form-control"
+            id="inputUsername"
+          />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="inputEmail4">Email</label>
+          <input
+            type="email"
+            name="email"
+            class="form-control"
+            id="inputEmail4"
+          />
+        </div>
+      </div>
+      <div class="form-row">
         <div class="form-group col-md-6">
           <label for="inputPassword4">Password</label>
-          <input type="password" class="form-control" id="inputPassword4" />
+          <input
+            type="password"
+            name="password"
+            class="form-control"
+            id="inputPassword4"
+          />
         </div>
-      </div>
-      <div class="form-group">
-        <label for="inputAddress">Address</label>
-        <input
-          type="text"
-          class="form-control"
-          id="inputAddress"
-          placeholder="1234 Main St"
-        />
-      </div>
-      <div class="form-group">
-        <label for="inputAddress2">Address 2</label>
-        <input
-          type="text"
-          class="form-control"
-          id="inputAddress2"
-          placeholder="Apartment, studio, or floor"
-        />
-      </div>
-      <div class="form-row">
         <div class="form-group col-md-6">
-          <label for="inputCity">City</label>
-          <input type="text" class="form-control" id="inputCity" />
-        </div>
-        <div class="form-group col-md-4">
-          <label for="inputState">State</label>
-          <select id="inputState" class="form-control">
-            <option selected>Choose...</option>
-            <option>...</option>
-          </select>
-        </div>
-        <div class="form-group col-md-2">
-          <label for="inputZip">Zip</label>
-          <input type="text" class="form-control" id="inputZip" />
+          <label for="inputPassword5">Password Confirm</label>
+          <input
+            type="password"
+            name="passwordConfirm"
+            class="form-control"
+            id="inputPassword5"
+          />
         </div>
       </div>
-      <div class="form-group">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="gridCheck" />
-          <label class="form-check-label" for="gridCheck"> Check me out </label>
-        </div>
+      <div class="col text-center">
+        <button type="submit" class="btn btn-primary">Register</button>
       </div>
-      <button type="submit" class="btn btn-primary">Sign in</button>
     </form>
   </body>
 </html>
