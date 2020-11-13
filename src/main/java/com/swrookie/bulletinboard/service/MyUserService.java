@@ -27,12 +27,10 @@ public class MyUserService implements UserDetailsService
 	@Autowired
 	private MemberRepository memberRepository;
 	
-	private static final String Role_PREFIX = "Role_";
-	
 	@PostConstruct
 	private void created()
 	{
-		log.debug("체크 로그인");
+		log.debug("Check Login");
 	}
 	
 	@Override
@@ -43,7 +41,7 @@ public class MyUserService implements UserDetailsService
 		Member member = memberRepository.findByUserName(userName);
 		
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<GrantedAuthority>();
-		grantedAuthorities.add(new SimpleGrantedAuthority(Role_PREFIX + member.getRole().getName()));
+		grantedAuthorities.add(new SimpleGrantedAuthority(member.getRole().getName()));
 		
 		return new User(member.getUserName(), member.getPassword(), grantedAuthorities);
 	}

@@ -31,6 +31,7 @@ dependencies {
 	}
 	compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.6.0'
 	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'org.springframework.security:spring-security-taglibs'
 }
 
 test {

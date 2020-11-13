@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -72,74 +72,7 @@ pageEncoding="UTF-8"%>
       href="../resources/loginResources/css/main.css"
     />
     <!--===============================================================================================-->
-  </head>
-
-  <body>
-    <div class="limiter">
-      <div class="container-login100">
-        <div class="wrap-login100 p-t-50 p-b-90">
-          <form
-            class="login100-form validate-form flex-sb flex-w"
-            method="POST"
-            action="${pageContext.request.contextPath}/do_login"
-          >
-            <span class="login100-form-title p-b-51"> Login </span>
-            <div
-              class="wrap-input100 validate-input m-b-16"
-              data-validate="Username is required"
-            >
-              <input
-                class="input100"
-                type="text"
-                name="userName"
-                placeholder="Username"
-              />
-              <span class="focus-input100"></span>
-            </div>
-            <div
-              class="wrap-input100 validate-input m-b-16"
-              data-validate="Password is required"
-            >
-              <input
-                class="input100"
-                type="password"
-                name="password"
-                placeholder="Password"
-              />
-              <span class="focus-input100"></span>
-            </div>
-            <div class="flex-sb-m w-full p-t-3 p-b-24">
-              <div class="contact100-form-checkbox">
-                <input
-                  class="input-checkbox100"
-                  id="ckb1"
-                  type="checkbox"
-                  name="remember-me"
-                />
-                <label class="label-checkbox100" for="ckb1">
-                  Remember me
-                </label>
-              </div>
-              <div>
-                <a
-                  href="${pageContext.request.contextPath}/go_registration"
-                  class="txt1"
-                >
-                  Not a member?
-                </a>
-                <a href="#" class="txt1"> Forgot? </a>
-              </div>
-            </div>
-            <div class="container-login100-form-btn m-t-17">
-              <button class="login100-form-btn" type="submit">Login</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <div id="dropDownSelect1"></div>
-
+    
     <!--===============================================================================================-->
     <script src="../resources/loginResources/vendor/jquery/jquery-3.2.1.min.js"></script>
     <!--===============================================================================================-->
@@ -156,5 +89,50 @@ pageEncoding="UTF-8"%>
     <script src="../resources/loginResources/vendor/countdowntime/countdowntime.js"></script>
     <!--===============================================================================================-->
     <script src="../resources/loginResources/js/main.js"></script>
+    
+  </head>
+
+  <body>
+    <div class="limiter">
+      <div class="container-login100">
+        <div class="wrap-login100 p-t-50 p-b-90">
+          <form class="login100-form validate-form flex-sb flex-w" method="POST" action="${pageContext.request.contextPath}/do_login">
+            <span class="login100-form-title p-b-51"> Login </span>
+            <div class="wrap-input100 validate-input m-b-16" data-validate="Username is required">
+              <input class="input100" type="text" name="userName" placeholder="Username" />
+              <span class="focus-input100">
+              </span>
+            </div>
+            <div class="wrap-input100 validate-input m-b-16" data-validate="Password is required" >
+              <input class="input100" type="password" name="password" placeholder="Password" />
+              <span class="focus-input100">
+              </span>
+            </div>
+            <div class="flex-sb-m w-full p-t-3 p-b-24">
+              <div class="contact100-form-checkbox">
+                <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me" />
+                <label class="label-checkbox100" for="ckb1">
+                  Remember me
+                </label>
+              </div>
+              <div>
+                <a class="txt1" href="${pageContext.request.contextPath}/register" >
+                  Not a member?
+                </a>
+                <a class="txt1" href="#" >
+                 Forgot? 
+                </a>
+              </div>
+            </div>
+            <div class="container-login100-form-btn m-t-17">
+              <button class="login100-form-btn" type="submit">Login</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="dropDownSelect1"></div>
+
   </body>
 </html>

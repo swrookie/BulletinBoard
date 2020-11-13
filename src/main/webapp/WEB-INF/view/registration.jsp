@@ -11,6 +11,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Registration</title>
+
     <!-- Bootstrap CSS & JS -->
     <link
       rel="stylesheet"
@@ -47,7 +48,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
   </head>
 
   <body>
-    <form method="POST" action="${pageContext.request.contextPath}/register">
+    <form method="POST" action="${pageContext.request.contextPath}/do_register">
       <div class="form-row">
         <div class="col-md-6 mb-3">
           <label for="validationCustom01">First name</label>
@@ -107,12 +108,8 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
         </div>
         <div class="form-group col-md-6">
           <label for="inputPassword5">Password Confirm</label>
-          <input
-            type="password"
-            name="passwordConfirm"
-            class="form-control"
-            id="inputPassword5"
-          />
+          <input type="password" name="passwordConfirm" class="form-control
+          id="inputPassword5" />
         </div>
       </div>
       <div class="col text-center">

@@ -1,15 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8" %> <%@ taglib prefix="c"
-uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
-uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%  
-response.setHeader("cache-control","no-store");   
-response.setHeader("Pragma","no-cache"); 
-response.setDateHeader("Expires",0);  
-%> 
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta charset="UTF-8" />
     <title>Bulletin Board</title>
@@ -34,72 +30,50 @@ response.setDateHeader("Expires",0);
   </head>
 
   <body>
+
     <header>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="go_home_post_read">Bulletin Board</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
+        <a class="navbar-brand" href="/">Bulletin Board</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <!-- <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li> -->
             <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Dropdown
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Menu
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Profile</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" location.href="${pageContext.request.contextPath}/do_logout">Logout</a>
+                <sec:authorize access="isAnonymous()">
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/go_login">Login</a>
+                </sec:authorize>
+                <sec:authorize access="isAuthenticated()">
+                  <a class="dropdown-item" href="${pageContext.request.contextPath}/do_logout">Logout</a>
+                </sec:authorize>
               </div>
             </li>
           </ul>
-          <form
-            class="form-inline my-2 my-lg-0"
-            method="GET"
-            action="/go_home/search_posts"
-          >
-            <input
-              class="form-control mr-sm-2"
-              type="search"
-              name="keyword"
-              placeholder="게시글 제목으로 검색"
-              aria-label="Search"
-            />
+          <form class="form-inline my-2 my-lg-0" method="GET" action="/go_home/search_posts">
+            <input class="form-control mr-sm-2" type="search" name="keyword" placeholder="Search by Post Title" aria-label="Search"/>
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-              검색하기
+              Search
             </button>
           </form>
         </div>
       </nav>
     </header>
+
     <table class="table table-hover">
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">제목</th>
-          <th scope="col">작성자</th>
-          <th scope="col">작성일</th>
-          <th scope="col">수정일</th>
+          <th scope="col">Title</th>
+          <th scope="col">Author</th>
+          <th scope="col">Posted Date</th>
+          <th scope="col">Modified Date</th>
         </tr>
       </thead>
       <tbody>
@@ -118,7 +92,8 @@ response.setDateHeader("Expires",0);
         </tr>
       </tbody>
     </table>
-    <nav aria-label="Page navigation example">
+
+    <nav aria-label="Page Navigation">
       <ul class="pagination justify-content-center">
         <li class="page-item enabled">
           <a class="page-link" href="?page=0">First</a>
@@ -188,16 +163,23 @@ response.setDateHeader("Expires",0);
         </li>
       </ul>
     </nav>
+
     <footer>
       <div class="text-center">
-        <button
-          class="btn btn-primary"
-          type="button"
-          onclick="location.href='/go_home/go_create'"
-        >
-          글쓰기
+      <sec:authorize access="isAnonymous()">
+      	<button class="btn btn-primary" type="button" onclick="location.href='/create_post'" disabled>
+          WRITE POST
         </button>
+      </sec:authorize>
+      <sec:authorize access="isAuthenticated()">
+      	<button class="btn btn-primary" type="button" onclick="location.href='/create_post'">
+          WRITE POST
+        </button>   
+      </sec:authorize>
+        
       </div>
     </footer>
+
   </body>
+
 </html>

@@ -1,6 +1,6 @@
 package com.swrookie.bulletinboard.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -24,8 +24,8 @@ public class BoardController
 		this.boardService = boardService;
 	}
 	
-	// Go to home page and list posts
-	@GetMapping("/go_home")
+	// Go to home page and list posts when starting Spring Boot Application
+	@GetMapping("/")
 	public String readPost(Model model, @PageableDefault (size = 7) Pageable pageable)
 	{
 		model.addAttribute("boardList", boardService.readPost(pageable));
@@ -38,19 +38,19 @@ public class BoardController
 	}
 	
 	// Transfer to post creation page from home page
-	@GetMapping("/go_home/go_create")
+	@GetMapping("/create_post")
 	public String createPost()
 	{
 		return "home_post_create";
 	}
 	
 	// Create post by clicking write button and return to home page
-	@PostMapping("/go_home")
+	@PostMapping("/do_create")
 	public String createPost(BoardDTO boardDto, Model model)
 	{
 		boardService.createPost(boardDto);
 		
-		return "redirect:/go_home";
+		return "redirect:/";
 	}
 	
 	// View details of the post by clicking link on the title
@@ -89,12 +89,12 @@ public class BoardController
 		return "home_post_read";
 	}
 	
-	// Search for posts
+	// Search for posts after clicking search button
 	@GetMapping("/go_home/search_posts")
 	public String searchPost(@RequestParam(value = "keyword") String keyword, Model model)
 	{
 		if (keyword.isEmpty())
-			return "redirect:/go_home";
+			return "redirect:/";
 		
 		model.addAttribute("boardList", boardService.searchPost(keyword));
 		

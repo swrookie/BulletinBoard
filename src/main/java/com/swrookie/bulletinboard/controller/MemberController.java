@@ -1,9 +1,8 @@
 package com.swrookie.bulletinboard.controller; 
 
- 
-import org.springframework.beans.factory.annotation.Autowired; 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,23 +29,26 @@ public class MemberController
 		this.memberService = memberService;
 	}	
 	
-	// Go to login Page when starting Spring Boot Application
-	@GetMapping("/")
-	public String login()
+	// Go to login page when clicking login button
+	@GetMapping("/go_login")
+	public String goLogin()
 	{
 		return "login";
 	}
 	
+	// Authenticate in the security configuration and return to the home screen
 	@PostMapping("/do_login")
 	public String doLogin()
 	{
-		return "redirect:/go_home";
+		return "redirect:/";
 	}
 	
+	// Being Logged in, Go to the home page after clicking logout button
+	// @PostMapping needed when implementing CSRF
 	@GetMapping("/do_logout")
 	public String doLogout()
 	{
-		return "/";
+		return "redirect:/";
 	}
 	
 	@GetMapping("/denied")
@@ -56,16 +58,16 @@ public class MemberController
 	}
 	
 	// Registration Page
-	@GetMapping("/go_registration")
+	@GetMapping("/register")
 	public String registration()
 	{
 		return "registration";
 	}
 	
-	@PostMapping("/register")
-	public String registerMember(@Validated Member userForm, BindingResult bindingResult)
+	@PostMapping("/do_register")
+	public String registerMember(@Validated Member member, BindingResult bindingResult)
 	{	
-		memberValidator.validate(userForm, bindingResult);
+		memberValidator.validate(member, bindingResult);
 		
 		if (bindingResult.hasErrors())
 		{
@@ -73,11 +75,11 @@ public class MemberController
 			return "redirect:/registration";
 		}
 		
-		userForm.setRole(MemberRole.MEMBER);
-		memberService.createMember(userForm);
-		log.debug("userInfo" + userForm.toString());
-		log.debug("email" + userForm.getEmail() + "|" + userForm.getPassword());
+		member.setRole(MemberRole.MEMBER);
+		memberService.createMember(member);
+		log.debug("User Info: " + member.toString());
+		log.debug("Email: " + member.getEmail() + " | " + member.getPassword());
 		
-		return "redirect:/";
+		return "redirect:/go_login";
 	}
 }

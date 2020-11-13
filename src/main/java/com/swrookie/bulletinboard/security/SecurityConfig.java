@@ -30,59 +30,63 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	@Override
 	protected void configure(HttpSecurity http) throws Exception
 	{
+		// CSRF Disabled
 		http.csrf().disable().authorizeRequests()
-			.antMatchers("/do_login/go_home/**/").hasRole("MEMBER")
-			.antMatchers("/admin/**/").hasRole("ADMIN")
-			.anyRequest().permitAll()
+			.antMatchers("/admin/**").hasRole("ADMIN")
+			.antMatchers("go_home/**").hasRole("MEMBER")
+			.antMatchers("/**").permitAll()
+			.anyRequest().authenticated()
 				.and()
 			.formLogin()
-			.loginPage("/")
-			.loginProcessingUrl("/do_login")
 			.usernameParameter("userName")
 			.passwordParameter("password")
-			.defaultSuccessUrl("/go_home")
+			.loginPage("/")
+			.loginProcessingUrl("/do_login")
+			.defaultSuccessUrl("/")
 			.permitAll()
 				.and()
 			.exceptionHandling().accessDeniedHandler(MemberAccessDeniedHandler())
 				.and()
 			.logout()
-			.invalidateHttpSession(true)
-			.clearAuthentication(true)
         	.logoutRequestMatcher(new AntPathRequestMatcher("/do_logout"))
         	.logoutSuccessUrl("/")
-        	.permitAll();
+			.invalidateHttpSession(true)
+			.clearAuthentication(true);
 		
-		
-//		http.authorizeRequests().
-//			 anyRequest().authenticated().
-//			 and().
-//			 headers().
-//			 frameOptions().disable().
-//			 and().
-//			 csrf().ignoringAntMatchers("/h2-console/**").
-//			 and().
-//			 formLogin().
-//			 loginPage("/login").
-//			 loginProcessingUrl("/registration").
-//			 defaultSuccessUrl("/home_post_read").
-//			 failureUrl("/login?error").
-//			 usernameParameter("email").
-//			 passwordParameter("passwd").
-//			 permitAll().and().exceptionHandling().accessDeniedHandler(MemberAccessDeniedHandler()).
-//			 and().
-//			 logout().
-//			 invalidateHttpSession(true).
-//			 clearAuthentication(true).
-//			 logoutRequestMatcher(new AntPathRequestMatcher("/logout")).
-//			 logoutSuccessUrl("/login?logout").
-//			 permitAll().
-//			 and().
-//			 rememberMe().
-//			 key("jpub").
-//			 rememberMeParameter("remember-me").
-//			 rememberMeCookieName("jpubcookie").
-//			 tokenValiditySeconds(86400).
-//			 tokenRepository(rememberMeTokenService()).userDetailsService(myUserService());
+		// CSRF Enabled
+//		http.authorizeRequests()
+//			.antMatchers("/admin/**/").hasRole("ADMIN")
+//			.antMatchers("/do_login/**").hasRole("MEMBER")
+//			.antMatchers("/**").permitAll()
+//			.anyRequest().authenticated()
+//			.and()
+//			.headers()
+//			.frameOptions().disable()
+//			.and()
+//			.csrf().ignoringAntMatchers("/h2-console/**").
+//			.and()
+//			.formLogin().
+//			.loginPage("/")
+//			.loginProcessingUrl("/do_login")
+//			.defaultSuccessUrl("/go_home")
+//			.failureUrl("/login?error")
+//			.usernameParameter("userName")
+//			.passwordParameter("password")
+//			.permitAll().and().exceptionHandling().accessDeniedHandler(MemberAccessDeniedHandler())
+//			.and()
+//			.logout()
+//			.invalidateHttpSession(true)
+//		    .clearAuthentication(true)
+//			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//			.logoutSuccessUrl("/login?logout")
+//			.permitAll()
+//			.and()
+//			.rememberMe()
+//			.key("swrookie")
+//			.rememberMeParameter("remember-me")
+//			.rememberMeCookieName("swrookiecookie")
+//			.tokenValiditySeconds(86400)
+//			.tokenRepository(rememberMeTokenService()).userDetailsService(myUserService());
 	}
 	
 	@Override

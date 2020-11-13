@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.swrookie.bulletinboard.entity.Board;
 
@@ -38,6 +40,13 @@ public class BoardDTO
 	
 	public Board toEntity()
 	{
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		if (principal instanceof UserDetails)
+			author = ((UserDetails) principal).getUsername();
+		else
+			author = principal.toString();
+		
 		Board boardEntity = Board.builder()
 								 .boardNo(boardNo)
 								 .title(title)
