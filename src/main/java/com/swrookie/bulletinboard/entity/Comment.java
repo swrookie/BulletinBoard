@@ -21,7 +21,7 @@ public class Comment
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int commentNo;
 	private int boardNo;
-	private String content;
 	private String author;
+	private String content;
 	private Timestamp createDate;
 }

@@ -62,7 +62,7 @@ public class BoardController
 		return "home_post_detail";
 	}
 	
-	// Transfer to post editing page from post creation page by clicking editing button
+	// Transfer to post editing page from post detail page by clicking editing button
 	@GetMapping("/go_home/go_detail/go_update/{boardNo}")
 	public String editPost(@PathVariable("boardNo") Long boardNo, Model model)
 	{

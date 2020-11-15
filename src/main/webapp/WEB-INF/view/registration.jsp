@@ -116,5 +116,11 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
         <button type="submit" class="btn btn-primary">Register</button>
       </div>
     </form>
+    <footer>
+      <div class="jumbotron text-center" style="margin-bottom: 0">
+        <p>Bulletin Board Project by swrookie</p>
+        <p>dpdjflr@gmail.com</p>
+      </div>
+    </footer>
   </body>
 </html>
