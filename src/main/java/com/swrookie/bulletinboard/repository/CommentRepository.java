@@ -6,4 +6,5 @@ import com.swrookie.bulletinboard.entity.Comment;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> 
 {
+	
 }

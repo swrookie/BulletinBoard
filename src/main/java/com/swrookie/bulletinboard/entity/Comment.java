@@ -26,9 +26,10 @@ public class Comment
 	private String content;			// Comment content
 	@CreationTimestamp
 	private Timestamp createDate;	// LocalDateTime during create
-	private Integer commentParent;
-	private Integer commentDepth;
-	private Integer commentOrder;
+	private Integer commentGroup;	// Outermost parent comment representing the whole depth
+	private Integer commentParent;	// Immediate parent comment of the child comment
+	private Integer commentDepth;	// Depth of the child comment
+	private Integer commentOrder;	// Order of the comment
 	
 	public Comment()
 	{

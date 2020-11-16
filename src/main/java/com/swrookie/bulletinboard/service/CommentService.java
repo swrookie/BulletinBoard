@@ -76,7 +76,7 @@ public class CommentService
 		{
 			if (!comment.getCommentParent().equals(null))
 			{
-				Comment commentInfo = 
+				Comment commentInfo;
 			}
 		}
 	}
