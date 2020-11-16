@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.swrookie.bulletinboard.entity.Member;
-import com.swrookie.bulletinboard.entity.MemberRole;
+import com.swrookie.bulletinboard.enumeration.MemberRole;
 import com.swrookie.bulletinboard.security.MemberValidator;
 import com.swrookie.bulletinboard.service.MemberService;
 

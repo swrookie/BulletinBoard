@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,14 +23,15 @@ public class Board
 {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long boardNo;
-	private String title;
-	private String author;
-	private String content;
+	private Long boardNo;			// Post Number
+	private String title;			// Post Title
+	private String author;			// Post Author
+	@Lob
+	private String content;			// Post Content
 	@CreationTimestamp
-	private Timestamp createDate;		// LocalDateTime
+	private Timestamp createDate;	// LocalDateTime during creation
 	@UpdateTimestamp
-	private Timestamp updateDate;	// LocalDateTime
+	private Timestamp updateDate;	// LocalDateTime during update
 	
 	public Board()
 	{

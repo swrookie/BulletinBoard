@@ -138,19 +138,16 @@ uri="http://www.springframework.org/security/tags" %>
       </div>
       <hr />
       <div class="card">
-        <form>
-          <input type="hidden" id="boardNo" value="${board.boardNo}" />
+        <form
+          method="POST"
+          action="${pageContext.request.contextPath}/save_comment"
+        >
+          <input type="hidden" name="boardNo" value="${boardDto.boardNo}" />
           <div class="card-body">
-            <textarea
-              id="comment-content"
-              class="form-control"
-              row="1"
-            ></textarea>
+            <textarea name="content" class="form-control" row="1"></textarea>
           </div>
           <div class="card-footer">
-            <button id="btn-comment-save" class="btn btn-primary">
-              COMMENT
-            </button>
+            <input type="submit" class="btn btn-primary" value="POST" />
           </div>
         </form>
       </div>
@@ -158,15 +155,19 @@ uri="http://www.springframework.org/security/tags" %>
       <div class="card">
         <div class="card-header">Comments</div>
         <ul class="list-group">
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-          >
-            Comment Content
-            <div class="d-flex">
-              <div class="font-italic">Author: ssarmango &nbsp;</div>
-              <button class="badge">DELETE</button>
-            </div>
-          </li>
+          <c:forEach var="comment" items="${commentList}">
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              ${comment.content}
+              <div class="d-flex">
+                <div class="font-italic">Author: ${comment.author} &nbsp;</div>
+                <button class="badge">DELETE</button>
+                <button class="badge">UPDATE</button>
+                <button class="badge">REPLY</button>
+              </div>
+            </li>
+          </c:forEach>
         </ul>
       </div>
     </div>

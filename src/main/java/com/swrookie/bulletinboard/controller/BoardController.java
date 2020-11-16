@@ -1,6 +1,6 @@
 package com.swrookie.bulletinboard.controller;
 
-import org.springframework.beans.factory.annotation.Autowired; 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.swrookie.bulletinboard.dto.BoardDTO;
 import com.swrookie.bulletinboard.service.BoardService;
+import com.swrookie.bulletinboard.service.CommentService;
 
 @Controller
 public class BoardController 
 {
 	@Autowired
 	private BoardService boardService;
+	@Autowired
+	private CommentService commentService;
 	
 	public BoardController(BoardService boardService)
 	{
@@ -26,7 +29,7 @@ public class BoardController
 	
 	// Go to home page and list posts when starting Spring Boot Application
 	@GetMapping("/")
-	public String readPost(Model model, @PageableDefault (size = 7) Pageable pageable)
+	public String readPost(@PageableDefault (size = 7) Pageable pageable, Model model)
 	{
 		model.addAttribute("boardList", boardService.readPost(pageable));
 		model.addAttribute("startPage", BoardService.getStartPage());
@@ -46,7 +49,7 @@ public class BoardController
 	
 	// Create post by clicking write button and return to home page
 	@PostMapping("/do_create")
-	public String createPost(BoardDTO boardDto, Model model)
+	public String createPost(BoardDTO boardDto)
 	{
 		boardService.createPost(boardDto);
 		
@@ -58,7 +61,7 @@ public class BoardController
 	public String detailPost(@PathVariable("boardNo") Long boardNo, Model model)
 	{
 		model.addAttribute("boardDto", boardService.updatePost(boardNo));
-		
+		model.addAttribute("commentList", commentService.readComment(boardNo));
 		return "home_post_detail";
 	}
 	

@@ -1,6 +1,8 @@
 package com.swrookie.bulletinboard.dto;
 
-import java.sql.Timestamp;   
+import java.sql.Timestamp;
+
+import javax.persistence.Lob;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -20,6 +22,7 @@ public class BoardDTO
 	private Long boardNo;								// Table PK Instance Field
 	private String title;								// Table Title Column Instance Field
 	private String author;								// Table Author Column Instance Field
+	@Lob
 	private String content;								// Table Content Column Instance Field
 	@CreationTimestamp
 	private Timestamp createDate;		// LocalDateTime

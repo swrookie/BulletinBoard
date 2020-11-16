@@ -1,9 +1,10 @@
 package com.swrookie.bulletinboard.service;
 
-import java.util.*; 
+import java.util.*;  
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,12 +12,12 @@ import org.springframework.stereotype.Service;
 
 import com.swrookie.bulletinboard.dto.BoardDTO;
 import com.swrookie.bulletinboard.entity.Board;
-
 import com.swrookie.bulletinboard.repository.BoardRepository;
 
 @Service
 public class BoardService 
 {
+	@Autowired
 	private BoardRepository boardRepository;
 	
 	private static final int PAGE_BLOCK_COUNT = 5;		// Max number of pages visible on block
@@ -28,12 +29,12 @@ public class BoardService
 	private BoardDTO convertEntityToDto(Board board)
 	{
 		return BoardDTO.builder()
-				.boardNo(board.getBoardNo())
-				.author(board.getAuthor())
-				.title(board.getTitle())
-				.createDate(board.getCreateDate())
-				.updateDate(board.getUpdateDate())
-				.build();
+					   .boardNo(board.getBoardNo())
+					   .author(board.getAuthor())
+					   .title(board.getTitle())
+					   .createDate(board.getCreateDate())
+					   .updateDate(board.getUpdateDate())
+					   .build();
 	}
 	
 	public BoardService(BoardRepository boardRepository)
@@ -54,16 +55,16 @@ public class BoardService
 		currentPage = page.getPageable().getPageNumber();
 		lastPage = page.getTotalPages();
 		startPage = (currentPage / PAGE_BLOCK_COUNT) * PAGE_BLOCK_COUNT;
-		endPage = (lastPage <= PAGE_BLOCK_COUNT) ? lastPage - 1:
+		endPage = (lastPage <= PAGE_BLOCK_COUNT) ? ((this.getBoardCount() < 1) ? lastPage : lastPage - 1) :
 				  (lastPage - PAGE_BLOCK_COUNT > startPage) ? 
 				   startPage + PAGE_BLOCK_COUNT - 1 : lastPage - 1; 
 		
-//		System.out.println("Current page number in terms of html: " + page.getPageable().getPageNumber());
-//		System.out.println("Total Pages: " + page.getTotalPages());
-//		System.out.println("Start page of the block: " + startPage);
-//		System.out.println("End page of the block: " + endPage);
-//		System.out.println("Last page of the total pages: " + lastPage);
-//		System.out.println("page of Page<Board> data type: " + page.toString());
+		System.out.println("Current page number in terms of html: " + page.getPageable().getPageNumber());
+		System.out.println("Total Pages: " + page.getTotalPages());
+		System.out.println("Start page of the block: " + startPage);
+		System.out.println("End page of the block: " + endPage);
+		System.out.println("Last page of the total pages: " + lastPage);
+		System.out.println("page of Page<Board> data type: " + page.toString());
 		
 		List<Board> boards = page.getContent();
 		List<BoardDTO> boardDtoList = new ArrayList<BoardDTO>();
@@ -118,6 +119,7 @@ public class BoardService
 		
 		return boardDtoList;
 	}
+	
 	
 	@Transactional
 	public Long getBoardCount()

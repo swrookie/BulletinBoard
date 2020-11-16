@@ -1,4 +1,4 @@
-package com.swrookie.bulletinboard.entity;
+package com.swrookie.bulletinboard.enumeration;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

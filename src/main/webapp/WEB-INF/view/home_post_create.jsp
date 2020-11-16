@@ -129,6 +129,7 @@ uri="http://www.springframework.org/security/tags" %>
         />
       </form>
     </div>
+
     <script>
       $(".summernote").summernote({
         placeholder: "Write Something...",
