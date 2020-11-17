@@ -143,6 +143,8 @@ uri="http://www.springframework.org/security/tags" %>
           action="${pageContext.request.contextPath}/save_comment"
         >
           <input type="hidden" name="boardNo" value="${boardDto.boardNo}" />
+          <input type="hidden" name="commentParent" value="0" />
+          <input type="hidden" name="commentDepth" value="0" />
           <div class="card-body">
             <textarea name="content" class="form-control" row="1"></textarea>
           </div>
@@ -154,24 +156,56 @@ uri="http://www.springframework.org/security/tags" %>
       <br />
       <div class="card">
         <div class="card-header">Comments</div>
-        <ul class="list-group">
+        <ul class="list-group" id="commentBlockList">
           <c:forEach var="comment" items="${commentList}">
             <li
               class="list-group-item d-flex justify-content-between align-items-center"
+              id="commentBlock"
             >
               ${comment.content}
               <div class="d-flex">
                 <div class="font-italic">Author: ${comment.author} &nbsp;</div>
                 <button class="badge">DELETE</button>
                 <button class="badge">UPDATE</button>
-                <button class="badge">REPLY</button>
+                <button
+                  class="badge"
+                  data-toggle="collapse"
+                  data-target="#collapseCommentReply${comment.commentNo}"
+                >
+                  REPLY
+                </button>
               </div>
             </li>
+            <div class="collapse" id="collapseCommentReply${comment.commentNo}">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center"
+                id="replyBlock"
+              >
+                <textarea
+                  name="content"
+                  class="form-control"
+                  row="1"
+                ></textarea>
+                <button class="badge">POST</button>
+              </li>
+            </div>
           </c:forEach>
         </ul>
       </div>
     </div>
     <br />
+    <script>
+      function replyToComment() {
+        var element = document.createElement("li");
+        element.setAttribute(
+          "class",
+          "list-group-item d-flex justify-content-between align-items-center"
+        );
+        element.setAttribute("name", "nextChildComment");
+        var commentBlockList = document.getElementById("commentBlock");
+        commentBlockList.append(element);
+      }
+    </script>
     <footer>
       <div class="jumbotron text-center" style="margin-bottom: 0">
         <p>Bulletin Board Project by swrookie</p>

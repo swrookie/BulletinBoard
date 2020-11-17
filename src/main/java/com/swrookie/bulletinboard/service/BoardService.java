@@ -45,7 +45,7 @@ public class BoardService
 	@Transactional
 	public void createPost(BoardDTO boardDto)
 	{
-		boardRepository.save(boardDto.toEntity()).getBoardNo();
+		boardRepository.save(boardDto.toEntity());
 	}
 	
 	@Transactional
@@ -59,12 +59,12 @@ public class BoardService
 				  (lastPage - PAGE_BLOCK_COUNT > startPage) ? 
 				   startPage + PAGE_BLOCK_COUNT - 1 : lastPage - 1; 
 		
-		System.out.println("Current page number in terms of html: " + page.getPageable().getPageNumber());
-		System.out.println("Total Pages: " + page.getTotalPages());
-		System.out.println("Start page of the block: " + startPage);
-		System.out.println("End page of the block: " + endPage);
-		System.out.println("Last page of the total pages: " + lastPage);
-		System.out.println("page of Page<Board> data type: " + page.toString());
+//		System.out.println("Current page number in terms of html: " + page.getPageable().getPageNumber());
+//		System.out.println("Total Pages: " + page.getTotalPages());
+//		System.out.println("Start page of the block: " + startPage);
+//		System.out.println("End page of the block: " + endPage);
+//		System.out.println("Last page of the total pages: " + lastPage);
+//		System.out.println("page of Page<Board> data type: " + page.toString());
 		
 		List<Board> boards = page.getContent();
 		List<BoardDTO> boardDtoList = new ArrayList<BoardDTO>();

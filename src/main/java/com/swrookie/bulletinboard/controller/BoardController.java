@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.swrookie.bulletinboard.dto.BoardDTO;
+import com.swrookie.bulletinboard.entity.Board;
 import com.swrookie.bulletinboard.service.BoardService;
 import com.swrookie.bulletinboard.service.CommentService;
 
@@ -58,10 +59,12 @@ public class BoardController
 	
 	// View details of the post by clicking link on the title
 	@GetMapping("/go_home/go_detail/{boardNo}")
-	public String detailPost(@PathVariable("boardNo") Long boardNo, Model model)
+	public String detailPost(@PathVariable("boardNo") Long boardNo, 
+							 @PathVariable("boardNo") Board boardNum, Model model)
 	{
 		model.addAttribute("boardDto", boardService.updatePost(boardNo));
-		model.addAttribute("commentList", commentService.readComment(boardNo));
+		model.addAttribute("commentList", commentService.readComment(boardNum));
+		
 		return "home_post_detail";
 	}
 	
@@ -85,16 +88,18 @@ public class BoardController
 	
 	// Delete the post by clicking delete button and return to home page
 	@GetMapping("/go_home/go_detail/delete_post/{boardNo}")
-	public String delete(@PathVariable("boardNo")Long boardNo, Model model)
+	public String delete(@PathVariable("boardNo")Long boardNo)
 	{
 		boardService.deletePost(boardNo);
+		if (commentService.postContainsComment(boardNo))
+			commentService.deleteComment(boardNo);
 		
 		return "home_post_read";
 	}
 	
 	// Search for posts after clicking search button
 	@GetMapping("/go_home/search_posts")
-	public String searchPost(@RequestParam(value = "keyword") String keyword, Model model)
+	public String searchPost(@RequestParam(value="keyword") String keyword, Model model)
 	{
 		if (keyword.isEmpty())
 			return "redirect:/";
