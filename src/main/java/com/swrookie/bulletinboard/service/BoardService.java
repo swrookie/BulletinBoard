@@ -59,13 +59,6 @@ public class BoardService
 				  (lastPage - PAGE_BLOCK_COUNT > startPage) ? 
 				   startPage + PAGE_BLOCK_COUNT - 1 : lastPage - 1; 
 		
-//		System.out.println("Current page number in terms of html: " + page.getPageable().getPageNumber());
-//		System.out.println("Total Pages: " + page.getTotalPages());
-//		System.out.println("Start page of the block: " + startPage);
-//		System.out.println("End page of the block: " + endPage);
-//		System.out.println("Last page of the total pages: " + lastPage);
-//		System.out.println("page of Page<Board> data type: " + page.toString());
-		
 		List<Board> boards = page.getContent();
 		List<BoardDTO> boardDtoList = new ArrayList<BoardDTO>();
 		
@@ -80,8 +73,7 @@ public class BoardService
 	@Transactional
 	public BoardDTO updatePost(Long boardNo)
 	{
-		Optional<Board> boardWrapper = boardRepository.findById(boardNo);
-		Board board = boardWrapper.get();
+		Board board =  boardRepository.findById(boardNo).get();
 		
 		BoardDTO boardDto = BoardDTO.builder()
 				.boardNo(board.getBoardNo())

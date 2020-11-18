@@ -1,5 +1,9 @@
 package com.swrookie.bulletinboard.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.swrookie.bulletinboard.dto.BoardDTO;
 import com.swrookie.bulletinboard.entity.Board;
@@ -22,6 +27,7 @@ public class BoardController
 	private BoardService boardService;
 	@Autowired
 	private CommentService commentService;
+	
 	
 	public BoardController(BoardService boardService)
 	{
@@ -50,9 +56,21 @@ public class BoardController
 	
 	// Create post by clicking write button and return to home page
 	@PostMapping("/do_create")
-	public String createPost(BoardDTO boardDto)
+	public String createPost(BoardDTO boardDto, @RequestParam("files") List<MultipartFile> files) throws IOException
 	{
 		boardService.createPost(boardDto);
+		
+		for (MultipartFile file : files)
+		{
+			try
+			{
+				file.transferTo(new File("C:/Users/Public/Documents/" + file.getOriginalFilename()));
+			}
+			catch(IllegalStateException | IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
 		
 		return "redirect:/";
 	}
@@ -87,12 +105,10 @@ public class BoardController
 	}
 	
 	// Delete the post by clicking delete button and return to home page
-	@GetMapping("/go_home/go_detail/delete_post/{boardNo}")
+	@GetMapping("/delete_post/{boardNo}")
 	public String delete(@PathVariable("boardNo")Long boardNo)
 	{
 		boardService.deletePost(boardNo);
-		if (commentService.postContainsComment(boardNo))
-			commentService.deleteComment(boardNo);
 		
 		return "home_post_read";
 	}

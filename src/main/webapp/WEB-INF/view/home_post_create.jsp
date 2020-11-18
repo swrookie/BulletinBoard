@@ -102,7 +102,11 @@ uri="http://www.springframework.org/security/tags" %>
     <br />
 
     <div class="container">
-      <form method="POST" action="${pageContext.request.contextPath}/do_create">
+      <form
+        method="POST"
+        action="${pageContext.request.contextPath}/do_create"
+        enctype="multipart/form-data"
+      >
         <div class="form-group">
           <input
             type="text"
@@ -121,6 +125,20 @@ uri="http://www.springframework.org/security/tags" %>
             name="content"
           ></textarea>
         </div>
+        <div class="form-group">
+          <div class="col-sm-10">
+            <input
+              name="files"
+              multiple
+              type="file"
+              class="custom-file-input"
+              id="customFile"
+            />
+            <label class="custom-file-label" for="customFile"
+              >Please select files to upload</label
+            >
+          </div>
+        </div>
         <input
           type="submit"
           class="btn btn-primary pull-right"
@@ -137,7 +155,15 @@ uri="http://www.springframework.org/security/tags" %>
         height: 300,
       });
     </script>
-
+    <script>
+      $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this)
+          .siblings(".custom-file-lable")
+          .addClass("selected")
+          .html(fileName);
+      });
+    </script>
     <br />
     <footer>
       <div class="jumbotron text-center" style="margin-bottom: 0">

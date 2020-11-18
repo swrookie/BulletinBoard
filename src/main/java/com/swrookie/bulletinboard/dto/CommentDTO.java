@@ -55,13 +55,18 @@ public class CommentDTO
 		return author;
 	}
 	
-	public Comment toEntity(Integer groupNum)
+	// Convert DTO to Entity when creating the outermost parent comment
+	public Comment toEntity(Integer groupNum, Integer orderNum)
 	{
 		commentGroup = groupNum;
+		commentParent = 0L;
+		commentDepth = 0;
+		commentOrder = orderNum;
+		
 		Comment commentEntity = Comment.builder()
 				   					   .commentNo(commentNo)
 									   .boardNo(boardNo)
-									   .commentGroup(commentGroup)			// Outermost parent is same as it's id
+									   .commentGroup(commentGroup)			
 									   .commentParent(commentParent)
 									   .commentDepth(commentDepth)
 									   .commentOrder(commentOrder)
@@ -73,10 +78,41 @@ public class CommentDTO
 		return commentEntity;
 	}
 	
-	public Comment replyToEntity(Integer depth, Integer order)
+	// Convert DTO to Entity when creating comment reply
+	public Comment toEntity()
+	{	
+		Comment commentEntity = Comment.builder()
+				   					   .commentNo(commentNo)
+				   					   .boardNo(boardNo)
+				   					   .commentGroup(commentGroup)			
+				   					   .commentParent(commentParent)
+				   					   .commentDepth(commentDepth)
+				   					   .commentOrder(commentOrder)
+				   					   .author(this.getAuthorFromSecurity())
+				   					   .content(content)
+				   					   .createDate(createDate)
+				   					   .build();
+
+		return commentEntity;
+	}
+	
+	// Convert DTO to Entity for updating orders of the child comments when creating comment reply
+	public Comment toEntity(Integer order)
 	{
-		Comment comment = new Comment();
+		Integer nOrder = commentOrder + order;
 		
-		return comment;
+		Comment commentEntity = Comment.builder()
+				   					   .commentNo(commentNo)
+				   					   .boardNo(boardNo)
+				   					   .commentGroup(commentGroup)			
+				   					   .commentParent(commentParent)
+				   					   .commentDepth(commentDepth)
+				   					   .commentOrder(nOrder)
+				   					   .author(this.getAuthorFromSecurity())
+				   					   .content(content)
+				   					   .createDate(createDate)
+				   					   .build();
+
+		return commentEntity;
 	}
 }

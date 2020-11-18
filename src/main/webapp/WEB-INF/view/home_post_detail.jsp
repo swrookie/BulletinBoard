@@ -143,8 +143,6 @@ uri="http://www.springframework.org/security/tags" %>
           action="${pageContext.request.contextPath}/save_comment"
         >
           <input type="hidden" name="boardNo" value="${boardDto.boardNo}" />
-          <input type="hidden" name="commentParent" value="0" />
-          <input type="hidden" name="commentDepth" value="0" />
           <div class="card-body">
             <textarea name="content" class="form-control" row="1"></textarea>
           </div>
@@ -162,7 +160,10 @@ uri="http://www.springframework.org/security/tags" %>
               class="list-group-item d-flex justify-content-between align-items-center"
               id="commentBlock"
             >
-              ${comment.content}
+              <div class="ml-${comment.commentDepth * 2}">
+                ${comment.content}
+              </div>
+
               <div class="d-flex">
                 <div class="font-italic">Author: ${comment.author} &nbsp;</div>
                 <button class="badge">DELETE</button>
@@ -181,12 +182,42 @@ uri="http://www.springframework.org/security/tags" %>
                 class="list-group-item d-flex justify-content-between align-items-center"
                 id="replyBlock"
               >
-                <textarea
-                  name="content"
-                  class="form-control"
-                  row="1"
-                ></textarea>
-                <button class="badge">POST</button>
+                <form
+                  method="POST"
+                  action="${pageContext.request.contextPath}/save_commentReply/"
+                >
+                  <input
+                    type="hidden"
+                    name="boardNo"
+                    value="${boardDto.boardNo}"
+                  />
+                  <input
+                    type="hidden"
+                    name="commentParent"
+                    value="${comment.commentNo}"
+                  />
+                  <input
+                    type="hidden"
+                    name="commentGroup"
+                    value="${comment.commentGroup}"
+                  />
+                  <input
+                    type="hidden"
+                    name="commentDepth"
+                    value="${comment.commentDepth + 1}"
+                  />
+                  <input
+                    type="hidden"
+                    name="commentOrder"
+                    value="${comment.commentOrder + 1}"
+                  />
+                  <textarea
+                    name="content"
+                    class="form-control"
+                    row="1"
+                  ></textarea>
+                  <input type="submit" class="btn btn-primary" value="POST" />
+                </form>
               </li>
             </div>
           </c:forEach>
@@ -194,18 +225,6 @@ uri="http://www.springframework.org/security/tags" %>
       </div>
     </div>
     <br />
-    <script>
-      function replyToComment() {
-        var element = document.createElement("li");
-        element.setAttribute(
-          "class",
-          "list-group-item d-flex justify-content-between align-items-center"
-        );
-        element.setAttribute("name", "nextChildComment");
-        var commentBlockList = document.getElementById("commentBlock");
-        commentBlockList.append(element);
-      }
-    </script>
     <footer>
       <div class="jumbotron text-center" style="margin-bottom: 0">
         <p>Bulletin Board Project by swrookie</p>

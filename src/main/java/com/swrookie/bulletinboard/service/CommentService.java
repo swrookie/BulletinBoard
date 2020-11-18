@@ -40,32 +40,40 @@ public class CommentService
 						 .build();
 	}
 	
-	private Sort sortByCommentNoDesc()
-	{
-		return Sort.by(Sort.Direction.DESC, "commentNo");
-	}
-	
 	private Integer determineGroupNum()
 	{
 		Integer groupNum = 0;
 		if (commentRepository.findAll().size() == 0)
 			groupNum = 1;
 		else
-			groupNum = commentRepository.findAll(sortByCommentNoDesc()).get(0).getCommentGroup() + 1;
+			groupNum = commentRepository.findAll(Sort.by(Sort.Direction.DESC, "commentNo"))
+										.get(0).getCommentGroup() + 1;
 		
 		return groupNum;
+	}
+	
+	private Integer determineOrderNum()
+	{
+		Integer orderNum = 0;
+		if (commentRepository.findAll().size() == 0)
+			orderNum = 1;
+		else
+			orderNum = commentRepository.findAll(Sort.by(Sort.Direction.DESC, "commentNo"))
+										.get(0).getCommentOrder() + 1;
+		
+		return orderNum;
 	}
 	
 	@Transactional
 	public void createComment(CommentDTO commentDto)
 	{
-		commentRepository.save(commentDto.toEntity(determineGroupNum()));
+		commentRepository.save(commentDto.toEntity(determineGroupNum(), determineOrderNum()));
 	}
 	
 	@Transactional
 	public List<CommentDTO> readComment(Board boardNo)
 	{
-		List<Comment> comments = commentRepository.findAll();
+		List<Comment> comments = commentRepository.findByBoardNoOrderByCommentOrderAsc(boardNo);
 		List<CommentDTO> commentDtoList = new ArrayList<CommentDTO>();
 		
 		for (Comment comment : comments)
@@ -90,25 +98,30 @@ public class CommentService
 		return commentDto;
 	}
 	
-	
 	@Transactional
 	public void deleteComment(Long commentNo)
 	{
 		commentRepository.deleteById(commentNo);
 	}
 	
-	public void createCommentReply() 
-	{
+	@Transactional
+	public void createCommentReply(CommentDTO commentDto) 
+	{	
+		List<Comment> comments = commentRepository.findByCommentOrderGreaterThanEqual(
+								 commentDto.getCommentOrder());
 		
-	}
-	
-	public boolean postContainsComment(Long boardNo)
-	{
-		List<Comment> comments = commentRepository.findAll();
 		
-		if (comments.size() == 0)
-			return false;
+		for (Comment comment: comments)
+		{
+//			if (comment.getCommentParent().equals(commentDto.getCommentParent()) &&
+//				comment.getCommentDepth().equals(commentDto.getCommentDepth()))
+//			{
+//				commentRepository.save(commentDto.toEntity(1));
+//			}
+//			else	
+				commentRepository.save(this.convertEntityToDto(comment).toEntity(1));
+		}
 		
-		return true;
+		commentRepository.save(commentDto.toEntity());
 	}
 }
