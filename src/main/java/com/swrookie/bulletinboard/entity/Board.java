@@ -1,13 +1,16 @@
 package com.swrookie.bulletinboard.entity;
 
-import java.sql.Timestamp; 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
-//import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,10 +18,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @Table(name="board")
+@NoArgsConstructor
 public class Board 
 {
 	@Id
@@ -28,14 +33,13 @@ public class Board
 	private String author;			// Post Author
 	@Lob
 	private String content;			// Post Content
+	@OneToMany
+	@JoinColumn(name="board_no")
+	private List<File> files = new ArrayList<File>();
 	@CreationTimestamp
 	private Timestamp createDate;	// LocalDateTime during creation
 	@UpdateTimestamp
 	private Timestamp updateDate;	// LocalDateTime during update
-	
-	public Board()
-	{
-	}
 	
 	@Builder
 	public Board(Long boardNo,  String title, String author, String content, Timestamp createDate)

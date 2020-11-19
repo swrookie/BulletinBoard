@@ -137,6 +137,15 @@ uri="http://www.springframework.org/security/tags" %>
         <div>${boardDto.content}</div>
       </div>
       <hr />
+      <div>
+        <strong>Attachments: </strong>
+        <c:forEach var="file" items="${fileList}">
+          <a class="card-text" href="@{'/download/' + ${file.fileNo}}">
+            ${file.origFileName}</a
+          >
+        </c:forEach>
+      </div>
+      <hr />
       <div class="card">
         <form
           method="POST"

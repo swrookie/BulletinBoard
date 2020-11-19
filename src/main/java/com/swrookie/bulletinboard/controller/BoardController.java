@@ -1,7 +1,6 @@
 package com.swrookie.bulletinboard.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.swrookie.bulletinboard.dto.BoardDTO;
+import com.swrookie.bulletinboard.dto.FileDTO;
 import com.swrookie.bulletinboard.entity.Board;
+import com.swrookie.bulletinboard.security.MD5Generator;
 import com.swrookie.bulletinboard.service.BoardService;
 import com.swrookie.bulletinboard.service.CommentService;
+import com.swrookie.bulletinboard.service.FileService;
 
 @Controller
 public class BoardController 
@@ -27,11 +29,15 @@ public class BoardController
 	private BoardService boardService;
 	@Autowired
 	private CommentService commentService;
+	@Autowired
+	private FileService fileService;
 	
 	
-	public BoardController(BoardService boardService)
+	public BoardController(BoardService boardService, CommentService commentService, FileService fileService)
 	{
 		this.boardService = boardService;
+		this.commentService = commentService;
+		this.fileService = fileService;
 	}
 	
 	// Go to home page and list posts when starting Spring Boot Application
@@ -56,20 +62,49 @@ public class BoardController
 	
 	// Create post by clicking write button and return to home page
 	@PostMapping("/do_create")
-	public String createPost(BoardDTO boardDto, @RequestParam("files") List<MultipartFile> files) throws IOException
+	public String createPost(BoardDTO boardDto, List<MultipartFile> files)
 	{
 		boardService.createPost(boardDto);
 		
-		for (MultipartFile file : files)
+		try
 		{
-			try
+			for (MultipartFile file : files)
 			{
-				file.transferTo(new File("C:/Users/Public/Documents/" + file.getOriginalFilename()));
+				String origFileName = file.getOriginalFilename();
+				if (origFileName.equals(""))
+					continue;
+				System.out.println("Original file name: " + origFileName);
+				String fileName = new MD5Generator(origFileName).toString();
+				String savePath = System.getProperty("user.dir") + "\\files";
+				
+				if (!new File(savePath).exists())
+				{
+					try
+					{
+						new File(savePath).mkdir();
+					}
+					catch(Exception e)
+					{
+						e.getStackTrace();
+					}
+				}
+				
+				String filePath = savePath + "\\" + fileName;
+				file.transferTo(new File(filePath));
+				
+				FileDTO fileDto = FileDTO.builder()
+										 .boardNo(boardService.getRecentBoardNo())
+										 .origFileName(origFileName)
+										 .fileName(fileName)
+										 .filePath(filePath)
+										 .build();
+				
+				 fileService.createFile(fileDto);
 			}
-			catch(IllegalStateException | IOException e)
-			{
-				e.printStackTrace();
-			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 		
 		return "redirect:/";
@@ -81,6 +116,7 @@ public class BoardController
 							 @PathVariable("boardNo") Board boardNum, Model model)
 	{
 		model.addAttribute("boardDto", boardService.updatePost(boardNo));
+		model.addAttribute("fileList", fileService.readFile(boardNo));
 		model.addAttribute("commentList", commentService.readComment(boardNum));
 		
 		return "home_post_detail";

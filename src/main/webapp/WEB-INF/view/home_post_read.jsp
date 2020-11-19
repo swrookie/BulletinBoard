@@ -64,16 +64,33 @@ uri="http://www.springframework.org/security/tags" %>
               Menu
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Profile</a>
-              <div class="dropdown-divider"></div>
               <sec:authorize access="isAnonymous()">
-                <a
-                  class="dropdown-item"
-                  href="${pageContext.request.contextPath}/go_login"
-                  >Login</a
-                >
+                <form class="px-4 py-3" method="POST" action="${pageContext.request.contextPath}/do_login">
+                  <div class="form-group">
+                    <label for="exampleDropdownFormEmail1">Username</label>
+                    <input type="text" class="form-control" name="userName" id="exampleDropdownFormEmail1" placeholder="Username">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleDropdownFormPassword1">Password</label>
+                    <input type="password" class="form-control" name="password" id="exampleDropdownFormPassword1" placeholder="Password">
+                  </div>
+                  <div class="form-group">
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" id="dropdownCheck">
+                      <label class="form-check-label" for="dropdownCheck">
+                        Remember me
+                      </label>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Sign in</button>
+                </form>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">New around here? Sign up</a>
+                <a class="dropdown-item" href="#">Forgot password?</a>
               </sec:authorize>
               <sec:authorize access="isAuthenticated()">
+                <a class="dropdown-item" href="#">Profile</a>
+                <div class="dropdown-divider"></div>
                 <a
                   class="dropdown-item"
                   href="${pageContext.request.contextPath}/do_logout"

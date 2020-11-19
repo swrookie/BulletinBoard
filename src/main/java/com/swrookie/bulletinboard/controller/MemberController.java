@@ -29,13 +29,6 @@ public class MemberController
 		this.memberService = memberService;
 	}	
 	
-	// Go to login page when clicking login button
-	@GetMapping("/go_login")
-	public String goLogin()
-	{
-		return "login";
-	}
-	
 	// Authenticate in the security configuration and return to the home screen
 	@PostMapping("/do_login")
 	public String doLogin()

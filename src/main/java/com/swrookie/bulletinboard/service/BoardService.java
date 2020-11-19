@@ -112,6 +112,14 @@ public class BoardService
 		return boardDtoList;
 	}
 	
+	@Transactional
+	public Long getRecentBoardNo()
+	{
+		List<Board> boards = boardRepository.findAll();
+		
+		return boards.get(boards.size() - 1).getBoardNo();
+	}
+	
 	
 	@Transactional
 	public Long getBoardCount()

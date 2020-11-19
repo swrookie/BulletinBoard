@@ -129,13 +129,13 @@ uri="http://www.springframework.org/security/tags" %>
           <div class="col-sm-10">
             <input
               name="files"
-              multiple
+              multiple="multiple"
               type="file"
               class="custom-file-input"
               id="customFile"
             />
             <label class="custom-file-label" for="customFile"
-              >Please select files to upload</label
+              >Choose files</label
             >
           </div>
         </div>
@@ -147,7 +147,6 @@ uri="http://www.springframework.org/security/tags" %>
         />
       </form>
     </div>
-
     <script>
       $(".summernote").summernote({
         placeholder: "Write Something...",
@@ -159,7 +158,7 @@ uri="http://www.springframework.org/security/tags" %>
       $(".custom-file-input").on("change", function () {
         var fileName = $(this).val().split("\\").pop();
         $(this)
-          .siblings(".custom-file-lable")
+          .siblings(".custom-file-label")
           .addClass("selected")
           .html(fileName);
       });

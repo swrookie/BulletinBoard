@@ -13,10 +13,14 @@ import com.swrookie.bulletinboard.entity.Board;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @ToString
 @Getter
+@Setter
+@NoArgsConstructor()
 public class BoardDTO
 {
 	private Long boardNo;								// Table PK Instance Field
@@ -41,7 +45,7 @@ public class BoardDTO
 		this.updateDate = updateDate;
 	}
 	
-	public Board toEntity()
+	public String getAuthorFromSecurity()
 	{
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
@@ -50,10 +54,15 @@ public class BoardDTO
 		else
 			author = principal.toString();
 		
+		return author;
+	}
+	
+	public Board toEntity()
+	{
 		Board boardEntity = Board.builder()
 								 .boardNo(boardNo)
 								 .title(title)
-								 .author(author)
+								 .author(this.getAuthorFromSecurity())
 								 .content(content)
 								 .createDate(createDate)
 								 .build();
