@@ -48,7 +48,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
   </head>
 
   <body>
-    <form method="POST" action="${pageContext.request.contextPath}/do_register">
+    <form method="POST" action="${pageContext.request.contextPath}/sign_up">
       <div class="form-row">
         <div class="col-md-6 mb-3">
           <label for="validationCustom01">First name</label>
@@ -116,11 +116,5 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
         <button type="submit" class="btn btn-primary">Register</button>
       </div>
     </form>
-    <footer>
-      <div class="jumbotron text-center" style="margin-bottom: 0">
-        <p>Bulletin Board Project by swrookie</p>
-        <p>dpdjflr@gmail.com</p>
-      </div>
-    </footer>
   </body>
 </html>

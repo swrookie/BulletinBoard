@@ -4,7 +4,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +35,10 @@ public class Board
 	private String author;			// Post Author
 	@Lob
 	private String content;			// Post Content
-	@OneToMany
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="board_no")
+	private List<Comment> comments = new ArrayList<Comment>();
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="board_no")
 	private List<File> files = new ArrayList<File>();
 	@CreationTimestamp

@@ -85,7 +85,7 @@ uri="http://www.springframework.org/security/tags" %>
                   <button type="submit" class="btn btn-primary">Sign in</button>
                 </form>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">New around here? Sign up</a>
+                <a class="dropdown-item" href="${pageContext.request.contextPath}/sign_up">New around here? Sign up</a>
                 <a class="dropdown-item" href="#">Forgot password?</a>
               </sec:authorize>
               <sec:authorize access="isAuthenticated()">
@@ -120,8 +120,8 @@ uri="http://www.springframework.org/security/tags" %>
     </nav>
     <br />
     <div class="container">
-      <table class="table table-hover">
-        <thead>
+      <table class="table table-bordered table-striped table-hover">
+        <thead class="thead-dark">
           <tr>
             <th scope="col">#</th>
             <th scope="col">Title</th>
@@ -141,8 +141,8 @@ uri="http://www.springframework.org/security/tags" %>
                   </a>
                 </td>
                 <td>${post.author}</td>
-                <td>${post.createDate}</td>
-                <td>${post.updateDate}</td>
+                <td><fmt:formatDate value="${post.createDate}" pattern="yyyy-MM-dd HH:mm"/></td>
+                <td><fmt:formatDate value="${post.updateDate}" pattern="yyyy-MM-dd HH:mm"/></td>
               </tr>
             </c:forEach>
           </tr>

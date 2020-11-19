@@ -1,12 +1,11 @@
 package com.swrookie.bulletinboard.dto;
 
-import java.sql.Timestamp;
+import java.sql.Timestamp; 
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.swrookie.bulletinboard.entity.Board;
 import com.swrookie.bulletinboard.entity.Comment;
 
 import lombok.Builder;
@@ -18,7 +17,7 @@ import lombok.ToString;
 public class CommentDTO 
 {
 	private Long commentNo;			// Comment Number
-	private Board boardNo;			// Post(Parent) number that contains comment(child) 
+	private Long boardNo;			// Post(Parent) number that contains comment(child) 
 	private String author;			// Comment Author
 	private String content;			// Comment content
 	@CreationTimestamp
@@ -29,7 +28,7 @@ public class CommentDTO
 	private Integer commentOrder;
 	
 	@Builder
-	public CommentDTO(Long commentNo, Board boardNo, String author, String content, Timestamp createDate,
+	public CommentDTO(Long commentNo, Long boardNo, String author, String content, Timestamp createDate,
 					  Integer commentGroup, Long commentParent, Integer commentDepth, Integer commentOrder) 
 	{
 		this.commentNo = commentNo;

@@ -24,22 +24,23 @@ public class MemberController
 	@Autowired
 	private MemberValidator memberValidator;
 	
-	public MemberController(MemberService memberService)
+	public MemberController(MemberService memberService, MemberValidator memberValidator)
 	{
 		this.memberService = memberService;
+		this.memberValidator = memberValidator;
 	}	
 	
 	// Authenticate in the security configuration and return to the home screen
-	@PostMapping("/do_login")
-	public String doLogin()
+	@PostMapping("/login")
+	public String login()
 	{
 		return "redirect:/";
 	}
 	
 	// Being Logged in, Go to the home page after clicking logout button
 	// @PostMapping needed when implementing CSRF
-	@GetMapping("/do_logout")
-	public String doLogout()
+	@GetMapping("/logout")
+	public String logout()
 	{
 		return "redirect:/";
 	}
@@ -50,29 +51,31 @@ public class MemberController
 		return "denied";
 	}
 	
-	// Registration Page
-	@GetMapping("/register")
-	public String registration()
+	// Go to Sign Up Page
+	@GetMapping("/sign_up")
+	public String signUp()
 	{
-		return "registration";
+		return "sign_up";
 	}
 	
-	@PostMapping("/do_register")
-	public String registerMember(@Validated Member member, BindingResult bindingResult)
+	// Send sign up form to database and return to home page
+	@PostMapping("/sign_up")
+	public String signUp(@Validated Member member, BindingResult bindingResult)
 	{	
 		memberValidator.validate(member, bindingResult);
 		
 		if (bindingResult.hasErrors())
 		{
+			System.out.println("Error occured");
 			log.debug("valid errors");
-			return "redirect:/registration";
+			return "redirect:/sign_up";
 		}
-		
+		System.out.println("Error not occured");
 		member.setRole(MemberRole.MEMBER);
 		memberService.createMember(member);
 		log.debug("User Info: " + member.toString());
 		log.debug("Email: " + member.getEmail() + " | " + member.getPassword());
 		
-		return "redirect:/go_login";
+		return "redirect:/";
 	}
 }

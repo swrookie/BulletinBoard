@@ -17,6 +17,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.swrookie.bulletinboard.enumeration.MemberRole;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -25,6 +26,7 @@ import lombok.ToString;
 @Entity
 @Table(name="member")
 @ToString
+@NoArgsConstructor
 public class Member
 {
 	@Id
@@ -32,11 +34,12 @@ public class Member
 	private Long memberNo;
 	private String firstName;
 	private String lastName;
-	@Column(name = "role_name")
+	@Column(name="role_name")
 	@Enumerated(EnumType.STRING)
 	private MemberRole role;
+	@Column(unique=true)
 	private String userName;
-	@Column(unique = true)
+	@Column(unique=true)
 	private String email;
 	private String password;
 	private String passwordConfirm;
@@ -44,8 +47,4 @@ public class Member
 	private Timestamp createDate;
 	@UpdateTimestamp
 	private Timestamp updateDate;
-	
-	public Member()
-	{
-	}
 }

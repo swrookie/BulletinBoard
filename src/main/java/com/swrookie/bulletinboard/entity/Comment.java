@@ -2,12 +2,11 @@ package com.swrookie.bulletinboard.entity;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -23,9 +22,8 @@ public class Comment
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long commentNo;			// Comment Number
-	@ManyToOne
-	@JoinColumn(name="board_no", nullable=false)
-	private Board boardNo;			// Post(Parent) number that contains comment(child) 
+	@Column(name="board_no")
+	private Long boardNo;			// Post(Parent) number that contains comment(child) 
 	private String author;			// Comment Author
 	private String content;			// Comment content
 	@CreationTimestamp
@@ -40,7 +38,7 @@ public class Comment
 	}
 	
 	@Builder
-	public Comment(Long commentNo, Board boardNo, String author, String content, Timestamp createDate, 
+	public Comment(Long commentNo, Long boardNo, String author, String content, Timestamp createDate, 
 				   Integer commentGroup, Long commentParent, Integer commentDepth, Integer commentOrder)
 	{
 		this.commentNo = commentNo;

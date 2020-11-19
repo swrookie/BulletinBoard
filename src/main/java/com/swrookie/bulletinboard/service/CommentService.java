@@ -1,6 +1,6 @@
 package com.swrookie.bulletinboard.service;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -10,7 +10,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.swrookie.bulletinboard.dto.CommentDTO;
-import com.swrookie.bulletinboard.entity.Board;
 import com.swrookie.bulletinboard.entity.Comment;
 import com.swrookie.bulletinboard.repository.CommentRepository;
 
@@ -71,14 +70,14 @@ public class CommentService
 	}
 	
 	@Transactional
-	public List<CommentDTO> readComment(Board boardNo)
+	public List<CommentDTO> readComment(Long boardNo)
 	{
 		List<Comment> comments = commentRepository.findByBoardNoOrderByCommentOrderAsc(boardNo);
 		List<CommentDTO> commentDtoList = new ArrayList<CommentDTO>();
 		
 		for (Comment comment : comments)
 		{
-			if (comment.getBoardNo().getBoardNo().equals(boardNo.getBoardNo()))
+			if (comment.getBoardNo().equals(boardNo))
 				commentDtoList.add(this.convertEntityToDto(comment));	
 		}
 		
@@ -107,21 +106,6 @@ public class CommentService
 	@Transactional
 	public void createCommentReply(CommentDTO commentDto) 
 	{	
-		List<Comment> comments = commentRepository.findByCommentOrderGreaterThanEqual(
-								 commentDto.getCommentOrder());
-		
-		
-		for (Comment comment: comments)
-		{
-//			if (comment.getCommentParent().equals(commentDto.getCommentParent()) &&
-//				comment.getCommentDepth().equals(commentDto.getCommentDepth()))
-//			{
-//				commentRepository.save(commentDto.toEntity(1));
-//			}
-//			else	
-				commentRepository.save(this.convertEntityToDto(comment).toEntity(1));
-		}
-		
 		commentRepository.save(commentDto.toEntity());
 	}
 }

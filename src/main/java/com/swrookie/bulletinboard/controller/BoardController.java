@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.swrookie.bulletinboard.dto.BoardDTO;
 import com.swrookie.bulletinboard.dto.FileDTO;
-import com.swrookie.bulletinboard.entity.Board;
 import com.swrookie.bulletinboard.security.MD5Generator;
 import com.swrookie.bulletinboard.service.BoardService;
 import com.swrookie.bulletinboard.service.CommentService;
@@ -65,7 +64,7 @@ public class BoardController
 	public String createPost(BoardDTO boardDto, List<MultipartFile> files)
 	{
 		boardService.createPost(boardDto);
-		
+
 		try
 		{
 			for (MultipartFile file : files)
@@ -112,12 +111,11 @@ public class BoardController
 	
 	// View details of the post by clicking link on the title
 	@GetMapping("/go_home/go_detail/{boardNo}")
-	public String detailPost(@PathVariable("boardNo") Long boardNo, 
-							 @PathVariable("boardNo") Board boardNum, Model model)
+	public String detailPost(@PathVariable("boardNo") Long boardNo, Model model)
 	{
 		model.addAttribute("boardDto", boardService.updatePost(boardNo));
 		model.addAttribute("fileList", fileService.readFile(boardNo));
-		model.addAttribute("commentList", commentService.readComment(boardNum));
+//		model.addAttribute("commentList", commentService.readComment(boardNum));
 		
 		return "home_post_detail";
 	}
