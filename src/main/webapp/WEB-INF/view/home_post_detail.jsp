@@ -66,7 +66,7 @@ uri="http://www.springframework.org/security/tags" %>
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <sec:authorize access="isAnonymous()">
-                <form class="px-4 py-3" method="POST" action="${pageContext.request.contextPath}/do_login">
+                <form class="px-4 py-3" method="POST" action="${pageContext.request.contextPath}/login">
                   <div class="form-group">
                     <label for="exampleDropdownFormEmail1">Username</label>
                     <input type="text" class="form-control" name="userName" id="exampleDropdownFormEmail1" placeholder="Username">
@@ -186,7 +186,7 @@ uri="http://www.springframework.org/security/tags" %>
               class="list-group-item d-flex justify-content-between align-items-center"
               id="commentBlock"
             >
-              <div class="ml-${comment.commentDepth * 2}">
+              <div class="ml-${comment.commentDepth * 1.5}">
                 ${comment.content}
               </div>
 
@@ -210,7 +210,7 @@ uri="http://www.springframework.org/security/tags" %>
               >
                 <form
                   method="POST"
-                  action="${pageContext.request.contextPath}/save_commentReply/"
+                  action="${pageContext.request.contextPath}/save_comment/"
                 >
                   <input
                     type="hidden"
@@ -219,23 +219,13 @@ uri="http://www.springframework.org/security/tags" %>
                   />
                   <input
                     type="hidden"
-                    name="commentParent"
+                    name="commentNo"
                     value="${comment.commentNo}"
                   />
                   <input
                     type="hidden"
-                    name="commentGroup"
-                    value="${comment.commentGroup}"
-                  />
-                  <input
-                    type="hidden"
                     name="commentDepth"
-                    value="${comment.commentDepth + 1}"
-                  />
-                  <input
-                    type="hidden"
-                    name="commentOrder"
-                    value="${comment.commentOrder + 1}"
+                    value="${comment.commentDepth}"
                   />
                   <textarea
                     name="content"

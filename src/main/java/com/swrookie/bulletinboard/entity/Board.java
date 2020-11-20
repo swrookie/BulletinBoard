@@ -21,11 +21,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @Entity
 @Table(name="board")
 @NoArgsConstructor
+@ToString
 public class Board 
 {
 	@Id

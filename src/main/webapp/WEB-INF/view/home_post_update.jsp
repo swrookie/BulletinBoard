@@ -62,7 +62,7 @@ pageEncoding="UTF-8"%>
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <sec:authorize access="isAnonymous()">
-                <form class="px-4 py-3" method="POST" action="${pageContext.request.contextPath}/do_login">
+                <form class="px-4 py-3" method="POST" action="${pageContext.request.contextPath}/login">
                   <div class="form-group">
                     <label for="exampleDropdownFormEmail1">Username</label>
                     <input type="text" class="form-control" name="userName" id="exampleDropdownFormEmail1" placeholder="Username">

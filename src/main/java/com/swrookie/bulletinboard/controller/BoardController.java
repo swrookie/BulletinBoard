@@ -115,7 +115,7 @@ public class BoardController
 	{
 		model.addAttribute("boardDto", boardService.updatePost(boardNo));
 		model.addAttribute("fileList", fileService.readFile(boardNo));
-//		model.addAttribute("commentList", commentService.readComment(boardNum));
+		model.addAttribute("commentList", commentService.readComment(boardNo));
 		
 		return "home_post_detail";
 	}

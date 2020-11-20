@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.swrookie.bulletinboard.dto.CommentDTO;
+import com.swrookie.bulletinboard.entity.Comment;
 import com.swrookie.bulletinboard.service.CommentService;
 
 @Controller
@@ -19,17 +20,9 @@ public class CommentController
 	}
 	
 	@PostMapping("/save_comment")
-	public String createComment(CommentDTO commentDto)
+	public String createComment(Comment commentDto)
 	{
 		commentService.createComment(commentDto);
-		
-		return "redirect:/";
-	}
-	
-	@PostMapping("/save_commentReply")
-	public String createCommentReply(CommentDTO commentDto)
-	{
-		commentService.createCommentReply(commentDto);
 		
 		return "redirect:/";
 	}

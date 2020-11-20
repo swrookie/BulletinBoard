@@ -74,7 +74,7 @@ public class BoardService
 	public BoardDTO updatePost(Long boardNo)
 	{
 		Board board =  boardRepository.findById(boardNo).get();
-		
+//		System.out.println("List of comments" + board.getComments().toString());
 		BoardDTO boardDto = BoardDTO.builder()
 				.boardNo(board.getBoardNo())
 				.author(board.getAuthor())
