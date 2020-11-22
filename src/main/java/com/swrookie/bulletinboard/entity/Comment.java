@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -21,19 +22,15 @@ import org.hibernate.annotations.CreationTimestamp;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Getter
-@Setter
 @Entity
 @Table(name="comment")
 @NoArgsConstructor
-@ToString
 public class Comment 
 {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long commentNo;			// Comment Number
 	@Column(name="board_no")
 	private Long boardNo;			// Post(Parent) number that contains comment(child) 
@@ -43,23 +40,22 @@ public class Comment
 	@CreationTimestamp
 	private Timestamp createDate;	// LocalDateTime during create
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="parent_comment_no")
-	private Comment parentComment;
-	@OneToMany(mappedBy="parentComment", cascade=CascadeType.ALL)
-	private List<Comment> childComment = new ArrayList<Comment>();
-	private Integer commentDepth;
+	@JoinColumn(name="parent", updatable=false, nullable=true)
+	private Comment parent;
+	@OneToMany(mappedBy="parent", cascade=CascadeType.ALL)
+	private List<Comment> children = new ArrayList<Comment>();
+	private Integer depth;
 	
 	@Builder
 	public Comment(Long commentNo, Long boardNo, String author, String content, Timestamp createDate,
-				   Comment parentComment, List<Comment> childComment, Integer commentDepth)
+				   Comment parent, Integer depth)
 	{
 		this.commentNo = commentNo;
 		this.boardNo = boardNo;
 		this.author = author;
 		this.content = content;
 		this.createDate = createDate;
-		this.parentComment = parentComment;
-		this.childComment = childComment;
-		this.commentDepth = commentDepth;
+		this.parent = parent;
+		this.depth = depth;
 	}
 }

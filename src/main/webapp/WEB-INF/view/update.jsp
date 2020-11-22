@@ -1,9 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%> <%@ taglib prefix="c"
-uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
-uri="http://java.sun.com/jsp/jstl/fmt" %> <%@ taglib prefix="sec"
-uri="http://www.springframework.org/security/tags" %>
-
+pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
   <head>
@@ -36,6 +32,7 @@ uri="http://www.springframework.org/security/tags" %>
   </head>
 
   <body>
+    <!-- 게시판 -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand" href="/">Bulletin Board</a>
       <button
@@ -85,7 +82,7 @@ uri="http://www.springframework.org/security/tags" %>
                   <button type="submit" class="btn btn-primary">Sign in</button>
                 </form>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="${pageContext.request.contextPath}/sign_up">New around here? Sign up</a>
+                <a class="dropdown-item" href="#">New around here? Sign up</a>
                 <a class="dropdown-item" href="#">Forgot password?</a>
               </sec:authorize>
               <sec:authorize access="isAuthenticated()">
@@ -120,135 +117,52 @@ uri="http://www.springframework.org/security/tags" %>
     </nav>
     <br />
     <div class="container">
-      <table class="table table-bordered table-striped table-hover">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Title</th>
-            <th scope="col">Author</th>
-            <th scope="col">Posted Date</th>
-            <th scope="col">Modified Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <c:forEach var="post" items="${boardList}">
-              <tr>
-                <td>${post.boardNo}</td>
-                <td>
-                  <a href="/go_home/go_detail/${post.boardNo}">
-                    ${post.title}
-                  </a>
-                </td>
-                <td>${post.author}</td>
-                <td><fmt:formatDate value="${post.createDate}" pattern="yyyy-MM-dd HH:mm"/></td>
-                <td><fmt:formatDate value="${post.updateDate}" pattern="yyyy-MM-dd HH:mm"/></td>
-              </tr>
-            </c:forEach>
-          </tr>
-        </tbody>
-      </table>
+      <form method="POST" action="$/do_update">
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="${boardDto.title}"
+            id="title"
+            name="title"
+            maxlength="50"
+          />
+        </div>
+        <div class="form-group">
+          <textarea
+            class="form-control summernote"
+            rows="3"
+            id="content"
+            name="content"
+          ></textarea>
+        </div>
+        <input
+          type="text"
+          style="display: none"
+          value="${boardDto.createDate}"
+          name="createDate"
+        />
+        <input
+          type="text"
+          style="display: none"
+          value="${boardDto.boardNo}"
+          name="boardNo"
+        />
+        <input
+          type="submit"
+          class="btn btn-warning"
+          name="page"
+          value="UPDATE"
+        />
+      </form>
     </div>
-
-    <nav aria-label="Page Navigation">
-      <ul class="pagination justify-content-center">
-        <li class="page-item enabled">
-          <a class="page-link" href="?page=0">First</a>
-        </li>
-        <c:choose>
-          <c:when test="${currentPage != 0}">
-            <li class="page-item">
-              <a
-                class="page-link"
-                href="?page=${currentPage - 1}"
-                tabindex="-1"
-                aria-disabled="true"
-                aria-label="Previous"
-              >
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-          </c:when>
-          <c:otherwise>
-            <li class="page-item disabled">
-              <a
-                class="page-link"
-                href="?page=${currentPage - 1}"
-                tabindex="-1"
-                aria-disabled="true"
-                aria-label="Previous"
-              >
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-          </c:otherwise>
-        </c:choose>
-        <c:forEach var="pageNum" begin="${startPage}" end="${endPage}">
-          <c:choose>
-            <c:when test="${currentPage eq pageNum}">
-              <li class="page-item active">
-                <a class="page-link" name="page" href="?page=${pageNum}">
-                  ${pageNum + 1}
-                </a>
-              </li>
-            </c:when>
-            <c:otherwise>
-              <li class="page-item">
-                <a class="page-link" name="page" href="?page=${pageNum}">
-                  ${pageNum + 1}
-                </a>
-              </li>
-            </c:otherwise>
-          </c:choose>
-        </c:forEach>
-
-        <c:choose>
-          <c:when test="${currentPage lt lastPage - 1}">
-            <li class="page-item">
-              <a
-                class="page-link"
-                href="?page=${currentPage + 1}"
-                aria-label="Next"
-              >
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </c:when>
-          <c:otherwise>
-            <li class="page-item disabled">
-              <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </c:otherwise>
-        </c:choose>
-        <li class="page-item">
-          <a class="page-link" href="?page=${lastPage - 1}">Last</a>
-        </li>
-      </ul>
-    </nav>
-
-    <div class="text-center">
-      <sec:authorize access="isAnonymous()">
-        <button
-          class="btn btn-primary"
-          type="button"
-          onclick="location.href='/create_post'"
-          disabled
-        >
-          WRITE
-        </button>
-      </sec:authorize>
-      <sec:authorize access="isAuthenticated()">
-        <button
-          class="btn btn-primary"
-          type="button"
-          onclick="location.href='/create_post'"
-        >
-          WRITE
-        </button>
-      </sec:authorize>
-    </div>
+    <script>
+      $(".summernote").summernote({
+        placeholder: "${boardDto.content}",
+        tabsize: 2,
+        height: 300,
+      });
+    </script>
 
     <br />
     <footer>

@@ -2,12 +2,14 @@ package com.swrookie.bulletinboard.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+//import org.springframework.web.bind.annotation.RestController;
 
 import com.swrookie.bulletinboard.dto.CommentDTO;
-import com.swrookie.bulletinboard.entity.Comment;
 import com.swrookie.bulletinboard.service.CommentService;
 
+//@RestController
 @Controller
 public class CommentController 
 {
@@ -20,14 +22,14 @@ public class CommentController
 	}
 	
 	@PostMapping("/save_comment")
-	public String createComment(Comment commentDto)
+	public String createComment(CommentDTO commentDto)
 	{
 		commentService.createComment(commentDto);
 		
 		return "redirect:/";
 	}
 	
-	@PostMapping("/delete_comment")
+	@DeleteMapping("/delete_comment")
 	public String deleteComment(Long commentNo)
 	{
 		commentService.deleteComment(commentNo);

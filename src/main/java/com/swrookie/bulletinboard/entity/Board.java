@@ -31,7 +31,7 @@ import lombok.ToString;
 public class Board 
 {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long boardNo;			// Post Number
 	private String title;			// Post Title
 	private String author;			// Post Author

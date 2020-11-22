@@ -1,8 +1,6 @@
 package com.swrookie.bulletinboard.dto;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,22 +26,20 @@ public class CommentDTO
 	private String content;			// Comment content
 	@CreationTimestamp
 	private Timestamp createDate;	// LocalDateTime during create
-	private Comment parentComment;
-	private List<Comment> childComment = new ArrayList<Comment>();
-	private Integer commentDepth;
+	private Comment parent;
+	private Integer depth;
 	
 	@Builder
 	public CommentDTO(Long commentNo, Long boardNo, String author, String content, Timestamp createDate,
-					  Comment parentComment, List<Comment> childComment, Integer commentDepth)
+					  Comment parent, Integer depth)
 	{
 		this.commentNo = commentNo;
 		this.boardNo = boardNo;
 		this.author = author;
 		this.content = content;
 		this.createDate = createDate;
-		this.parentComment = parentComment;
-		this.childComment = childComment;
-		this.commentDepth = commentDepth;
+		this.parent = parent;
+		this.depth = depth;
 	}
 	
 	public String getAuthorFromSecurity()
@@ -66,29 +62,10 @@ public class CommentDTO
 									   .author(this.getAuthorFromSecurity())
 									   .content(content)
 									   .createDate(createDate)
-									   .parentComment(parentComment)
-									   .childComment(childComment)
-									   .commentDepth(commentDepth)
+									   .parent(parent)
+									   .depth(depth)
 									   .build();
-		System.out.println("New child comment: " + commentEntity.toString());
+		
 		return commentEntity;
 	}
-//	
-//	// Convert DTO to Entity when creating comment reply
-//	public Comment toEntity()
-//	{	
-//		Comment commentEntity = Comment.builder()
-//				   					   .commentNo(commentNo)
-//				   					   .boardNo(boardNo)
-//				   					   .commentGroup(commentGroup)			
-//				   					   .commentParent(commentParent)
-//				   					   .commentDepth(commentDepth)
-//				   					   .commentOrder(commentOrder)
-//				   					   .author(this.getAuthorFromSecurity())
-//				   					   .content(content)
-//				   					   .createDate(createDate)
-//				   					   .build();
-//
-//		return commentEntity;
-//	}
 }

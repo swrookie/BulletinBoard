@@ -30,7 +30,7 @@ import lombok.ToString;
 public class Member
 {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long memberNo;
 	private String firstName;
 	private String lastName;

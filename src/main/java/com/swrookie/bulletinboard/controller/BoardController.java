@@ -1,16 +1,22 @@
 package com.swrookie.bulletinboard.controller;
 
-import java.io.File;
+import java.io.File; 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping; 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +47,8 @@ public class BoardController
 	
 	// Go to home page and list posts when starting Spring Boot Application
 	@GetMapping("/")
-	public String readPost(@PageableDefault (size = 7) Pageable pageable, Model model)
+	public String readPost(@PageableDefault (size = 7, sort = "boardNo", direction = Sort.Direction.DESC) 
+						   Pageable pageable, Model model)
 	{
 		model.addAttribute("boardList", boardService.readPost(pageable));
 		model.addAttribute("startPage", BoardService.getStartPage());
@@ -49,18 +56,18 @@ public class BoardController
 		model.addAttribute("currentPage", BoardService.getCurrentPage());
 		model.addAttribute("lastPage", BoardService.getLastPage());
 		
-		return "home_post_read";
+		return "home";
 	}
 	
 	// Transfer to post creation page from home page
-	@GetMapping("/create_post")
+	@GetMapping("/post/write")
 	public String createPost()
 	{
-		return "home_post_create";
+		return "write";
 	}
 	
 	// Create post by clicking write button and return to home page
-	@PostMapping("/do_create")
+	@PostMapping("/post/write")
 	public String createPost(BoardDTO boardDto, List<MultipartFile> files)
 	{
 		boardService.createPost(boardDto);
@@ -110,41 +117,41 @@ public class BoardController
 	}
 	
 	// View details of the post by clicking link on the title
-	@GetMapping("/go_home/go_detail/{boardNo}")
-	public String detailPost(@PathVariable("boardNo") Long boardNo, Model model)
+	@GetMapping("/post/{boardNo}")
+	public String detail(@PathVariable("boardNo") Long boardNo, Model model)
 	{
-		model.addAttribute("boardDto", boardService.updatePost(boardNo));
+		model.addAttribute("boardDto", boardService.showPostDetail(boardNo));
 		model.addAttribute("fileList", fileService.readFile(boardNo));
 		model.addAttribute("commentList", commentService.readComment(boardNo));
 		
-		return "home_post_detail";
+		return "detail";
 	}
 	
 	// Transfer to post editing page from post detail page by clicking editing button
-	@GetMapping("/go_home/go_detail/go_update/{boardNo}")
+	@GetMapping("/post/{boardNo}/update")
 	public String editPost(@PathVariable("boardNo") Long boardNo, Model model)
 	{
-		model.addAttribute("boardDto", boardService.updatePost(boardNo));
+		model.addAttribute("boardDto", boardService.showPostDetail(boardNo));
 		
-		return "home_post_update";
+		return "update";
 	}
 	
 	// Update post by clicking update button and return to home page
-	@PostMapping("/do_update")
-	public String updatePost(BoardDTO boardDto, Model model)
+	@PutMapping("/post/{boardNo}/update")
+	public ResponseEntity<Long> updatePost(@RequestBody BoardDTO boardDto)
 	{
 		boardService.createPost(boardDto);
 		
-		return "redirect:/go_home";
+		return new ResponseEntity<>(boardDto.getBoardNo(), HttpStatus.OK);
 	}
 	
 	// Delete the post by clicking delete button and return to home page
-	@GetMapping("/delete_post/{boardNo}")
-	public String delete(@PathVariable("boardNo")Long boardNo)
+	@DeleteMapping("/post/{boardNo}")
+	public ResponseEntity<Long> delete(@PathVariable("boardNo") Long boardNo)
 	{
 		boardService.deletePost(boardNo);
 		
-		return "home_post_read";
+		return new ResponseEntity<>(boardNo, HttpStatus.OK);
 	}
 	
 	// Search for posts after clicking search button
@@ -156,6 +163,6 @@ public class BoardController
 		
 		model.addAttribute("boardList", boardService.searchPost(keyword));
 		
-		return "home_post_read";
+		return "home";
 	}
 }

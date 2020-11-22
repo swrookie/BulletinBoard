@@ -121,7 +121,7 @@ uri="http://www.springframework.org/security/tags" %>
     <div class="container">
       <form
         method="POST"
-        action="${pageContext.request.contextPath}/do_create"
+        action="${pageContext.request.contextPath}/post/write"
         enctype="multipart/form-data"
       >
         <div class="form-group">

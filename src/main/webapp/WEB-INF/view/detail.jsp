@@ -67,22 +67,14 @@ uri="http://www.springframework.org/security/tags" %>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <sec:authorize access="isAnonymous()">
                 <form class="px-4 py-3" method="POST" action="${pageContext.request.contextPath}/login">
-                  <div class="form-group">
-                    <label for="exampleDropdownFormEmail1">Username</label>
-                    <input type="text" class="form-control" name="userName" id="exampleDropdownFormEmail1" placeholder="Username">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleDropdownFormPassword1">Password</label>
-                    <input type="password" class="form-control" name="password" id="exampleDropdownFormPassword1" placeholder="Password">
-                  </div>
-                  <div class="form-group">
-                    <div class="form-check">
-                      <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                      <label class="form-check-label" for="dropdownCheck">
-                        Remember me
-                      </label>
-                    </div>
-                  </div>
+                  <label for="exampleDropdownFormEmail1">Username</label>
+                  <input type="text" class="form-control" name="userName" id="exampleDropdownFormEmail1" placeholder="Username">
+                  <label for="exampleDropdownFormPassword1">Password</label>
+                  <input type="password" class="form-control" name="password" id="exampleDropdownFormPassword1" placeholder="Password">
+                  <input type="checkbox" class="form-check-input" id="dropdownCheck">
+                  <label class="form-check-label" for="dropdownCheck">
+                      Remember me
+                    </label>
                   <button type="submit" class="btn btn-primary">Sign in</button>
                 </form>
                 <div class="dropdown-divider"></div>
@@ -121,22 +113,12 @@ uri="http://www.springframework.org/security/tags" %>
     </nav>
     <br />
     <div class="container">
+      <button class="btn btn-secondary" onclick="history.back()">List</button>
       <sec:authorize access="isAuthenticated()">
         <sec:authentication var="username" property="principal.username" />
         <c:if test="${username eq boardDto.author}">
-          <a
-            class="btn btn-warning"
-            href="/go_home/go_detail/go_update/${boardDto.boardNo}"
-          >
-            Edit
-          </a>
-          <button
-            class="btn btn-danger"
-            type="button"
-            onclick="location.href='${pageContext.request.contextPath}/delete_post/${boardDto.boardNo}'"
-          >
-            Delete
-          </button>
+          <a class="btn btn-warning" href="/post/${boardDto.boardNo}/update">Edit</a>
+          <button id="btn-delete" class="btn btn-danger">Delete</button>
         </c:if>
       </sec:authorize>
       <br />
@@ -183,13 +165,10 @@ uri="http://www.springframework.org/security/tags" %>
         <ul class="list-group" id="commentBlockList">
           <c:forEach var="comment" items="${commentList}">
             <li
-              class="list-group-item d-flex justify-content-between align-items-center"
+              class="list-group-item d-flex justify-content-between ml-${comment.depth}"
               id="commentBlock"
             >
-              <div class="ml-${comment.commentDepth * 1.5}">
                 ${comment.content}
-              </div>
-
               <div class="d-flex">
                 <div class="font-italic">Author: ${comment.author} &nbsp;</div>
                 <button class="badge">DELETE</button>
@@ -205,7 +184,7 @@ uri="http://www.springframework.org/security/tags" %>
             </li>
             <div class="collapse" id="collapseCommentReply${comment.commentNo}">
               <li
-                class="list-group-item d-flex justify-content-between align-items-center"
+                class="list-group-item d-flex justify-content-between"
                 id="replyBlock"
               >
                 <form
@@ -219,13 +198,8 @@ uri="http://www.springframework.org/security/tags" %>
                   />
                   <input
                     type="hidden"
-                    name="commentNo"
+                    name="parent"
                     value="${comment.commentNo}"
-                  />
-                  <input
-                    type="hidden"
-                    name="commentDepth"
-                    value="${comment.commentDepth}"
                   />
                   <textarea
                     name="content"
@@ -240,6 +214,7 @@ uri="http://www.springframework.org/security/tags" %>
         </ul>
       </div>
     </div>
+    <script src="/js/board.js"></script>
     <br />
     <footer>
       <div class="jumbotron text-center" style="margin-bottom: 0">

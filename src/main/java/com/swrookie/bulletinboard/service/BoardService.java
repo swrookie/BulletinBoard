@@ -37,6 +37,28 @@ public class BoardService
 					   .build();
 	}
 	
+	private void getPaging(Page<Board> page)
+	{
+		currentPage = page.getPageable().getPageNumber();
+		lastPage = page.getTotalPages();
+		startPage = (currentPage / PAGE_BLOCK_COUNT) * PAGE_BLOCK_COUNT;
+		
+		if (lastPage <= PAGE_BLOCK_COUNT)
+		{
+			if (this.getPostCount() < 1)
+				endPage = lastPage;
+			else
+				endPage = lastPage - 1;
+		}
+		else
+		{
+			if (lastPage - PAGE_BLOCK_COUNT > startPage)
+				endPage = startPage + PAGE_BLOCK_COUNT - 1;
+			else
+				endPage = lastPage - 1;
+		}
+	}
+	
 	public BoardService(BoardRepository boardRepository)
 	{
 		this.boardRepository = boardRepository;
@@ -52,12 +74,14 @@ public class BoardService
 	public List<BoardDTO> readPost(Pageable pageable)
 	{		
 		Page<Board> page = boardRepository.findAll(pageable);
-		currentPage = page.getPageable().getPageNumber();
-		lastPage = page.getTotalPages();
-		startPage = (currentPage / PAGE_BLOCK_COUNT) * PAGE_BLOCK_COUNT;
-		endPage = (lastPage <= PAGE_BLOCK_COUNT) ? ((this.getBoardCount() < 1) ? lastPage : lastPage - 1) :
-				  (lastPage - PAGE_BLOCK_COUNT > startPage) ? 
-				   startPage + PAGE_BLOCK_COUNT - 1 : lastPage - 1; 
+		this.getPaging(page);
+		
+//		currentPage = page.getPageable().getPageNumber();
+//		lastPage = page.getTotalPages();
+//		startPage = (currentPage / PAGE_BLOCK_COUNT) * PAGE_BLOCK_COUNT;
+//		endPage = (lastPage <= PAGE_BLOCK_COUNT) ? ((this.getPostCount() < 1) ? lastPage : lastPage - 1) :
+//				  (lastPage - PAGE_BLOCK_COUNT > startPage) ? 
+//				   startPage + PAGE_BLOCK_COUNT - 1 : lastPage - 1; 
 		
 		List<Board> boards = page.getContent();
 		List<BoardDTO> boardDtoList = new ArrayList<BoardDTO>();
@@ -71,10 +95,10 @@ public class BoardService
 	}
 	
 	@Transactional
-	public BoardDTO updatePost(Long boardNo)
+	public BoardDTO showPostDetail(Long boardNo)
 	{
 		Board board =  boardRepository.findById(boardNo).get();
-//		System.out.println("List of comments" + board.getComments().toString());
+
 		BoardDTO boardDto = BoardDTO.builder()
 				.boardNo(board.getBoardNo())
 				.author(board.getAuthor())
@@ -120,9 +144,8 @@ public class BoardService
 		return boards.get(boards.size() - 1).getBoardNo();
 	}
 	
-	
 	@Transactional
-	public Long getBoardCount()
+	public Long getPostCount()
 	{
 		return boardRepository.count();
 	}
