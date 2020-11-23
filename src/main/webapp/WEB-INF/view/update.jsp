@@ -1,11 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
+pageEncoding="UTF-8"%> <%@ taglib prefix="c"
+uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
+uri="http://java.sun.com/jsp/jstl/fmt" %> <%@ taglib prefix="sec"
+uri="http://www.springframework.org/security/tags" %>
+
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bulletin Board</title>
+    <title>OnBoard</title>
 
     <!-- Bootstrap CSS & JS -->
     <link
@@ -29,12 +33,13 @@ pageEncoding="UTF-8"%>
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+    
   </head>
 
   <body>
     <!-- 게시판 -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="/">Bulletin Board</a>
+      <a class="navbar-brand" href="/">OnBoard</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -90,80 +95,60 @@ pageEncoding="UTF-8"%>
                 <div class="dropdown-divider"></div>
                 <a
                   class="dropdown-item"
-                  href="${pageContext.request.contextPath}/do_logout"
+                  href="${pageContext.request.contextPath}/logout"
                   >Logout</a
                 >
               </sec:authorize>
             </div>
           </li>
         </ul>
-        <form
-          class="form-inline my-2 my-lg-0"
-          method="GET"
-          action="/go_home/search_posts"
-        >
-          <input
-            class="form-control mr-sm-2"
-            type="search"
-            name="keyword"
-            placeholder="Search by Post Title"
-            aria-label="Search"
-          />
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-            Search
-          </button>
-        </form>
       </div>
     </nav>
     <br />
     <div class="container">
-      <form method="POST" action="$/do_update">
+      <form>
         <div class="form-group">
           <input
+            id="boardNo"
+            type="hidden"
+            value="${boardDto.boardNo}"
+          />
+          <input
+            id="title"
             type="text"
             class="form-control"
             placeholder="${boardDto.title}"
-            id="title"
-            name="title"
             maxlength="50"
+          />
+          <input
+            id="createDate"
+            type="hidden"
+            value="${boardDto.createDate}"
           />
         </div>
         <div class="form-group">
           <textarea
+            id="content"
             class="form-control summernote"
             rows="3"
-            id="content"
-            name="content"
           ></textarea>
         </div>
-        <input
-          type="text"
-          style="display: none"
-          value="${boardDto.createDate}"
-          name="createDate"
-        />
-        <input
-          type="text"
-          style="display: none"
-          value="${boardDto.boardNo}"
-          name="boardNo"
-        />
-        <input
-          type="submit"
-          class="btn btn-warning"
-          name="page"
-          value="UPDATE"
-        />
       </form>
+      <button
+        id="btn-update"
+        class="btn btn-warning"
+      >
+        UPDATE
+      </button>
     </div>
     <script>
       $(".summernote").summernote({
-        placeholder: "${boardDto.content}",
+        placeholder: "Write Something...",
         tabsize: 2,
         height: 300,
       });
     </script>
-
+    <script src="/resources/js/board.js"></script>
     <br />
     <footer>
       <div class="jumbotron text-center" style="margin-bottom: 0">

@@ -9,7 +9,7 @@ uri="http://www.springframework.org/security/tags" %>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bulletin Board</title>
+    <title>OnBoard</title>
 
     <!-- Bootstrap CSS & JS -->
     <link
@@ -37,7 +37,7 @@ uri="http://www.springframework.org/security/tags" %>
 
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="/">Bulletin Board</a>
+      <a class="navbar-brand" href="/">OnBoard</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -93,7 +93,7 @@ uri="http://www.springframework.org/security/tags" %>
                 <div class="dropdown-divider"></div>
                 <a
                   class="dropdown-item"
-                  href="${pageContext.request.contextPath}/do_logout"
+                  href="${pageContext.request.contextPath}/logout"
                   >Logout</a
                 >
               </sec:authorize>

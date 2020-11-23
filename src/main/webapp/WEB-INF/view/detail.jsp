@@ -9,7 +9,7 @@ uri="http://www.springframework.org/security/tags" %>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bulletin Board</title>
+    <title>OnBoard</title>
 
     <!-- Bootstrap CSS & JS -->
     <link
@@ -38,7 +38,7 @@ uri="http://www.springframework.org/security/tags" %>
   <body>
     <!-- 게시판 -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="/">Bulletin Board</a>
+      <a class="navbar-brand" href="/">OnBoard</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -67,18 +67,26 @@ uri="http://www.springframework.org/security/tags" %>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <sec:authorize access="isAnonymous()">
                 <form class="px-4 py-3" method="POST" action="${pageContext.request.contextPath}/login">
-                  <label for="exampleDropdownFormEmail1">Username</label>
-                  <input type="text" class="form-control" name="userName" id="exampleDropdownFormEmail1" placeholder="Username">
-                  <label for="exampleDropdownFormPassword1">Password</label>
-                  <input type="password" class="form-control" name="password" id="exampleDropdownFormPassword1" placeholder="Password">
-                  <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                  <label class="form-check-label" for="dropdownCheck">
-                      Remember me
-                    </label>
+                  <div class="form-group">
+                    <label for="exampleDropdownFormEmail1">Username</label>
+                    <input type="text" class="form-control" name="userName" id="exampleDropdownFormEmail1" placeholder="Username">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleDropdownFormPassword1">Password</label>
+                    <input type="password" class="form-control" name="password" id="exampleDropdownFormPassword1" placeholder="Password">
+                  </div>
+                  <div class="form-group">
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" id="dropdownCheck">
+                      <label class="form-check-label" for="dropdownCheck">
+                        Remember me
+                      </label>
+                    </div>
+                  </div>
                   <button type="submit" class="btn btn-primary">Sign in</button>
                 </form>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">New around here? Sign up</a>
+                <a class="dropdown-item" href="${pageContext.request.contextPath}/sign_up">New around here? Sign up</a>
                 <a class="dropdown-item" href="#">Forgot password?</a>
               </sec:authorize>
               <sec:authorize access="isAuthenticated()">
@@ -86,29 +94,13 @@ uri="http://www.springframework.org/security/tags" %>
                 <div class="dropdown-divider"></div>
                 <a
                   class="dropdown-item"
-                  href="${pageContext.request.contextPath}/do_logout"
+                  href="${pageContext.request.contextPath}/logout"
                   >Logout</a
                 >
               </sec:authorize>
             </div>
           </li>
         </ul>
-        <form
-          class="form-inline my-2 my-lg-0"
-          method="GET"
-          action="/go_home/search_posts"
-        >
-          <input
-            class="form-control mr-sm-2"
-            type="search"
-            name="keyword"
-            placeholder="Search by Post Title"
-            aria-label="Search"
-          />
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-            Search
-          </button>
-        </form>
       </div>
     </nav>
     <br />
@@ -214,7 +206,7 @@ uri="http://www.springframework.org/security/tags" %>
         </ul>
       </div>
     </div>
-    <script src="/js/board.js"></script>
+
     <br />
     <footer>
       <div class="jumbotron text-center" style="margin-bottom: 0">

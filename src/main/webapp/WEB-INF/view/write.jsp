@@ -9,7 +9,8 @@ uri="http://www.springframework.org/security/tags" %>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bulletin Board</title>
+    <title>OnBoard</title>
+
     <!-- Bootstrap CSS & JS -->
     <link
       rel="stylesheet"
@@ -33,9 +34,10 @@ uri="http://www.springframework.org/security/tags" %>
     />
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
   </head>
+
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="/">Bulletin Board</a>
+      <a class="navbar-brand" href="/">OnBoard</a>
       <button
         class="navbar-toggler"
         type="button"
