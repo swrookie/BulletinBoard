@@ -19,8 +19,8 @@ uri="http://www.springframework.org/security/tags" %>
       crossorigin="anonymous"
     />
     <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
       crossorigin="anonymous"
     ></script>
     <script
@@ -100,39 +100,17 @@ uri="http://www.springframework.org/security/tags" %>
             </div>
           </li>
         </ul>
-        <form
-          class="form-inline my-2 my-lg-0"
-          method="GET"
-          action="/go_home/search_posts"
-        >
-          <input
-            class="form-control mr-sm-2"
-            type="search"
-            name="keyword"
-            placeholder="Search by Post Title"
-            aria-label="Search"
-          />
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-            Search
-          </button>
-        </form>
       </div>
     </nav>
     <br />
-
     <div class="container">
-      <form
-        method="POST"
-        action="${pageContext.request.contextPath}/post/write"
-        enctype="multipart/form-data"
-      >
+      <form name="writeForm" id="writeForm" enctype="multipart/form-data" action="/post/write">
         <div class="form-group">
           <input
             type="text"
             class="form-control"
             placeholder="Enter title"
             id="title"
-            name="title"
             maxlength="50"
           />
         </div>
@@ -141,7 +119,6 @@ uri="http://www.springframework.org/security/tags" %>
             class="form-control summernote"
             rows="3"
             id="content"
-            name="content"
           ></textarea>
         </div>
         <div class="form-group">
@@ -158,13 +135,8 @@ uri="http://www.springframework.org/security/tags" %>
             >
           </div>
         </div>
-        <input
-          type="submit"
-          class="btn btn-primary pull-right"
-          name="page"
-          value="POST"
-        />
       </form>
+      <button id="btn-create" class="btn btn-primary">POST</button>
     </div>
     <script>
       $(".summernote").summernote({
@@ -182,6 +154,7 @@ uri="http://www.springframework.org/security/tags" %>
           .html(fileName);
       });
     </script>
+    <script src="${pageContext.request.contextPath}/resources/js/board.js"></script>
     <br />
     <footer>
       <div class="jumbotron text-center" style="margin-bottom: 0">

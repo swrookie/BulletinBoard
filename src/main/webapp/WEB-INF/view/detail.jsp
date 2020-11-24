@@ -19,8 +19,8 @@ uri="http://www.springframework.org/security/tags" %>
       crossorigin="anonymous"
     />
     <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
       crossorigin="anonymous"
     ></script>
     <script
@@ -110,14 +110,15 @@ uri="http://www.springframework.org/security/tags" %>
         <sec:authentication var="username" property="principal.username" />
         <c:if test="${username eq boardDto.author}">
           <a class="btn btn-warning" href="/post/${boardDto.boardNo}/update">Edit</a>
+          <input id="boardNo" type="hidden" value="${boardDto.boardNo}" />
           <button id="btn-delete" class="btn btn-danger">Delete</button>
         </c:if>
       </sec:authorize>
       <br />
       <br />
       <div>
-        Post No: <span id="id"><i>${boardDto.boardNo}</i></span> Author:
-        <span><i>${boardDto.author}</i></span>
+        Post No: <span id="boardNo"><i>${boardDto.boardNo}</i></span> 
+        Author: <span id="author"><i>${boardDto.author}</i></span>
       </div>
       <br />
       <div class="form-group">
@@ -131,7 +132,7 @@ uri="http://www.springframework.org/security/tags" %>
       <div>
         <strong>Attachments: </strong>
         <c:forEach var="file" items="${fileList}">
-          <a class="card-text" href="@{'/download/' + ${file.fileNo}}">
+          <a class="card-text" href="/post/${boardDto.boardNo}/download/${file.fileNo}">
             ${file.origFileName}</a
           >
         </c:forEach>
@@ -206,7 +207,7 @@ uri="http://www.springframework.org/security/tags" %>
         </ul>
       </div>
     </div>
-
+    <script src="${pageContext.request.contextPath}/resources/js/board.js"></script>
     <br />
     <footer>
       <div class="jumbotron text-center" style="margin-bottom: 0">

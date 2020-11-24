@@ -4,8 +4,6 @@ import java.sql.Timestamp;
 
 import javax.persistence.Lob;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,7 +18,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-@NoArgsConstructor()
+@NoArgsConstructor
 public class BoardDTO
 {
 	private Long boardNo;								// Table PK Instance Field
@@ -28,21 +26,18 @@ public class BoardDTO
 	private String author;								// Table Author Column Instance Field
 	@Lob
 	private String content;								// Table Content Column Instance Field
-	@CreationTimestamp
-	private Timestamp createDate;		// LocalDateTime
-	@UpdateTimestamp
-	private Timestamp updateDate;	// LocalDateTime
+	private Timestamp createdDate;
+	private Timestamp modifiedDate;
 	
 	@Builder
-	public BoardDTO(Long boardNo, String title, String author, 
-					String content, Timestamp createDate, Timestamp updateDate)
+	public BoardDTO(Long boardNo, String title, String author, String content, Timestamp createdDate, Timestamp modifiedDate)
 	{
 		this.boardNo = boardNo;
-		this.title = title;
 		this.author = author;
+		this.title = title;
 		this.content = content;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
+		this.createdDate = createdDate;
+		this.modifiedDate = modifiedDate;
 	}
 	
 	public String getAuthorFromSecurity()
@@ -61,10 +56,9 @@ public class BoardDTO
 	{
 		Board boardEntity = Board.builder()
 								 .boardNo(boardNo)
-								 .title(title)
 								 .author(this.getAuthorFromSecurity())
+								 .title(title)
 								 .content(content)
-								 .createDate(createDate)
 								 .build();
 		
 		return boardEntity;

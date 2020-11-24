@@ -19,8 +19,8 @@ uri="http://www.springframework.org/security/tags" %>
       crossorigin="anonymous"
     />
     <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
       crossorigin="anonymous"
     ></script>
     <script
@@ -36,6 +36,7 @@ uri="http://www.springframework.org/security/tags" %>
   </head>
 
   <body>
+    <!-- 게시판 -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand" href="/">OnBoard</a>
       <button
@@ -141,8 +142,8 @@ uri="http://www.springframework.org/security/tags" %>
                   </a>
                 </td>
                 <td>${post.author}</td>
-                <td><fmt:formatDate value="${post.createDate}" pattern="yyyy-MM-dd HH:mm"/></td>
-                <td><fmt:formatDate value="${post.updateDate}" pattern="yyyy-MM-dd HH:mm"/></td>
+                <td><fmt:formatDate value="${post.createdDate}" pattern="yyyy-MM-dd HH:mm"/></td>
+                <td><fmt:formatDate value="${post.modifiedDate}" pattern="yyyy-MM-dd HH:mm"/></td>
               </tr>
             </c:forEach>
           </tr>

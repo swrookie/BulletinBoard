@@ -38,14 +38,28 @@ public class FileService
 		for (File file : files)
 		{
 			fileDtoList.add(FileDTO.builder()
-					   .fileNo(file.getFileNo())
-					   .boardNo(boardNo)
-					   .origFileName(file.getOrigFileName())
-					   .fileName(file.getFileName())
-					   .filePath(file.getFilePath())
-					   .build());
+					   			   .fileNo(file.getFileNo())
+					               .boardNo(boardNo)
+					               .origFileName(file.getOrigFileName())
+					               .fileName(file.getFileName())
+					               .filePath(file.getFilePath())
+					               .build());
 		}
 		
 		return fileDtoList;
+	}
+	
+	@Transactional
+	public FileDTO getFile(Long fileNo)
+	{
+		File file = fileRepository.findById(fileNo).get();
+		
+        return FileDTO.builder()
+     		   		  .fileNo(file.getFileNo())
+     		   		  .boardNo(file.getBoardNo())
+     		   		  .origFileName(file.getOrigFileName())
+     		   		  .fileName(file.getFileName())
+     		   		  .filePath(file.getFilePath())
+     				  .build();
 	}
 }

@@ -1,43 +1,58 @@
 let index = {
-    init: function () {
+    init: function() 
+    {
         $("#btn-create").on("click", () => {
-            this.createPost();
+            this.createBoardDtoAndFile();
         });
         $("#btn-update").on("click", () => {
             this.updatePost();
         });
         $("#btn-delete").on("click", () => {
-            this.deletePost(); 
+            this.deletePost();
         });
-    },
-
-    createPost: function () {
-        let data = {
+    }, 
+ 
+    createBoardDtoAndFile: function() 
+    {       
+        let files = $("#customFile")[0]; 
+        let boardDto = 
+        {
             title: $("#title").val(),
-            content: $("#content").val()
-        };
-
-        $.ajax({
+            content: $("#content").val(), 
+        };     
+ 
+        var formData = new FormData(document.getElementById("writeForm"));    
+         
+        formData.append("boardDto", new Blob([JSON.stringify(boardDto)], {type : "application/json"}));
+               
+        // for (var value of formData.values()) {
+        //     console.log(value);   
+        // }
+   
+        $.ajax({ 
             type: "POST",
-            url: "/post",
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json"
-        }).done(function (resp) {
+            enctype: "multipart/form-data",
+            url: "/post/write",
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+        }).done(function(resp) {
             alert("Post Successful!");
             location.href = "/";
-        }).fail(function (error) {
+        }).fail(function(error) {
             alert(JSON.stringify(error));
-        });
+        }); 
     },
 
-    updatePost: function () {
-        var boardNo = $("#boardNo").val();
+    updatePost: function() 
+    {
+        let boardNo = $("#boardNo").val();
 
-        var data = {
+        let data = {
+            boardNo: boardNo,
             title: $("#title").val(),
             content: $("#content").val(),
-            createDate: $("#creatDate").val()
         };
 
         $.ajax({
@@ -46,25 +61,26 @@ let index = {
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json"
-        }).done(function (resp) {
-            alert("Update Successful!"),
-                location.href = "/"
-        }).fail(function (error) {
+        }).done(function(resp) {
+            alert("Update Successful!");
+            location.href="/";
+        }).fail(function(error) {
             alert(JSON.stringify(error));
         });
     },
 
-    deletePost: function () {
-        var id = $("#boardNo").val();
+    deletePost: function() 
+    {
+        let boardNo = $("#boardNo").val();
 
         $.ajax({
-            type: "DELETE",
-            url: "/post/" + id,
-            dataType: "json"
-        }).done(function (resp) {
+            type:"DELETE",
+            url:"/post/" + boardNo,
+            dataType:"json"
+        }).done(function(resp) {
             alert("Delete Successful!");
-            location.href = "/";
-        }).fail(function (error) {
+            location.href="/";
+        }).fail(function(error) {
             alert(JSON.stringify(error));
         });
     }

@@ -1,13 +1,21 @@
 package com.swrookie.bulletinboard.controller;
 
-import java.io.File; 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,6 +47,53 @@ public class BoardController
 	@Autowired
 	private FileService fileService;
 	
+	private void createFile(List<MultipartFile> files)
+	{
+		try
+		{
+			if (files != null)
+			{
+				for (MultipartFile file : files)
+				{
+					String origFileName = file.getOriginalFilename();
+					if (origFileName.equals(""))
+						continue;
+					
+//					System.out.println("Original file name: " + origFileName);
+					String fileName = new MD5Generator(origFileName).toString();
+					String savePath = System.getProperty("user.dir") + "\\files";
+					
+					if (!new File(savePath).exists())
+					{
+						try
+						{
+							new File(savePath).mkdir();
+						}
+						catch(Exception e)
+						{
+							e.getStackTrace();
+						}
+					}
+					
+					String filePath = savePath + "\\" + fileName;
+					file.transferTo(new File(filePath));
+					
+					FileDTO fileDto = FileDTO.builder()
+											 .boardNo(boardService.getRecentBoardNo())
+											 .origFileName(origFileName)
+											 .fileName(fileName)
+											 .filePath(filePath)
+											 .build();
+					
+					 fileService.createFile(fileDto);
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 	
 	public BoardController(BoardService boardService, CommentService commentService, FileService fileService)
 	{
@@ -69,52 +125,26 @@ public class BoardController
 	
 	// Create post by clicking write button and return to home page
 	@PostMapping("/post/write")
-	public String createPost(BoardDTO boardDto, List<MultipartFile> files)
+	@ResponseBody
+	public ResponseEntity<Integer> createPost(@RequestPart("boardDto") BoardDTO boardDto, 
+											  @RequestPart("files") List<MultipartFile> files)
 	{
 		boardService.createPost(boardDto);
-
-		try
-		{
-			for (MultipartFile file : files)
-			{
-				String origFileName = file.getOriginalFilename();
-				if (origFileName.equals(""))
-					continue;
-				System.out.println("Original file name: " + origFileName);
-				String fileName = new MD5Generator(origFileName).toString();
-				String savePath = System.getProperty("user.dir") + "\\files";
-				
-				if (!new File(savePath).exists())
-				{
-					try
-					{
-						new File(savePath).mkdir();
-					}
-					catch(Exception e)
-					{
-						e.getStackTrace();
-					}
-				}
-				
-				String filePath = savePath + "\\" + fileName;
-				file.transferTo(new File(filePath));
-				
-				FileDTO fileDto = FileDTO.builder()
-										 .boardNo(boardService.getRecentBoardNo())
-										 .origFileName(origFileName)
-										 .fileName(fileName)
-										 .filePath(filePath)
-										 .build();
-				
-				 fileService.createFile(fileDto);
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
+		this.createFile(files);
 		
-		return "redirect:/";
+		return new ResponseEntity<Integer>(1, HttpStatus.OK);
+	}
+	
+	@GetMapping("post/{boardNo}/download/{fileNo}")
+	public ResponseEntity<Resource> downloadFile(@PathVariable("fileNo") Long fileNo) throws IOException
+	{
+		FileDTO fileDto = fileService.getFile(fileNo);
+		Path path = Paths.get(fileDto.getFilePath());
+		Resource resource = new InputStreamResource(Files.newInputStream(path));
+
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream"))
+							 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""
+							 + fileDto.getOrigFileName() + "\"").body(resource);                  
 	}
 	
 	// View details of the post by clicking link on the title
@@ -140,24 +170,25 @@ public class BoardController
 	// Update post by clicking update button and return to home page
 	@PutMapping("/post/{boardNo}/update")
 	@ResponseBody
-	public ResponseEntity<Long> updatePost(@RequestBody BoardDTO boardDto)
+	public ResponseEntity<Integer> updatePost(@RequestBody BoardDTO boardDto)
 	{
 		boardService.createPost(boardDto);
 		
-		return new ResponseEntity<>(boardDto.getBoardNo(), HttpStatus.OK);
+		return new ResponseEntity<Integer>(1, HttpStatus.OK);
 	}
 	
 	// Delete the post by clicking delete button and return to home page
 	@DeleteMapping("/post/{boardNo}")
-	public ResponseEntity<Long> delete(@PathVariable("boardNo") Long boardNo)
+	@ResponseBody
+	public ResponseEntity<Integer> delete(@PathVariable("boardNo") Long boardNo)
 	{
 		boardService.deletePost(boardNo);
 		
-		return new ResponseEntity<>(boardNo, HttpStatus.OK);
+		return new ResponseEntity<Integer>(1, HttpStatus.OK);
 	}
 	
 	// Search for posts after clicking search button
-	@GetMapping("/go_home/search_posts")
+	@GetMapping("/search_posts")
 	public String searchPost(@RequestParam(value="keyword") String keyword, Model model)
 	{
 		if (keyword.isEmpty())

@@ -48,7 +48,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
   </head>
 
   <body>
-    <form method="POST" action="${pageContext.request.contextPath}/sign_up">
+    <form id="signupForm" method="POST">
       <div class="form-row">
         <div class="col-md-6 mb-3">
           <label for="validationCustom01">First name</label>
@@ -56,7 +56,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
             type="text"
             name="firstName"
             class="form-control"
-            id="validationCustom01"
+            id="firstName"
             required
           />
           <div class="valid-feedback">Looks good!</div>
@@ -67,7 +67,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
             type="text"
             name="lastName"
             class="form-control"
-            id="validationCustom02"
+            id="lastName"
             required
           />
           <div class="valid-feedback">Looks good!</div>
@@ -81,19 +81,14 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
             type="text"
             name="userName"
             class="form-control"
-            id="inputUsername"
+            id="userName"
           />
         </div>
       </div>
       <div class="form-row">
         <div class="form-group col-md-12">
           <label for="inputEmail4">Email</label>
-          <input
-            type="email"
-            name="email"
-            class="form-control"
-            id="inputEmail4"
-          />
+          <input type="email" name="email" class="form-control" id="email" />
         </div>
       </div>
       <div class="form-row">
@@ -103,17 +98,19 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
             type="password"
             name="password"
             class="form-control"
-            id="inputPassword4"
+            id="password"
           />
         </div>
         <div class="form-group col-md-6">
           <label for="inputPassword5">Password Confirm</label>
           <input type="password" name="passwordConfirm" class="form-control
-          id="inputPassword5" />
+          id="passwordConfirm" />
         </div>
       </div>
       <div class="col text-center">
-        <button type="submit" class="btn btn-primary">Register</button>
+        <button id="btn-createMember" type="submit" class="btn btn-primary">
+          Sign Up
+        </button>
       </div>
     </form>
   </body>

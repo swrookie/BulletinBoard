@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.swrookie.bulletinboard.dto.MemberDTO;
 import com.swrookie.bulletinboard.entity.Member;
 import com.swrookie.bulletinboard.repository.MemberRepository;
 
@@ -33,10 +34,10 @@ public class MemberService
 	}
 	
 	@Transactional
-	public void createMember(Member member)
+	public void createMember(MemberDTO memberDto)
 	{
-		member.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));
-		member.setPasswordConfirm(bCryptPasswordEncoder.encode(member.getPasswordConfirm()));
-		memberRepository.save(member);
+		memberDto.setPassword(bCryptPasswordEncoder.encode(memberDto.getPassword()));
+		memberDto.setPasswordConfirm(bCryptPasswordEncoder.encode(memberDto.getPasswordConfirm()));
+		memberRepository.save(memberDto.toEntity());
 	}
 }

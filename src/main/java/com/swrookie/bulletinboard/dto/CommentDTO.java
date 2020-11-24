@@ -61,7 +61,6 @@ public class CommentDTO
 									   .boardNo(boardNo)
 									   .author(this.getAuthorFromSecurity())
 									   .content(content)
-									   .createDate(createDate)
 									   .parent(parent)
 									   .depth(depth)
 									   .build();

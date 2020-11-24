@@ -1,6 +1,7 @@
 package com.swrookie.bulletinboard.controller; 
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 
 import org.springframework.validation.BindingResult;
@@ -8,7 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.swrookie.bulletinboard.entity.Member;
+import com.swrookie.bulletinboard.dto.MemberDTO;
 import com.swrookie.bulletinboard.enumeration.MemberRole;
 import com.swrookie.bulletinboard.security.MemberValidator;
 import com.swrookie.bulletinboard.service.MemberService;
@@ -60,21 +61,21 @@ public class MemberController
 	
 	// Send sign up form to database and return to home page
 	@PostMapping("/sign_up")
-	public String signUp(@Validated Member member, BindingResult bindingResult)
+//	@ResponseBody
+	public String signUp(@Validated MemberDTO memberDto, BindingResult bindingResult)
 	{	
-		memberValidator.validate(member, bindingResult);
+		memberValidator.validate(memberDto, bindingResult);
 		
 		if (bindingResult.hasErrors())
 		{
-			System.out.println("Error occured");
 			log.debug("valid errors");
-			return "redirect:/sign_up";
+			return "sign_up";
 		}
 		System.out.println("Error not occured");
-		member.setRole(MemberRole.MEMBER);
-		memberService.createMember(member);
-		log.debug("User Info: " + member.toString());
-		log.debug("Email: " + member.getEmail() + " | " + member.getPassword());
+		memberDto.setRole(MemberRole.MEMBER);
+		memberService.createMember(memberDto);
+		log.debug("User Info: " + memberDto.toString());
+		log.debug("Email: " + memberDto.getEmail() + " | " + memberDto.getPassword());
 		
 		return "redirect:/";
 	}

@@ -32,8 +32,8 @@ public class BoardService
 					   .boardNo(board.getBoardNo())
 					   .author(board.getAuthor())
 					   .title(board.getTitle())
-					   .createDate(board.getCreateDate())
-					   .updateDate(board.getUpdateDate())
+					   .createdDate(board.getCreatedDate())
+					   .modifiedDate(board.getModifiedDate())
 					   .build();
 	}
 	
@@ -74,14 +74,8 @@ public class BoardService
 	public List<BoardDTO> readPost(Pageable pageable)
 	{		
 		Page<Board> page = boardRepository.findAll(pageable);
-		this.getPaging(page);
 		
-//		currentPage = page.getPageable().getPageNumber();
-//		lastPage = page.getTotalPages();
-//		startPage = (currentPage / PAGE_BLOCK_COUNT) * PAGE_BLOCK_COUNT;
-//		endPage = (lastPage <= PAGE_BLOCK_COUNT) ? ((this.getPostCount() < 1) ? lastPage : lastPage - 1) :
-//				  (lastPage - PAGE_BLOCK_COUNT > startPage) ? 
-//				   startPage + PAGE_BLOCK_COUNT - 1 : lastPage - 1; 
+		this.getPaging(page);
 		
 		List<Board> boards = page.getContent();
 		List<BoardDTO> boardDtoList = new ArrayList<BoardDTO>();
@@ -100,13 +94,11 @@ public class BoardService
 		Board board =  boardRepository.findById(boardNo).get();
 
 		BoardDTO boardDto = BoardDTO.builder()
-				.boardNo(board.getBoardNo())
-				.author(board.getAuthor())
-				.title(board.getTitle())
-				.content(board.getContent())
-				.createDate(board.getCreateDate())
-				.updateDate(board.getUpdateDate())
-				.build();
+									.boardNo(board.getBoardNo())
+									.author(board.getAuthor())
+									.title(board.getTitle())
+									.content(board.getContent())
+									.build();
 		
 		return boardDto;
 	}

@@ -19,8 +19,8 @@ uri="http://www.springframework.org/security/tags" %>
       crossorigin="anonymous"
     />
     <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
       crossorigin="anonymous"
     ></script>
     <script
@@ -33,7 +33,6 @@ uri="http://www.springframework.org/security/tags" %>
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
-    
   </head>
 
   <body>
@@ -120,11 +119,6 @@ uri="http://www.springframework.org/security/tags" %>
             placeholder="${boardDto.title}"
             maxlength="50"
           />
-          <input
-            id="createDate"
-            type="hidden"
-            value="${boardDto.createDate}"
-          />
         </div>
         <div class="form-group">
           <textarea
@@ -134,12 +128,7 @@ uri="http://www.springframework.org/security/tags" %>
           ></textarea>
         </div>
       </form>
-      <button
-        id="btn-update"
-        class="btn btn-warning"
-      >
-        UPDATE
-      </button>
+      <button id="btn-update" class="btn btn-warning">UPDATE</button>
     </div>
     <script>
       $(".summernote").summernote({
@@ -148,7 +137,7 @@ uri="http://www.springframework.org/security/tags" %>
         height: 300,
       });
     </script>
-    <script src="/resources/js/board.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/board.js"></script>
     <br />
     <footer>
       <div class="jumbotron text-center" style="margin-bottom: 0">

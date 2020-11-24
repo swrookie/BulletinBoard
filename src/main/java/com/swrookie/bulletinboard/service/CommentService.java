@@ -31,22 +31,21 @@ public class CommentService
 				         .boardNo(comment.getBoardNo())
 				         .author(comment.getAuthor())
 				         .content(comment.getContent())
-				         .createDate(comment.getCreateDate())
 				         .parent(comment.getParent())
 				         .depth(comment.getDepth())
 				         .build();
 	}
 	
-	private void addEntityToDtoDfs(List<Comment> comments, List<CommentDTO> commentDtoList, List<Long> noList)
+	private void addEntityToDtoDfs(List<Comment> comments, List<CommentDTO> commentDtoList, List<Long> commentNoList)
 	{
 		for (Comment comment : comments)
 		{
-			if (!noList.contains(comment.getCommentNo()))
+			if (!commentNoList.contains(comment.getCommentNo()))
 			{
 				commentDtoList.add(this.convertEntityToDto(comment));
-				noList.add(comment.getCommentNo());
+				commentNoList.add(comment.getCommentNo());
 				if (!comment.getChildren().isEmpty())
-					addEntityToDtoDfs(comment.getChildren(), commentDtoList, noList);
+					addEntityToDtoDfs(comment.getChildren(), commentDtoList, commentNoList);
 			}
 		}
 	}
@@ -81,7 +80,6 @@ public class CommentService
 		
 		CommentDTO commentDto = CommentDTO.builder()
 										  .content(comment.getContent())
-										  .createDate(comment.getCreateDate())
 										  .build();
 		
 		return commentDto;
