@@ -1,14 +1,14 @@
 let index = {
     init: function() 
     {
-        $("#btn-create").on("click", () => {
+        $("#btn-create_post").on("click", () => {
             this.createBoardDtoAndFile();
         });
-        $("#btn-update").on("click", () => {
-            this.updatePost();
+        $("#btn-update_post").on("click", () => {
+            this.updateBoardDto();
         });
-        $("#btn-delete").on("click", () => {
-            this.deletePost();
+        $("#btn-delete_post").on("click", () => {
+            this.deleteBoardDto();
         });
     }, 
  
@@ -45,7 +45,7 @@ let index = {
         }); 
     },
 
-    updatePost: function() 
+    updateBoardDto: function() 
     {
         let boardNo = $("#boardNo").val();
 
@@ -62,14 +62,14 @@ let index = {
             contentType: "application/json; charset=utf-8",
             dataType: "json"
         }).done(function(resp) {
-            alert("Update Successful!");
+            alert("Post Update Successful!");
             location.href="/";
         }).fail(function(error) {
             alert(JSON.stringify(error));
         });
     },
 
-    deletePost: function() 
+    deleteBoardDto: function() 
     {
         let boardNo = $("#boardNo").val();
 
@@ -78,7 +78,7 @@ let index = {
             url:"/post/" + boardNo,
             dataType:"json"
         }).done(function(resp) {
-            alert("Delete Successful!");
+            alert("Post Delete Successful!");
             location.href="/";
         }).fail(function(error) {
             alert(JSON.stringify(error));

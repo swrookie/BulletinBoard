@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.swrookie.bulletinboard.dto.MemberDTO;
 import com.swrookie.bulletinboard.enumeration.MemberRole;
@@ -46,10 +47,10 @@ public class MemberController
 		return "redirect:/";
 	}
 	
-	@GetMapping("/denied")
+	@GetMapping("/login?error=true")
 	public String denied()
 	{
-		return "denied";
+		return "redirect:/";
 	}
 	
 	// Go to Sign Up Page
@@ -61,8 +62,7 @@ public class MemberController
 	
 	// Send sign up form to database and return to home page
 	@PostMapping("/sign_up")
-//	@ResponseBody
-	public String signUp(@Validated MemberDTO memberDto, BindingResult bindingResult)
+	public String signUp(@ModelAttribute("signUpForm") @Validated MemberDTO memberDto, BindingResult bindingResult)
 	{	
 		memberValidator.validate(memberDto, bindingResult);
 		
@@ -71,7 +71,7 @@ public class MemberController
 			log.debug("valid errors");
 			return "sign_up";
 		}
-		System.out.println("Error not occured");
+		
 		memberDto.setRole(MemberRole.MEMBER);
 		memberService.createMember(memberDto);
 		log.debug("User Info: " + memberDto.toString());

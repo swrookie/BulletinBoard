@@ -40,6 +40,9 @@ public class MyUserService implements UserDetailsService
 		
 		Member member = memberRepository.findByUserName(userName);
 		
+		if (member == null)
+			throw new UsernameNotFoundException(userName + "is not found");
+			
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<GrantedAuthority>();
 		grantedAuthorities.add(new SimpleGrantedAuthority(member.getRole().getName()));
 		

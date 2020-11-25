@@ -1,4 +1,4 @@
-package com.swrookie.bulletinboard.service;
+package com.swrookie.bulletinboard.security;
 
 import java.io.IOException;
 

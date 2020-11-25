@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8" %> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
-uri="http://java.sun.com/jsp/jstl/fmt" %>
+uri="http://java.sun.com/jsp/jstl/fmt" %> <%@ taglib prefix="form"
+uri="http://www.springframework.org/tags/form" %> <%@ taglib prefix="spring"
+uri="http://www.springframework.org/tags" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,6 +15,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
     <title>Registration</title>
 
     <!-- Bootstrap CSS & JS -->
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
@@ -48,70 +51,105 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
   </head>
 
   <body>
-    <form id="signupForm" method="POST">
+    <form:form
+      id="signUpForm"
+      method="POST"
+      action="${pageContext.request.contextPath}/sign_up"
+      modelAttribute="signUpForm"
+    >
       <div class="form-row">
         <div class="col-md-6 mb-3">
-          <label for="validationCustom01">First name</label>
+          <label for="firstName">First name</label>
           <input
             type="text"
             name="firstName"
             class="form-control"
             id="firstName"
             required
+            oninvalid="setCustomValidity('Please enter first name')"
+            oninput="setCustomValidity('')"
           />
-          <div class="valid-feedback">Looks good!</div>
         </div>
         <div class="col-md-6 mb-3">
-          <label for="validationCustom02">Last name</label>
+          <label for="lastName">Last name</label>
           <input
             type="text"
             name="lastName"
             class="form-control"
             id="lastName"
             required
+            oninvalid="setCustomValidity('Please enter last name')"
+            oninput="setCustomValidity('')"
           />
-          <div class="valid-feedback">Looks good!</div>
         </div>
       </div>
-      <div class="form-row"></div>
       <div class="form-row">
+        <label for="userName">Username</label>
         <div class="form-group col-md-12">
-          <label for="inputEmail4">Username</label>
           <input
             type="text"
             name="userName"
             class="form-control"
             id="userName"
+            required
+            oninvalid="this.setCustomValidity('Please enter user name')"
+            oninput="setCustomValidity('')"
           />
+          <span class="badge badge-danger">
+            <form:errors path="userName" />
+          </span>
         </div>
       </div>
       <div class="form-row">
         <div class="form-group col-md-12">
-          <label for="inputEmail4">Email</label>
-          <input type="email" name="email" class="form-control" id="email" />
+          <label for="email">Email</label>
+          <input
+            type="email"
+            name="email"
+            class="form-control"
+            id="email"
+            required
+            oninvalid="this.setCustomValidity('Please enter email')"
+            oninput="setCustomValidity('')"
+          />
         </div>
       </div>
       <div class="form-row">
         <div class="form-group col-md-6">
-          <label for="inputPassword4">Password</label>
+          <label for="password">Password</label>
           <input
             type="password"
             name="password"
             class="form-control"
             id="password"
+            required
+            oninvalid="this.setCustomValidity('Please enter password')"
+            oninput="setCustomValidity('')"
           />
         </div>
         <div class="form-group col-md-6">
-          <label for="inputPassword5">Password Confirm</label>
-          <input type="password" name="passwordConfirm" class="form-control
-          id="passwordConfirm" />
+          <label for="passwordConfirm">Password Confirm</label>
+          <input
+            type="password"
+            name="passwordConfirm"
+            class="form-control"
+            id="passwordConfirm"
+            required
+            oninvalid="this.setCustomValidity('Please re-enter password')"
+            oninput="setCustomValidity('')"
+          />
         </div>
       </div>
       <div class="col text-center">
-        <button id="btn-createMember" type="submit" class="btn btn-primary">
+        <button
+          id="btn-createMember"
+          type="submit"
+          class="btn btn-primary"
+          oninvalid="alert('Sign Up Failed..')"
+        >
           Sign Up
         </button>
       </div>
-    </form>
+    </form:form>
   </body>
 </html>

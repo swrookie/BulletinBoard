@@ -56,7 +56,10 @@ public class CommentService
 		if (commentDto.getParent() == null)
 			commentDto.setDepth(0);
 		else
-			commentDto.setDepth(commentDto.getParent().getDepth() + 1);
+		{
+			if (commentDto.getDepth() == null)
+				commentDto.setDepth(commentDto.getParent().getDepth() + 1);
+		}
 		
 		commentRepository.save(commentDto.toEntity());
 	}
@@ -71,18 +74,6 @@ public class CommentService
 		addEntityToDtoDfs(comments, commentDtoList, noList);
 		
 		return commentDtoList;
-	}
-	
-	@Transactional
-	public CommentDTO updateComment(Long commentNo)
-	{
-		Comment comment = commentRepository.findById(commentNo).get();
-		
-		CommentDTO commentDto = CommentDTO.builder()
-										  .content(comment.getContent())
-										  .build();
-		
-		return commentDto;
 	}
 	
 	@Transactional

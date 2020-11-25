@@ -1,6 +1,6 @@
 package com.swrookie.bulletinboard.security;
 
-import java.util.EnumSet; 
+import java.util.EnumSet;  
 
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
@@ -20,7 +20,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.swrookie.bulletinboard.service.MyUserService;
 import com.swrookie.bulletinboard.service.RememberMeTokenService;
-import com.swrookie.bulletinboard.service.MemberAccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -43,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 			.loginPage("/")
 			.loginProcessingUrl("/login")
 			.defaultSuccessUrl("/")
+			.failureHandler(customAuthenticationFailureHandler())
 			.permitAll()
 				.and()
 			.exceptionHandling().accessDeniedHandler(MemberAccessDeniedHandler())
@@ -135,5 +135,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	public MemberAccessDeniedHandler MemberAccessDeniedHandler() throws Exception
 	{
 		return new MemberAccessDeniedHandler();
+	}
+	
+	@Bean
+	public CustomAuthenticationFailureHandler customAuthenticationFailureHandler() throws Exception
+	{
+		return new CustomAuthenticationFailureHandler();
 	}
 }

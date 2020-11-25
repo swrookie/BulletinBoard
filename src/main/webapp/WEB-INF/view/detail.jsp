@@ -105,13 +105,13 @@ uri="http://www.springframework.org/security/tags" %>
     </nav>
     <br />
     <div class="container">
-      <button class="btn btn-secondary" onclick="history.back()">List</button>
+      <button class="btn btn-secondary" onclick="history.back()">LIST</button>
       <sec:authorize access="isAuthenticated()">
         <sec:authentication var="username" property="principal.username" />
         <c:if test="${username eq boardDto.author}">
-          <a class="btn btn-warning" href="/post/${boardDto.boardNo}/update">Edit</a>
+          <a class="btn btn-warning" href="/post/${boardDto.boardNo}/update">EDIT</a>
           <input id="boardNo" type="hidden" value="${boardDto.boardNo}" />
-          <button id="btn-delete" class="btn btn-danger">Delete</button>
+          <button id="btn-delete" class="btn btn-danger">DELETE</button>
         </c:if>
       </sec:authorize>
       <br />
@@ -157,57 +157,79 @@ uri="http://www.springframework.org/security/tags" %>
         <div class="card-header">Comments</div>
         <ul class="list-group" id="commentBlockList">
           <c:forEach var="comment" items="${commentList}">
-            <li
-              class="list-group-item d-flex justify-content-between ml-${comment.depth}"
-              id="commentBlock"
-            >
-                ${comment.content}
+            <li class="list-group-item d-flex justify-content-between" id="commentBlock">
+              <c:choose>
+                <c:when test="${comment.depth gt 0}">
+                  <div style="padding-left: ${comment.depth}em;">
+                    L ${comment.content}
+                  </div>
+                </c:when>
+                <c:otherwise>
+                  ${comment.content}
+                </c:otherwise>
+              </c:choose>
               <div class="d-flex">
                 <div class="font-italic">Author: ${comment.author} &nbsp;</div>
-                <button class="badge">DELETE</button>
-                <button class="badge">UPDATE</button>
-                <button
-                  class="badge"
-                  data-toggle="collapse"
-                  data-target="#collapseCommentReply${comment.commentNo}"
-                >
-                  REPLY
-                </button>
+                <button onClick="index2.deleteComment(${boardDto.boardNo}, ${comment.commentNo})" class="badge">DELETE</button>
+                <button class="badge" data-toggle="collapse" data-target="#collapseCommentUpdate${comment.commentNo}">UPDATE</button>
+                <button class="badge" data-toggle="collapse" data-target="#collapseCommentReply${comment.commentNo}">REPLY</button>
               </div>
             </li>
             <div class="collapse" id="collapseCommentReply${comment.commentNo}">
-              <li
-                class="list-group-item d-flex justify-content-between"
-                id="replyBlock"
-              >
+              <li class="list-group-item" id="replyBlock">
                 <form
                   method="POST"
                   action="${pageContext.request.contextPath}/save_comment/"
                 >
                   <input
                     type="hidden"
-                    name="boardNo"
+                    id="boardNo"
                     value="${boardDto.boardNo}"
                   />
                   <input
                     type="hidden"
-                    name="parent"
+                    id="parent"
                     value="${comment.commentNo}"
                   />
                   <textarea
-                    name="content"
+                    id="content"
                     class="form-control"
                     row="1"
                   ></textarea>
-                  <input type="submit" class="btn btn-primary" value="POST" />
+                  <button type="submit" class="btn btn-primary">POST</button>
                 </form>
+              </li>
+            </div>
+            <div class="collapse" id="collapseCommentUpdate${comment.commentNo}">
+              <li class="list-group-item" id="replyBlock">
+                <form>
+                  <input
+                    id="boardNo"
+                    type="hidden"
+                    value="${boardDto.boardNo}"
+                  />
+                  <input
+                    id="commentNo"
+                    type="hidden"
+                    value="${comment.commentNo}"
+                  />
+                  <div class="form-group">
+                    <textarea
+                      id="content"
+                      class="form-control"
+                      row="1"
+                    ></textarea>
+                  </div>
+                </form>
+                <button id="btn-update_comment" class="btn btn-primary">UPDATE</button>
               </li>
             </div>
           </c:forEach>
         </ul>
       </div>
     </div>
-    <script src="${pageContext.request.contextPath}/resources/js/board.js"></script>
+    <script type='text/javascript' src="${pageContext.request.contextPath}/resources/js/board.js"></script>
+    <script type='text/javascript' src="${pageContext.request.contextPath}/resources/js/comment.js"></script>
     <br />
     <footer>
       <div class="jumbotron text-center" style="margin-bottom: 0">

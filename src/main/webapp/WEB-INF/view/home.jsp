@@ -2,7 +2,9 @@
 pageEncoding="UTF-8"%> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
 uri="http://java.sun.com/jsp/jstl/fmt" %> <%@ taglib prefix="sec"
-uri="http://www.springframework.org/security/tags" %>
+uri="http://www.springframework.org/security/tags" %> <%@ taglib
+uri="http://www.springframework.org/tags" prefix="spring" %> <%@ taglib prefix="form"
+uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
 <html>
@@ -69,12 +71,18 @@ uri="http://www.springframework.org/security/tags" %>
                 <form class="px-4 py-3" method="POST" action="${pageContext.request.contextPath}/login">
                   <div class="form-group">
                     <label for="exampleDropdownFormEmail1">Username</label>
-                    <input type="text" class="form-control" name="userName" id="exampleDropdownFormEmail1" placeholder="Username">
+                    <input type="text" class="form-control" name="userName" id="userName" placeholder="Username" required>
                   </div>
                   <div class="form-group">
                     <label for="exampleDropdownFormPassword1">Password</label>
-                    <input type="password" class="form-control" name="password" id="exampleDropdownFormPassword1" placeholder="Password">
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
                   </div>
+                  <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
+                    <font color="red">
+                      <p class="error">Login Failed: ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</p>
+                      <c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session"/>
+                    </font>
+                  </c:if>
                   <div class="form-group">
                     <div class="form-check">
                       <input type="checkbox" class="form-check-input" id="dropdownCheck">
@@ -83,7 +91,7 @@ uri="http://www.springframework.org/security/tags" %>
                       </label>
                     </div>
                   </div>
-                  <button type="submit" class="btn btn-primary">Sign in</button>
+                  <button type="submit" class="btn btn-primary" name="signIn">Sign in</button>
                 </form>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="${pageContext.request.contextPath}/sign_up">New around here? Sign up</a>

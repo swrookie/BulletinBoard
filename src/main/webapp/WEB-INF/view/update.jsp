@@ -128,7 +128,7 @@ uri="http://www.springframework.org/security/tags" %>
           ></textarea>
         </div>
       </form>
-      <button id="btn-update" class="btn btn-warning">UPDATE</button>
+      <button id="btn-update_post" class="btn btn-warning">UPDATE</button>
     </div>
     <script>
       $(".summernote").summernote({

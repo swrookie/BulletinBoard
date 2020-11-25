@@ -1,15 +1,19 @@
 package com.swrookie.bulletinboard.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.swrookie.bulletinboard.dto.CommentDTO;
 import com.swrookie.bulletinboard.service.CommentService;
 
-//@RestController
 @Controller
 public class CommentController 
 {
@@ -29,11 +33,22 @@ public class CommentController
 		return "redirect:/";
 	}
 	
-	@DeleteMapping("/delete_comment")
-	public String deleteComment(Long commentNo)
+	@PutMapping("/post/{boardNo}/comment/{commentNo}")
+	@ResponseBody
+	public ResponseEntity<Integer> updateComment(@RequestBody CommentDTO commentDto)
 	{
-		commentService.deleteComment(commentNo);
+		System.out.println(commentDto.toString());
+//		commentService.createComment(commentDTO);
 		
-		return "redirect:/";
+		return new ResponseEntity<>(1, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/post/{boardNo}/comment/{commentNo}")
+	@ResponseBody
+	public ResponseEntity<Integer> deleteComment(@PathVariable("commentNo") Long commentNo)
+	{
+		commentService.deleteComment(commentNo);		
+		
+		return new ResponseEntity<>(1, HttpStatus.OK);
 	}
 }
