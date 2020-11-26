@@ -188,10 +188,11 @@ public class BoardController
 	}
 	
 	// Search for posts after clicking search button
-	@GetMapping("/search_posts")
-	public String searchPost(@RequestParam(value="keyword") String keyword, Model model)
+	@GetMapping("/search")
+	public String searchPost(@RequestParam(value="keyword", required=false) String keyword, 
+							 @RequestParam(value="option") String searchOption, Model model)
 	{
-		if (keyword.isEmpty())
+		if (keyword == null || keyword.isEmpty())
 			return "redirect:/";
 		
 		model.addAttribute("boardList", boardService.searchPost(keyword));

@@ -9,7 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -32,11 +31,9 @@ public class Board extends BaseTime
 	private String title;			// Post Title
 	@Lob
 	private String content;			// Post Content
-	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name="board_no")
+	@OneToMany(mappedBy="boardNo", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<Comment>();
-	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name="board_no")
+	@OneToMany(mappedBy="boardNo", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	private List<File> files = new ArrayList<File>();
 
 	@Builder

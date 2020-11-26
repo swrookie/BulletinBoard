@@ -3,8 +3,8 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
 uri="http://java.sun.com/jsp/jstl/fmt" %> <%@ taglib prefix="sec"
 uri="http://www.springframework.org/security/tags" %> <%@ taglib
-uri="http://www.springframework.org/tags" prefix="spring" %> <%@ taglib prefix="form"
-uri="http://www.springframework.org/tags/form" %>
+uri="http://www.springframework.org/tags" prefix="spring" %> <%@ taglib
+prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
 <html>
@@ -12,7 +12,6 @@ uri="http://www.springframework.org/tags/form" %>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>OnBoard</title>
-
     <!-- Bootstrap CSS & JS -->
     <link
       rel="stylesheet"
@@ -20,6 +19,10 @@ uri="http://www.springframework.org/tags/form" %>
       integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
       crossorigin="anonymous"
     />
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest"> -->
     <script
       src="https://code.jquery.com/jquery-3.5.1.js"
       integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
@@ -36,99 +39,59 @@ uri="http://www.springframework.org/tags/form" %>
     />
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
   </head>
-
   <body>
     <!-- 게시판 -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="/">OnBoard</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item dropdown">
+    <%@ include file="/WEB-INF/view/navbar.jsp" %>
+    <br />
+    <div class="container">
+      <div class="d-flex justify-content-between">
+        <div class="btn-group">
+          <button
+            class="btn btn-info btn-sm dropdown-toggle"
+            type="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Sort Post By
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item">Title Asc</a>
+            <a class="dropdown-item">Title Desc</a>
+            <a class="dropdown-item">Posted Date Asc</a>
+            <a class="dropdown-item">Posted Date Desc</a>
+            <a class="dropdown-item">Most Comments</a>
+          </div>
+        </div>
+        <form class="form-inline" method="GET" action="/search">
+          <div class="dropdown">
             <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              id="navbarDropdown"
+              aria-expanded="false"
+              aria-haspopup="true"
               role="button"
               data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
+              class="btn btn-info dropdown-toggle"
             >
-              Menu
+              <span id="selected">Search Post By</span
+              ><span class="caret"></span>
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <sec:authorize access="isAnonymous()">
-                <form class="px-4 py-3" method="POST" action="${pageContext.request.contextPath}/login">
-                  <div class="form-group">
-                    <label for="exampleDropdownFormEmail1">Username</label>
-                    <input type="text" class="form-control" name="userName" id="userName" placeholder="Username" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleDropdownFormPassword1">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
-                  </div>
-                  <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
-                    <font color="red">
-                      <p class="error">Login Failed: ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</p>
-                      <c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session"/>
-                    </font>
-                  </c:if>
-                  <div class="form-group">
-                    <div class="form-check">
-                      <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                      <label class="form-check-label" for="dropdownCheck">
-                        Remember me
-                      </label>
-                    </div>
-                  </div>
-                  <button type="submit" class="btn btn-primary" name="signIn">Sign in</button>
-                </form>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="${pageContext.request.contextPath}/sign_up">New around here? Sign up</a>
-                <a class="dropdown-item" href="#">Forgot password?</a>
-              </sec:authorize>
-              <sec:authorize access="isAuthenticated()">
-                <a class="dropdown-item" href="#">Profile</a>
-                <div class="dropdown-divider"></div>
-                <a
-                  class="dropdown-item"
-                  href="${pageContext.request.contextPath}/logout"
-                  >Logout</a
-                >
-              </sec:authorize>
+            <div class="dropdown-menu" data-toggle="dropdown" name="option">
+              <a class="dropdown-item">Title</a>
+              <a class="dropdown-item">Content</a>
             </div>
-          </li>
-        </ul>
-        <form
-          class="form-inline my-2 my-lg-0"
-          method="GET"
-          action="/go_home/search_posts"
-        >
+          </div>
           <input
             class="form-control mr-sm-2"
             type="search"
             name="keyword"
-            placeholder="Search by Post Title"
+            placeholder="Enter Keyword"
             aria-label="Search"
           />
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+          <button class="btn btn-outline-info my-2 my-sm-0" type="submit">
             Search
           </button>
         </form>
       </div>
-    </nav>
-    <br />
-    <div class="container">
       <table class="table table-bordered table-striped table-hover">
         <thead class="thead-dark">
           <tr>
@@ -145,20 +108,36 @@ uri="http://www.springframework.org/tags/form" %>
               <tr>
                 <td>${post.boardNo}</td>
                 <td>
-                  <a href="/post/${post.boardNo}">
-                    ${post.title}
-                  </a>
+                  <c:choose>
+                    <c:when test="${post.getCommentCount() gt 0}">
+                      <a href="/post/${post.boardNo}">
+                        ${post.title} [${post.getCommentCount()}]</a
+                      >
+                    </c:when>
+                    <c:otherwise>
+                      <a href="/post/${post.boardNo}"> ${post.title}</a>
+                    </c:otherwise>
+                  </c:choose>
                 </td>
                 <td>${post.author}</td>
-                <td><fmt:formatDate value="${post.createdDate}" pattern="yyyy-MM-dd HH:mm"/></td>
-                <td><fmt:formatDate value="${post.modifiedDate}" pattern="yyyy-MM-dd HH:mm"/></td>
+                <td>
+                  <fmt:formatDate
+                    value="${post.createdDate}"
+                    pattern="yyyy-MM-dd HH:mm"
+                  />
+                </td>
+                <td>
+                  <fmt:formatDate
+                    value="${post.modifiedDate}"
+                    pattern="yyyy-MM-dd HH:mm"
+                  />
+                </td>
               </tr>
             </c:forEach>
           </tr>
         </tbody>
       </table>
     </div>
-
     <nav aria-label="Page Navigation">
       <ul class="pagination justify-content-center">
         <li class="page-item enabled">
@@ -210,7 +189,6 @@ uri="http://www.springframework.org/tags/form" %>
             </c:otherwise>
           </c:choose>
         </c:forEach>
-
         <c:choose>
           <c:when test="${currentPage lt lastPage - 1}">
             <li class="page-item">
@@ -236,7 +214,6 @@ uri="http://www.springframework.org/tags/form" %>
         </li>
       </ul>
     </nav>
-
     <div class="text-center">
       <sec:authorize access="isAnonymous()">
         <button
@@ -258,7 +235,12 @@ uri="http://www.springframework.org/tags/form" %>
         </button>
       </sec:authorize>
     </div>
-
+    <script>
+      //$(".dropdown-toggle").dropdown();
+      // $(".dropdown-menu a").click(function () {
+      //   $("#selected").text($(this).text());
+      // });
+    </script>
     <br />
     <footer>
       <div class="jumbotron text-center" style="margin-bottom: 0">

@@ -26,7 +26,7 @@ public class MemberDTO
 	
 	@Builder
 	public MemberDTO(Long memberNo, String firstName, String lastName, String userName,
-					 String email, String password, String passwordConfirm)
+					 String email, String password)
 	{
 		this.memberNo = memberNo;
 		this.firstName = firstName;
@@ -34,7 +34,6 @@ public class MemberDTO
 		this.userName = userName;
 		this.email = email;
 		this.password = password;
-		this.passwordConfirm = passwordConfirm;
 	}
 	
 	public Member toEntity()
@@ -46,7 +45,6 @@ public class MemberDTO
 							  .userName(userName)
 							  .email(email)
 							  .password(password)
-							  .passwordConfirm(passwordConfirm)
 							  .build();
 		
 		return member;

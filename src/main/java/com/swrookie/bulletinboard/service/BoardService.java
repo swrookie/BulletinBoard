@@ -82,7 +82,10 @@ public class BoardService
 		
 		for (Board board : boards)
 		{
-			boardDtoList.add(this.convertEntityToDto(board));
+			Integer count = board.getComments().size();
+			BoardDTO boardDto = this.convertEntityToDto(board);
+			boardDto.setCount(count);
+			boardDtoList.add(boardDto);
 		}
 		
 		return boardDtoList;

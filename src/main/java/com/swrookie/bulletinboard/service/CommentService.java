@@ -53,11 +53,11 @@ public class CommentService
 	@Transactional
 	public void createComment(CommentDTO commentDto)
 	{
-		if (commentDto.getParent() == null)
-			commentDto.setDepth(0);
-		else
+		if (commentDto.getCommentNo() == null)
 		{
-			if (commentDto.getDepth() == null)
+			if (commentDto.getParent() == null)
+				commentDto.setDepth(0);
+			else
 				commentDto.setDepth(commentDto.getParent().getDepth() + 1);
 		}
 		
@@ -71,7 +71,7 @@ public class CommentService
 		List<CommentDTO> commentDtoList = new ArrayList<CommentDTO>();
 		List<Long> noList = new ArrayList<Long>();
 		
-		addEntityToDtoDfs(comments, commentDtoList, noList);
+		this.addEntityToDtoDfs(comments, commentDtoList, noList);
 		
 		return commentDtoList;
 	}

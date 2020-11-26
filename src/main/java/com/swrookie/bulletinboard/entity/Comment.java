@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -29,7 +28,6 @@ public class Comment extends BaseTime
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long commentNo;			// Comment Number
-	@Column(name="board_no")
 	private Long boardNo;			// Post(Parent) number that contains comment(child) 
 	private String author;			// Comment Author
 	@Lob

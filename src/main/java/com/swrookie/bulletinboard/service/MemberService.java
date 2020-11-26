@@ -37,7 +37,6 @@ public class MemberService
 	public void createMember(MemberDTO memberDto)
 	{
 		memberDto.setPassword(bCryptPasswordEncoder.encode(memberDto.getPassword()));
-		memberDto.setPasswordConfirm(bCryptPasswordEncoder.encode(memberDto.getPasswordConfirm()));
 		memberRepository.save(memberDto.toEntity());
 	}
 }

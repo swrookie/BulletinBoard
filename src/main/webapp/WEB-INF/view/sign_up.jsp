@@ -13,9 +13,7 @@ uri="http://www.springframework.org/tags" %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Registration</title>
-
     <!-- Bootstrap CSS & JS -->
-
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
@@ -49,7 +47,6 @@ uri="http://www.springframework.org/tags" %>
       }
     </style>
   </head>
-
   <body>
     <form:form
       id="signUpForm"
@@ -62,9 +59,9 @@ uri="http://www.springframework.org/tags" %>
           <label for="firstName">First name</label>
           <input
             type="text"
-            name="firstName"
             class="form-control"
             id="firstName"
+            name="firstName"
             required
             oninvalid="setCustomValidity('Please enter first name')"
             oninput="setCustomValidity('')"
@@ -74,9 +71,9 @@ uri="http://www.springframework.org/tags" %>
           <label for="lastName">Last name</label>
           <input
             type="text"
-            name="lastName"
             class="form-control"
             id="lastName"
+            name="lastName"
             required
             oninvalid="setCustomValidity('Please enter last name')"
             oninput="setCustomValidity('')"
@@ -88,16 +85,16 @@ uri="http://www.springframework.org/tags" %>
         <div class="form-group col-md-12">
           <input
             type="text"
-            name="userName"
             class="form-control"
             id="userName"
+            name="userName"
             required
             oninvalid="this.setCustomValidity('Please enter user name')"
             oninput="setCustomValidity('')"
           />
-          <span class="badge badge-danger">
+          <font color="red">
             <form:errors path="userName" />
-          </span>
+          </font>
         </div>
       </div>
       <div class="form-row">
@@ -105,13 +102,16 @@ uri="http://www.springframework.org/tags" %>
           <label for="email">Email</label>
           <input
             type="email"
-            name="email"
             class="form-control"
             id="email"
+            name="email"
             required
             oninvalid="this.setCustomValidity('Please enter email')"
             oninput="setCustomValidity('')"
           />
+          <font color="red">
+            <form:errors path="email" />
+          </font>
         </div>
       </div>
       <div class="form-row">
@@ -119,25 +119,31 @@ uri="http://www.springframework.org/tags" %>
           <label for="password">Password</label>
           <input
             type="password"
-            name="password"
             class="form-control"
             id="password"
+            name="password"
             required
             oninvalid="this.setCustomValidity('Please enter password')"
             oninput="setCustomValidity('')"
           />
+          <font color="red">
+            <form:errors path="password" />
+          </font>
         </div>
         <div class="form-group col-md-6">
           <label for="passwordConfirm">Password Confirm</label>
           <input
             type="password"
-            name="passwordConfirm"
             class="form-control"
             id="passwordConfirm"
+            name="passwordConfirm"
             required
             oninvalid="this.setCustomValidity('Please re-enter password')"
             oninput="setCustomValidity('')"
           />
+          <font color="red">
+            <form:errors path="passwordConfirm" />
+          </font>
         </div>
       </div>
       <div class="col text-center">

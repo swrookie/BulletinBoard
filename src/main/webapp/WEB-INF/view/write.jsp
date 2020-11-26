@@ -10,7 +10,6 @@ uri="http://www.springframework.org/security/tags" %>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>OnBoard</title>
-
     <!-- Bootstrap CSS & JS -->
     <link
       rel="stylesheet"
@@ -34,77 +33,11 @@ uri="http://www.springframework.org/security/tags" %>
     />
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
   </head>
-
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="/">OnBoard</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Menu
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <sec:authorize access="isAnonymous()">
-                <form class="px-4 py-3" method="POST" action="${pageContext.request.contextPath}/login">
-                  <div class="form-group">
-                    <label for="exampleDropdownFormEmail1">Username</label>
-                    <input type="text" class="form-control" name="userName" id="exampleDropdownFormEmail1" placeholder="Username">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleDropdownFormPassword1">Password</label>
-                    <input type="password" class="form-control" name="password" id="exampleDropdownFormPassword1" placeholder="Password">
-                  </div>
-                  <div class="form-group">
-                    <div class="form-check">
-                      <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                      <label class="form-check-label" for="dropdownCheck">
-                        Remember me
-                      </label>
-                    </div>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Sign in</button>
-                </form>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">New around here? Sign up</a>
-                <a class="dropdown-item" href="#">Forgot password?</a>
-              </sec:authorize>
-              <sec:authorize access="isAuthenticated()">
-                <a class="dropdown-item" href="#">Profile</a>
-                <div class="dropdown-divider"></div>
-                <a
-                  class="dropdown-item"
-                  href="${pageContext.request.contextPath}/do_logout"
-                  >Logout</a
-                >
-              </sec:authorize>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <%@ include file="/WEB-INF/view/navbar.jsp" %>
     <br />
     <div class="container">
-      <form name="writeForm" id="writeForm" enctype="multipart/form-data" action="/post/write">
+      <form name="writeForm" id="writeForm" enctype="multipart/form-data">
         <div class="form-group">
           <input
             type="text"
@@ -136,7 +69,7 @@ uri="http://www.springframework.org/security/tags" %>
           </div>
         </div>
       </form>
-      <button id="btn-create" class="btn btn-primary">POST</button>
+      <button id="btn-createPost" class="btn btn-primary">POST</button>
     </div>
     <script>
       $(".summernote").summernote({

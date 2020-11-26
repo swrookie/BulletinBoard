@@ -36,11 +36,10 @@ public class Member extends BaseTime
 	@Column(unique=true)
 	private String email;
 	private String password;
-	private String passwordConfirm;
 	
 	@Builder
 	public Member(Long memberNo, String firstName, String lastName, MemberRole role,
-				  String userName, String email, String password, String passwordConfirm)
+				  String userName, String email, String password)
 	{
 		this.memberNo = memberNo;
 		this.firstName = firstName;
@@ -49,6 +48,5 @@ public class Member extends BaseTime
 		this.userName = userName;
 		this.email = email;
 		this.password = password;
-		this.passwordConfirm = passwordConfirm;
 	}
 }

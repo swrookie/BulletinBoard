@@ -1,6 +1,6 @@
 package com.swrookie.bulletinboard.security;
 
-import java.util.EnumSet;  
+import java.util.EnumSet;   
 
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 		// CSRF Disabled
 		http.csrf().disable().authorizeRequests()
 			.antMatchers("/admin/**").hasRole("ADMIN")
-			.antMatchers("go_home/**").hasRole("MEMBER")
+			.antMatchers("/go_home/**").hasRole("MEMBER")
 			.antMatchers("/**").permitAll()
 			.anyRequest().authenticated()
 				.and()

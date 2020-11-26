@@ -28,6 +28,7 @@ public class BoardDTO
 	private String content;								// Table Content Column Instance Field
 	private Timestamp createdDate;
 	private Timestamp modifiedDate;
+	private Integer count;
 	
 	@Builder
 	public BoardDTO(Long boardNo, String title, String author, String content, Timestamp createdDate, Timestamp modifiedDate)
@@ -62,5 +63,10 @@ public class BoardDTO
 								 .build();
 		
 		return boardEntity;
+	}
+	
+	public Integer getCommentCount()
+	{
+		return count;
 	}
 }

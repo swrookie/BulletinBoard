@@ -10,7 +10,6 @@ uri="http://www.springframework.org/security/tags" %>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>OnBoard</title>
-
     <!-- Bootstrap CSS & JS -->
     <link
       rel="stylesheet"
@@ -18,6 +17,10 @@ uri="http://www.springframework.org/security/tags" %>
       integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
       crossorigin="anonymous"
     />
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest"> -->
     <script
       src="https://code.jquery.com/jquery-3.5.1.js"
       integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
@@ -34,91 +37,27 @@ uri="http://www.springframework.org/security/tags" %>
     />
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
   </head>
-
   <body>
     <!-- 게시판 -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="/">OnBoard</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Menu
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <sec:authorize access="isAnonymous()">
-                <form class="px-4 py-3" method="POST" action="${pageContext.request.contextPath}/login">
-                  <div class="form-group">
-                    <label for="exampleDropdownFormEmail1">Username</label>
-                    <input type="text" class="form-control" name="userName" id="exampleDropdownFormEmail1" placeholder="Username">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleDropdownFormPassword1">Password</label>
-                    <input type="password" class="form-control" name="password" id="exampleDropdownFormPassword1" placeholder="Password">
-                  </div>
-                  <div class="form-group">
-                    <div class="form-check">
-                      <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                      <label class="form-check-label" for="dropdownCheck">
-                        Remember me
-                      </label>
-                    </div>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Sign in</button>
-                </form>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="${pageContext.request.contextPath}/sign_up">New around here? Sign up</a>
-                <a class="dropdown-item" href="#">Forgot password?</a>
-              </sec:authorize>
-              <sec:authorize access="isAuthenticated()">
-                <a class="dropdown-item" href="#">Profile</a>
-                <div class="dropdown-divider"></div>
-                <a
-                  class="dropdown-item"
-                  href="${pageContext.request.contextPath}/logout"
-                  >Logout</a
-                >
-              </sec:authorize>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <%@ include file="/WEB-INF/view/navbar.jsp" %>
     <br />
     <div class="container">
+      <input id="boardNo" type="hidden" value="${boardDto.boardNo}" />
       <button class="btn btn-secondary" onclick="history.back()">LIST</button>
       <sec:authorize access="isAuthenticated()">
         <sec:authentication var="username" property="principal.username" />
         <c:if test="${username eq boardDto.author}">
-          <a class="btn btn-warning" href="/post/${boardDto.boardNo}/update">EDIT</a>
-          <input id="boardNo" type="hidden" value="${boardDto.boardNo}" />
-          <button id="btn-delete" class="btn btn-danger">DELETE</button>
+          <a class="btn btn-warning" href="/post/${boardDto.boardNo}/update"
+            >EDIT</a
+          >
+          <button id="btn-delete_post" class="btn btn-danger">DELETE</button>
         </c:if>
       </sec:authorize>
       <br />
       <br />
       <div>
-        Post No: <span id="boardNo"><i>${boardDto.boardNo}</i></span> 
-        Author: <span id="author"><i>${boardDto.author}</i></span>
+        Post No: <span id="boardNo"><i>${boardDto.boardNo}</i></span> Author:
+        <span id="author"><i>${boardDto.author}</i></span>
       </div>
       <br />
       <div class="form-group">
@@ -132,104 +71,125 @@ uri="http://www.springframework.org/security/tags" %>
       <div>
         <strong>Attachments: </strong>
         <c:forEach var="file" items="${fileList}">
-          <a class="card-text" href="/post/${boardDto.boardNo}/download/${file.fileNo}">
+          <a
+            class="card-text"
+            href="/post/${boardDto.boardNo}/download/${file.fileNo}"
+          >
             ${file.origFileName}</a
           >
         </c:forEach>
       </div>
       <hr />
       <div class="card">
-        <form
-          method="POST"
-          action="${pageContext.request.contextPath}/save_comment"
-        >
-          <input type="hidden" name="boardNo" value="${boardDto.boardNo}" />
+        <form>
           <div class="card-body">
-            <textarea name="content" class="form-control" row="1"></textarea>
-          </div>
-          <div class="card-footer">
-            <input type="submit" class="btn btn-primary" value="POST" />
+            <textarea id="content" class="form-control" row="1"></textarea>
           </div>
         </form>
+        <div class="card-footer">
+          <button id="btn-createComment" class="btn btn-primary">POST</button>
+        </div>
       </div>
       <br />
       <div class="card">
         <div class="card-header">Comments</div>
         <ul class="list-group" id="commentBlockList">
           <c:forEach var="comment" items="${commentList}">
-            <li class="list-group-item d-flex justify-content-between" id="commentBlock">
+            <li
+              class="list-group-item d-flex justify-content-between"
+              id="commentBlock${comment.commentNo}"
+            >
               <c:choose>
                 <c:when test="${comment.depth gt 0}">
-                  <div style="padding-left: ${comment.depth}em;">
+                  <div style="padding-left: ${comment.depth}em">
                     L ${comment.content}
                   </div>
                 </c:when>
-                <c:otherwise>
-                  ${comment.content}
-                </c:otherwise>
+                <c:otherwise> ${comment.content} </c:otherwise>
               </c:choose>
               <div class="d-flex">
                 <div class="font-italic">Author: ${comment.author} &nbsp;</div>
-                <button onClick="index2.deleteComment(${boardDto.boardNo}, ${comment.commentNo})" class="badge">DELETE</button>
-                <button class="badge" data-toggle="collapse" data-target="#collapseCommentUpdate${comment.commentNo}">UPDATE</button>
-                <button class="badge" data-toggle="collapse" data-target="#collapseCommentReply${comment.commentNo}">REPLY</button>
+                <button
+                  class="badge"
+                  data-toggle="collapse"
+                  data-target="#collapseCommentReply${comment.commentNo}"
+                >
+                  REPLY
+                </button>
+                <c:if test="${username eq comment.author}">
+                  <button
+                    class="badge"
+                    data-toggle="collapse"
+                    data-target="#collapseCommentUpdate${comment.commentNo}"
+                  >
+                    UPDATE
+                  </button>
+                  <button
+                    onClick="board.deleteCommentDto(${boardDto.boardNo}, ${comment.commentNo})"
+                    class="badge"
+                  >
+                    DELETE
+                  </button>
+                </c:if>
               </div>
             </li>
             <div class="collapse" id="collapseCommentReply${comment.commentNo}">
-              <li class="list-group-item" id="replyBlock">
-                <form
-                  method="POST"
-                  action="${pageContext.request.contextPath}/save_comment/"
-                >
+              <li class="list-group-item" id="commentReplyBlock">
+                <form>
                   <input
                     type="hidden"
-                    id="boardNo"
-                    value="${boardDto.boardNo}"
-                  />
-                  <input
-                    type="hidden"
-                    id="parent"
+                    id="parent${comment.commentNo}"
                     value="${comment.commentNo}"
                   />
                   <textarea
-                    id="content"
+                    id="contentReply${comment.commentNo}"
                     class="form-control"
                     row="1"
                   ></textarea>
-                  <button type="submit" class="btn btn-primary">POST</button>
                 </form>
+                <button
+                  onclick="board.createCommentReplyDto(${comment.commentNo})"
+                  class="btn btn-primary"
+                >
+                  REPLY
+                </button>
               </li>
             </div>
-            <div class="collapse" id="collapseCommentUpdate${comment.commentNo}">
-              <li class="list-group-item" id="replyBlock">
+            <div
+              class="collapse"
+              id="collapseCommentUpdate${comment.commentNo}"
+            >
+              <li class="list-group-item" id="commentUpdateBlock">
                 <form>
                   <input
-                    id="boardNo"
-                    type="hidden"
-                    value="${boardDto.boardNo}"
-                  />
-                  <input
-                    id="commentNo"
+                    id="commentNo${comment.commentNo}"
                     type="hidden"
                     value="${comment.commentNo}"
                   />
-                  <div class="form-group">
-                    <textarea
-                      id="content"
-                      class="form-control"
-                      row="1"
-                    ></textarea>
-                  </div>
+                  <input
+                    id="depth${comment.commentNo}"
+                    type="hidden"
+                    value="${comment.depth}"
+                  />
+                  <textarea
+                    id="contentUpdate${comment.commentNo}"
+                    class="form-control"
+                    row="1"
+                  ></textarea>
                 </form>
-                <button id="btn-update_comment" class="btn btn-primary">UPDATE</button>
+                <button
+                  onclick="board.updateCommentReplyDto(${comment.commentNo})"
+                  class="btn btn-primary"
+                >
+                  UPDATE
+                </button>
               </li>
             </div>
           </c:forEach>
         </ul>
       </div>
     </div>
-    <script type='text/javascript' src="${pageContext.request.contextPath}/resources/js/board.js"></script>
-    <script type='text/javascript' src="${pageContext.request.contextPath}/resources/js/comment.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/board.js"></script>
     <br />
     <footer>
       <div class="jumbotron text-center" style="margin-bottom: 0">
