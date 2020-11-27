@@ -19,10 +19,6 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
       integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
       crossorigin="anonymous"
     />
-    <!-- <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest"> -->
     <script
       src="https://code.jquery.com/jquery-3.5.1.js"
       integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
@@ -45,17 +41,23 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     <br />
     <div class="container">
       <div class="d-flex justify-content-between">
-        <div class="btn-group">
-          <button
-            class="btn btn-info btn-sm dropdown-toggle"
-            type="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
+        <div class="dropdown">
+          <a
             aria-expanded="false"
+            aria-haspopup="true"
+            class="btn btn-info dropdown-toggle"
+            id="dropdown"
+            role="button"
+            data-toggle="dropdown"
           >
-            Sort Post By
-          </button>
-          <div class="dropdown-menu">
+            <span id="sortSelected">Sort Post By</span
+            ><span class="caret"></span>
+          </a>
+          <div
+            class="dropdown-menu sort"
+            id="dropdownSort"
+            data-toggle="dropdown"
+          >
             <a class="dropdown-item">Title Asc</a>
             <a class="dropdown-item">Title Desc</a>
             <a class="dropdown-item">Posted Date Asc</a>
@@ -64,30 +66,25 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
           </div>
         </div>
         <form class="form-inline" method="GET" action="/search">
-          <div class="dropdown">
-            <a
-              aria-expanded="false"
-              aria-haspopup="true"
-              role="button"
-              data-toggle="dropdown"
-              class="btn btn-info dropdown-toggle"
-            >
-              <span id="selected">Search Post By</span
-              ><span class="caret"></span>
-            </a>
-            <div class="dropdown-menu" data-toggle="dropdown" name="option">
-              <a class="dropdown-item">Title</a>
-              <a class="dropdown-item">Content</a>
-            </div>
+          <div class="form-group">
+            <select class="form-control" id="searchType" name="searchType">
+              <option>Title</option>
+              <option>Content</option>
+            </select>
           </div>
           <input
             class="form-control mr-sm-2"
             type="search"
+            id="keyword"
             name="keyword"
             placeholder="Enter Keyword"
             aria-label="Search"
           />
-          <button class="btn btn-outline-info my-2 my-sm-0" type="submit">
+          <button
+            class="btn btn-info my-2 my-sm-0"
+            type="button"
+            onclick="searchPost();"
+          >
             Search
           </button>
         </form>
@@ -219,7 +216,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
         <button
           class="btn btn-primary"
           type="button"
-          onclick="location.href='/create_post'"
+          onclick="location.href='/post/write'"
           disabled
         >
           WRITE
@@ -236,17 +233,31 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
       </sec:authorize>
     </div>
     <script>
-      //$(".dropdown-toggle").dropdown();
-      // $(".dropdown-menu a").click(function () {
-      //   $("#selected").text($(this).text());
-      // });
+      $("#dropdownSort a").click(function () {
+        $("#sortSelected").text($(this).text());
+      });
+    </script>
+    <script type="text/javascript">
+      function searchPost() {
+        var searchType = $("#searchType").val();
+        var keyword = $("#keyword").val();
+        if (keyword != "")
+          window.location.href =
+            "http://localhost:8080/search/" + searchType + "/" + keyword;
+        else {
+          alert("Keyword is Empty!");
+          $("#keyword").focus();
+          return false;
+        }
+      }
     </script>
     <br />
-    <footer>
-      <div class="jumbotron text-center" style="margin-bottom: 0">
-        <p>Bulletin Board Project by swrookie</p>
-        <p>dpdjflr@gmail.com</p>
-      </div>
-    </footer>
   </body>
+  <footer>
+    <div class="jumbotron text-center" style="margin-bottom: 0">
+      <p>Bulletin Board Project by swrookie</p>
+      <p>dpdjflr@gmail.com</p>
+      <p>@2020 Copyrights Reserved</p>
+    </div>
+  </footer>
 </html>

@@ -1,4 +1,16 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%> <%@ taglib prefix="c"
+uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
+uri="http://java.sun.com/jsp/jstl/fmt" %> <%@ taglib prefix="sec"
+uri="http://www.springframework.org/security/tags" %> <%@ taglib
+uri="http://www.springframework.org/tags" prefix="spring" %> <%@ taglib
+prefix="form" uri="http://www.springframework.org/tags/form" %>
+
+
+<!DOCTYPE html>
+<html>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/">OnBoard</a>
     <button
       class="navbar-toggler"
@@ -70,3 +82,5 @@
       </ul>
     </div>
   </nav>
+</body>
+</html>

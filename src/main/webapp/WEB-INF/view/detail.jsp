@@ -50,7 +50,7 @@ uri="http://www.springframework.org/security/tags" %>
           <a class="btn btn-warning" href="/post/${boardDto.boardNo}/update"
             >EDIT</a
           >
-          <button id="btn-delete_post" class="btn btn-danger">DELETE</button>
+          <button id="btn-deletePost" class="btn btn-danger">DELETE</button>
         </c:if>
       </sec:authorize>
       <br />

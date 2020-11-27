@@ -95,6 +95,14 @@ public class BoardController
 		}
 	}
 	
+	private void addPageToAttribute(Model model)
+	{
+		model.addAttribute("startPage", BoardService.getStartPage());
+		model.addAttribute("endPage", BoardService.getEndPage());
+		model.addAttribute("currentPage", BoardService.getCurrentPage());
+		model.addAttribute("lastPage", BoardService.getLastPage());
+	}
+	
 	public BoardController(BoardService boardService, CommentService commentService, FileService fileService)
 	{
 		this.boardService = boardService;
@@ -108,10 +116,7 @@ public class BoardController
 						   Pageable pageable, Model model)
 	{
 		model.addAttribute("boardList", boardService.readPost(pageable));
-		model.addAttribute("startPage", BoardService.getStartPage());
-		model.addAttribute("endPage", BoardService.getEndPage());
-		model.addAttribute("currentPage", BoardService.getCurrentPage());
-		model.addAttribute("lastPage", BoardService.getLastPage());
+		this.addPageToAttribute(model);
 		
 		return "home";
 	}
@@ -163,6 +168,7 @@ public class BoardController
 	public String editPost(@PathVariable("boardNo") Long boardNo, Model model)
 	{
 		model.addAttribute("boardDto", boardService.showPostDetail(boardNo));
+		model.addAttribute("fileList", fileService.readFile(boardNo));
 		
 		return "update";
 	}
@@ -170,9 +176,11 @@ public class BoardController
 	// Update post by clicking update button and return to home page
 	@PutMapping("/post/{boardNo}/update")
 	@ResponseBody
-	public ResponseEntity<Integer> updatePost(@RequestBody BoardDTO boardDto)
+	public ResponseEntity<Integer> updatePost(@RequestPart BoardDTO boardDto, 
+											  @RequestPart List<MultipartFile> files)
 	{
 		boardService.createPost(boardDto);
+		this.createFile(files);
 		
 		return new ResponseEntity<Integer>(1, HttpStatus.OK);
 	}
@@ -188,14 +196,16 @@ public class BoardController
 	}
 	
 	// Search for posts after clicking search button
-	@GetMapping("/search")
-	public String searchPost(@RequestParam(value="keyword", required=false) String keyword, 
-							 @RequestParam(value="option") String searchOption, Model model)
+	@GetMapping("/search/{searchType}/{keyword}")
+	public String searchPost(@PathVariable(name="keyword", required=true) String keyword, 
+							 @PathVariable(name="searchType", required=true) String searchType, 
+							 @PageableDefault (size = 7, sort = "boardNo", direction = Sort.Direction.DESC)
+							 Pageable pageable, Model model)
 	{
-		if (keyword == null || keyword.isEmpty())
-			return "redirect:/";
-		
-		model.addAttribute("boardList", boardService.searchPost(keyword));
+		System.out.println("Search type: " + searchType);
+		System.out.println("keyword: " + keyword);
+		model.addAttribute("boardList", boardService.searchPost(searchType, keyword, pageable));
+		this.addPageToAttribute(model);
 		
 		return "home";
 	}

@@ -38,24 +38,49 @@ uri="http://www.springframework.org/security/tags" %>
     <%@ include file="/WEB-INF/view/navbar.jsp" %>
     <br />
     <div class="container">
-      <form>
+      <form name="writeForm" id="writeForm" enctype="multipart/form-data">
         <div class="form-group">
           <input id="boardNo" type="hidden" value="${boardDto.boardNo}" />
           <input
             id="title"
             type="text"
             class="form-control"
-            placeholder="${boardDto.title}"
+            value="${boardDto.title}"
             maxlength="50"
           />
         </div>
         <div class="form-group">
-          <textarea
-            id="content"
-            class="form-control summernote"
-            rows="3"
-          ></textarea>
+          <textarea id="content" class="form-control summernote" rows="3">
+${boardDto.content}</textarea
+          >
         </div>
+        <div class="form-group">
+          <div class="col-sm-10">
+            <input
+              name="files"
+              multiple="multiple"
+              type="file"
+              class="custom-file-input"
+              id="customFile"
+            />
+            <label class="custom-file-label" for="customFile"
+              >Choose files</label
+            >
+          </div>
+        </div>
+        <hr />
+        <div>
+          <strong>Attachments: </strong>
+          <c:forEach var="file" items="${fileList}">
+            <a
+              class="card-text"
+              href="/post/${boardDto.boardNo}/download/${file.fileNo}"
+            >
+              ${file.origFileName}</a
+            >
+          </c:forEach>
+        </div>
+        <hr />
       </form>
       <button id="btn-updatePost" class="btn btn-warning">UPDATE</button>
     </div>
@@ -64,6 +89,15 @@ uri="http://www.springframework.org/security/tags" %>
         placeholder: "Write Something...",
         tabsize: 2,
         height: 300,
+      });
+    </script>
+    <script>
+      $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this)
+          .siblings(".custom-file-label")
+          .addClass("selected")
+          .html(fileName);
       });
     </script>
     <script src="${pageContext.request.contextPath}/resources/js/board.js"></script>

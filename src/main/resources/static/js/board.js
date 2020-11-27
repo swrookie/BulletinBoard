@@ -13,7 +13,7 @@ let board = {
         $("#btn-createComment").on("click", () => {
             this.createCommentDto();
         });
-    },  
+    },   
   
     createBoardDtoAndFile: function() 
     {       
@@ -46,22 +46,27 @@ let board = {
     {
         let boardNo = $("#boardNo").val();
 
-        let data = 
+        let boardDto = 
         {
             boardNo: boardNo,
             title: $("#title").val(),
             content: $("#content").val(),
-        };
+        }; 
+
+        var formData = new FormData(document.getElementById("writeForm"));    
+        formData.append("boardDto", new Blob([JSON.stringify(boardDto)], {type : "application/json"}));
  
         $.ajax({
             type: "PUT",
+            enctype: "multipart/form-data",
             url: "/post/" + boardNo + "/update",
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",
+            data: formData,
+            contentType: false,
+            processData: false,
             dataType: "json"
         }).done(function(resp) {
             alert("Post Update Successful!");
-            location.href="/";
+            location.href="/post/" + boardNo;
         }).fail(function(error) {
             alert(JSON.stringify(error));
         });

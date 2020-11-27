@@ -1,10 +1,11 @@
 package com.swrookie.bulletinboard.service;
 
-import java.util.*;  
+import java.util.*;   
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -45,11 +46,11 @@ public class BoardService
 		
 		if (lastPage <= PAGE_BLOCK_COUNT)
 		{
-			if (this.getPostCount() < 1)
+			if (lastPage == 0)
 				endPage = lastPage;
 			else
 				endPage = lastPage - 1;
-		}
+			}
 		else
 		{
 			if (lastPage - PAGE_BLOCK_COUNT > startPage)
@@ -113,14 +114,21 @@ public class BoardService
 	}
 	
 	@Transactional
-	public List<BoardDTO> searchPost(String keyword)
+	public List<BoardDTO> searchPost(String searchType, String keyword, Pageable pageable)
 	{
-		List<Board> boards = boardRepository.findByTitleContaining(keyword);
+		Page<Board> page = null;
+
+		if (searchType.equals("Title"))
+			page = boardRepository.findByTitleContaining(keyword, pageable);
+		else if (searchType.equals("Content"))
+			page = boardRepository.findByContentContaining(keyword, pageable);
+
+		this.getPaging(page);
+		
+		List<Board> boards = page.getContent();
 		List<BoardDTO> boardDtoList = new ArrayList<BoardDTO>();
 		
-		System.out.println(boards.toString());
-		
-		if (boards.isEmpty())
+		if (boards.isEmpty() || boards == null)
 			return boardDtoList;
 		
 		for (Board board : boards)
