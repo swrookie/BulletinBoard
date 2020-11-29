@@ -62,4 +62,10 @@ public class FileService
      		   		  .filePath(file.getFilePath())
      				  .build();
 	}
+	
+	@Transactional
+	public void deleteFile(Long fileNo)
+	{
+		fileRepository.deleteById(fileNo);
+	}
 }

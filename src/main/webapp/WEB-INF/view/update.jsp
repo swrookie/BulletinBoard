@@ -2,10 +2,11 @@
 pageEncoding="UTF-8"%> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
 uri="http://java.sun.com/jsp/jstl/fmt" %> <%@ taglib prefix="sec"
-uri="http://www.springframework.org/security/tags" %>
+uri="http://www.springframework.org/security/tags" %><%@ taglib prefix="form"
+uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="en" style="position: relative; min-height: 100%; margin: 0">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -33,12 +34,17 @@ uri="http://www.springframework.org/security/tags" %>
     />
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
   </head>
-  <body>
+  <body class="bg-light" style="min-height: 100%">
     <!-- 게시판 -->
     <%@ include file="/WEB-INF/view/navbar.jsp" %>
     <br />
     <div class="container">
-      <form name="writeForm" id="writeForm" enctype="multipart/form-data">
+      <form
+        name="writeForm"
+        id="writeForm"
+        enctype="multipart/form-data"
+        accept-charset="UTF-8"
+      >
         <div class="form-group">
           <input id="boardNo" type="hidden" value="${boardDto.boardNo}" />
           <input
@@ -47,12 +53,18 @@ uri="http://www.springframework.org/security/tags" %>
             class="form-control"
             value="${boardDto.title}"
             maxlength="50"
+            required
           />
         </div>
         <div class="form-group">
-          <textarea id="content" class="form-control summernote" rows="3">
-${boardDto.content}</textarea
+          <textarea
+            id="content"
+            class="form-control summernote"
+            rows="3"
+            required
           >
+            ${boardDto.content}
+          </textarea>
         </div>
         <div class="form-group">
           <div class="col-sm-10">
@@ -72,17 +84,31 @@ ${boardDto.content}</textarea
         <div>
           <strong>Attachments: </strong>
           <c:forEach var="file" items="${fileList}">
-            <a
-              class="card-text"
-              href="/post/${boardDto.boardNo}/download/${file.fileNo}"
-            >
-              ${file.origFileName}</a
-            >
+            <button id="btn-deleteFile" class="btn btn-danger btn-sm">
+              ${file.origFileName}
+              <svg
+                width="1em"
+                height="1em"
+                viewBox="0 0 16 16"
+                class="bi bi-x-square-fill"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"
+                />
+              </svg>
+            </button>
           </c:forEach>
         </div>
         <hr />
       </form>
-      <button id="btn-updatePost" class="btn btn-warning">UPDATE</button>
+      <div class="text-right">
+        <button id="btn-updatePost" class="btn btn-warning btn-sm">
+          UPDATE
+        </button>
+      </div>
     </div>
     <script>
       $(".summernote").summernote({
@@ -102,11 +128,6 @@ ${boardDto.content}</textarea
     </script>
     <script src="${pageContext.request.contextPath}/resources/js/board.js"></script>
     <br />
-    <footer>
-      <div class="jumbotron text-center" style="margin-bottom: 0">
-        <p>Bulletin Board Project by swrookie</p>
-        <p>dpdjflr@gmail.com</p>
-      </div>
-    </footer>
+    <%@ include file="/WEB-INF/view/footer.jsp" %>
   </body>
 </html>

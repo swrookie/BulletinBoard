@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import com.swrookie.bulletinboard.repository.RememberMeTokenRepository;
 @Transactional
 public class RememberMeTokenService implements PersistentTokenRepository
 {
+	@Autowired
 	private RememberMeTokenRepository rememberMeTokenRepository;
 	
 	@Override

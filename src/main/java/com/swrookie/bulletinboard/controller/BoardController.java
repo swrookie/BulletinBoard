@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +45,7 @@ public class BoardController
 	@Autowired
 	private FileService fileService;
 	
+	// Attach file on the post and upload
 	private void createFile(List<MultipartFile> files)
 	{
 		try
@@ -58,7 +57,6 @@ public class BoardController
 					String origFileName = file.getOriginalFilename();
 					if (origFileName.equals(""))
 						continue;
-					
 //					System.out.println("Original file name: " + origFileName);
 					String fileName = new MD5Generator(origFileName).toString();
 					String savePath = System.getProperty("user.dir") + "\\files";
@@ -140,21 +138,42 @@ public class BoardController
 		return new ResponseEntity<Integer>(1, HttpStatus.OK);
 	}
 	
-	@GetMapping("post/{boardNo}/download/{fileNo}")
+	// Download the file when attachment link is clicked
+	@GetMapping("/post/{boardNo}/download/{fileNo}")
 	public ResponseEntity<Resource> downloadFile(@PathVariable("fileNo") Long fileNo) throws IOException
 	{
 		FileDTO fileDto = fileService.getFile(fileNo);
 		Path path = Paths.get(fileDto.getFilePath());
 		Resource resource = new InputStreamResource(Files.newInputStream(path));
+		
+		String contentType="application/octet-stream";
+		String origFileName = new String(fileDto.getOrigFileName().getBytes("UTF-8"), "ISO-8859-1");
 
-		return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream"))
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
 							 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""
-							 + fileDto.getOrigFileName() + "\"").body(resource);                  
+							 + origFileName + "\"").body(resource);                  
+	}
+	
+	@PostMapping("/post/{boardNo}/udpate/{fileNo}")
+	@ResponseBody
+	public ResponseEntity<Integer> deleteFile(@PathVariable("fileNo") Long fileNo, 
+			@PathVariable("boardNo") Long boardNo, Model model) throws IOException
+	{
+		FileDTO fileDto = fileService.getFile(fileNo);		
+		File file = new File(fileDto.getFilePath());
+		
+		if (file.exists())
+			file.delete();
+		fileService.deleteFile(fileNo);
+		
+		model.addAttribute("fileList", fileService.readFile(boardNo));
+		
+		return new ResponseEntity<>(1, HttpStatus.OK);
 	}
 	
 	// View details of the post by clicking link on the title
 	@GetMapping("/post/{boardNo}")
-	public String detail(@PathVariable("boardNo") Long boardNo, Model model)
+	public String showDetail(@PathVariable("boardNo") Long boardNo, Model model)
 	{
 		model.addAttribute("boardDto", boardService.showPostDetail(boardNo));
 		model.addAttribute("fileList", fileService.readFile(boardNo));
@@ -202,8 +221,6 @@ public class BoardController
 							 @PageableDefault (size = 7, sort = "boardNo", direction = Sort.Direction.DESC)
 							 Pageable pageable, Model model)
 	{
-		System.out.println("Search type: " + searchType);
-		System.out.println("keyword: " + keyword);
 		model.addAttribute("boardList", boardService.searchPost(searchType, keyword, pageable));
 		this.addPageToAttribute(model);
 		

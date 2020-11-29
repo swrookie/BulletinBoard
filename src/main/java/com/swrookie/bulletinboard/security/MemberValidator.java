@@ -26,20 +26,29 @@ public class MemberValidator implements Validator
 	{
 		MemberDTO memberDto = (MemberDTO) target;
 		
+		// Display error message on the form if user name input field is empty
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userName", "NotEmpty");
+		
+		// Display error message on the form if user name does not match required length
 		if (memberDto.getUserName().length() < 3 || memberDto.getUserName().length() > 32)
 			errors.rejectValue("userName", "Size.userForm.userName");
 		
+		// Display error message on the form if user name already exists
 		if (memberService.findByUserName(memberDto.getUserName()) != null)
 			errors.rejectValue("userName", "Duplicate.userForm.userName");
 		
+		// Display error message on the form if email already exists
 		if (memberService.findByUserEmail(memberDto.getEmail()) != null)
 			errors.rejectValue("email", "Duplicate.userForm.email");
 		
+		// Display error message on the form if password input field is empty
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
+		
+		// Display error message on the form if password does not match required length
 		if (memberDto.getPassword().length() < 5 || memberDto.getPassword().length() > 32)
 			errors.rejectValue("password", "Size.userForm.password");
 		
+		// Display error message on the form if password does not match with confirm
 		if (!memberDto.getPasswordConfirm().equals(memberDto.getPassword()))
 			errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
 	}

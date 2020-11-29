@@ -2,10 +2,11 @@
 pageEncoding="UTF-8"%> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
 uri="http://java.sun.com/jsp/jstl/fmt" %> <%@ taglib prefix="sec"
-uri="http://www.springframework.org/security/tags" %>
+uri="http://www.springframework.org/security/tags" %><%@ taglib prefix="form"
+uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="en" style="position: relative; min-height: 100%; margin: 0">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,10 +18,6 @@ uri="http://www.springframework.org/security/tags" %>
       integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
       crossorigin="anonymous"
     />
-    <!-- <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest"> -->
     <script
       src="https://code.jquery.com/jquery-3.5.1.js"
       integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
@@ -37,11 +34,11 @@ uri="http://www.springframework.org/security/tags" %>
     />
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
   </head>
-  <body>
+  <body class="bg-light" style="min-height: 100%; overflow-y: scroll">
     <!-- 게시판 -->
     <%@ include file="/WEB-INF/view/navbar.jsp" %>
     <br />
-    <div class="container">
+    <div class="container bg-light">
       <input id="boardNo" type="hidden" value="${boardDto.boardNo}" />
       <button class="btn btn-secondary" onclick="history.back()">LIST</button>
       <sec:authorize access="isAuthenticated()">
@@ -65,7 +62,9 @@ uri="http://www.springframework.org/security/tags" %>
       </div>
       <hr />
       <div class="form-group">
-        <div>${boardDto.content}</div>
+        <div class="card bg-light shadow-lg">
+          <div>${boardDto.content}</div>
+        </div>
       </div>
       <hr />
       <div>
@@ -80,57 +79,63 @@ uri="http://www.springframework.org/security/tags" %>
         </c:forEach>
       </div>
       <hr />
-      <div class="card">
-        <form>
-          <div class="card-body">
-            <textarea id="content" class="form-control" row="1"></textarea>
+      <sec:authorize access="isAuthenticated()">
+        <div class="card bg-light shadow-lg p-3">
+          <form>
+            <div class="card-body">
+              <textarea id="content" class="form-control" row="1"></textarea>
+            </div>
+          </form>
+          <div class="card-footer">
+            <div class="text-right">
+              <button id="btn-createComment" class="btn btn-primary">
+                POST
+              </button>
+            </div>
           </div>
-        </form>
-        <div class="card-footer">
-          <button id="btn-createComment" class="btn btn-primary">POST</button>
         </div>
-      </div>
-      <br />
+        <br />
+      </sec:authorize>
       <div class="card">
         <div class="card-header">Comments</div>
         <ul class="list-group" id="commentBlockList">
           <c:forEach var="comment" items="${commentList}">
-            <li
-              class="list-group-item d-flex justify-content-between"
-              id="commentBlock${comment.commentNo}"
-            >
+            <li class="list-group-item" id="commentBlock${comment.commentNo}">
               <c:choose>
                 <c:when test="${comment.depth gt 0}">
                   <div style="padding-left: ${comment.depth}em">
-                    L ${comment.content}
+                    &#x21B3; ${comment.content}
                   </div>
                 </c:when>
                 <c:otherwise> ${comment.content} </c:otherwise>
               </c:choose>
-              <div class="d-flex">
+              <hr />
+              <div class="d-flex justify-content-end">
                 <div class="font-italic">Author: ${comment.author} &nbsp;</div>
-                <button
-                  class="badge"
-                  data-toggle="collapse"
-                  data-target="#collapseCommentReply${comment.commentNo}"
-                >
-                  REPLY
-                </button>
-                <c:if test="${username eq comment.author}">
+                <sec:authorize access="isAuthenticated()">
                   <button
                     class="badge"
                     data-toggle="collapse"
-                    data-target="#collapseCommentUpdate${comment.commentNo}"
+                    data-target="#collapseCommentReply${comment.commentNo}"
                   >
-                    UPDATE
+                    REPLY
                   </button>
-                  <button
-                    onClick="board.deleteCommentDto(${boardDto.boardNo}, ${comment.commentNo})"
-                    class="badge"
-                  >
-                    DELETE
-                  </button>
-                </c:if>
+                  <c:if test="${username eq comment.author}">
+                    <button
+                      class="badge"
+                      data-toggle="collapse"
+                      data-target="#collapseCommentUpdate${comment.commentNo}"
+                    >
+                      UPDATE
+                    </button>
+                    <button
+                      onclick="board.deleteCommentDto(${boardDto.boardNo}, ${comment.commentNo})"
+                      class="badge"
+                    >
+                      DELETE
+                    </button>
+                  </c:if>
+                </sec:authorize>
               </div>
             </li>
             <div class="collapse" id="collapseCommentReply${comment.commentNo}">
@@ -147,12 +152,15 @@ uri="http://www.springframework.org/security/tags" %>
                     row="1"
                   ></textarea>
                 </form>
-                <button
-                  onclick="board.createCommentReplyDto(${comment.commentNo})"
-                  class="btn btn-primary"
-                >
-                  REPLY
-                </button>
+                <br />
+                <div class="text-right">
+                  <button
+                    onclick="board.createCommentReplyDto(${comment.commentNo})"
+                    class="btn btn-primary"
+                  >
+                    REPLY
+                  </button>
+                </div>
               </li>
             </div>
             <div
@@ -177,25 +185,32 @@ uri="http://www.springframework.org/security/tags" %>
                     row="1"
                   ></textarea>
                 </form>
-                <button
-                  onclick="board.updateCommentReplyDto(${comment.commentNo})"
-                  class="btn btn-primary"
-                >
-                  UPDATE
-                </button>
+                <br />
+                <div class="text-right">
+                  <button
+                    onclick="board.updateCommentReplyDto(${comment.commentNo})"
+                    class="btn btn-primary"
+                  >
+                    UPDATE
+                  </button>
+                </div>
               </li>
             </div>
           </c:forEach>
         </ul>
       </div>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </div>
-    <script src="${pageContext.request.contextPath}/resources/js/board.js"></script>
     <br />
-    <footer>
-      <div class="jumbotron text-center" style="margin-bottom: 0">
-        <p>Bulletin Board Project by swrookie</p>
-        <p>dpdjflr@gmail.com</p>
-      </div>
-    </footer>
+    <br />
+    <br />
+    <br />
+    <br />
+    <script src="${pageContext.request.contextPath}/resources/js/board.js"></script>
+    <%@ include file="/WEB-INF/view/footer.jsp" %>
   </body>
 </html>

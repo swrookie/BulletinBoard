@@ -48,45 +48,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 			.exceptionHandling().accessDeniedHandler(MemberAccessDeniedHandler())
 				.and()
 			.logout()
+			.invalidateHttpSession(true)
+			.clearAuthentication(true)
         	.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
         	.logoutSuccessUrl("/")
-			.invalidateHttpSession(true)
-			.clearAuthentication(true);
-		
-		// CSRF Enabled
-//		http.authorizeRequests()
-//			.antMatchers("/admin/**/").hasRole("ADMIN")
-//			.antMatchers("/do_login/**").hasRole("MEMBER")
-//			.antMatchers("/**").permitAll()
-//			.anyRequest().authenticated()
-//			.and()
-//			.headers()
-//			.frameOptions().disable()
-//			.and()
-//			.csrf().ignoringAntMatchers("/h2-console/**").
-//			.and()
-//			.formLogin().
-//			.loginPage("/")
-//			.loginProcessingUrl("/do_login")
-//			.defaultSuccessUrl("/go_home")
-//			.failureUrl("/login?error")
-//			.usernameParameter("userName")
-//			.passwordParameter("password")
-//			.permitAll().and().exceptionHandling().accessDeniedHandler(MemberAccessDeniedHandler())
-//			.and()
-//			.logout()
-//			.invalidateHttpSession(true)
-//		    .clearAuthentication(true)
-//			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//			.logoutSuccessUrl("/login?logout")
-//			.permitAll()
-//			.and()
-//			.rememberMe()
-//			.key("swrookie")
-//			.rememberMeParameter("remember-me")
-//			.rememberMeCookieName("swrookiecookie")
-//			.tokenValiditySeconds(86400)
-//			.tokenRepository(rememberMeTokenService()).userDetailsService(myUserService());
+			.permitAll()
+			.and()
+			.rememberMe()
+			.key("swrookie")
+			.rememberMeParameter("remember-me")
+			.rememberMeCookieName("swrookiecookie")
+			.tokenValiditySeconds(86400)
+			.tokenRepository(rememberMeTokenService())
+			.userDetailsService(userDetailsService());
 	}
 	
 	@Override

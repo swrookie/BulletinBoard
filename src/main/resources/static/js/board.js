@@ -1,6 +1,6 @@
 let board = {  
     init: function() 
-    {        
+    {           
         $("#btn-createPost").on("click", () => {
             this.createBoardDtoAndFile();
         });
@@ -13,14 +13,31 @@ let board = {
         $("#btn-createComment").on("click", () => {
             this.createCommentDto();
         });
-    },   
-  
+    },          
+    
     createBoardDtoAndFile: function() 
-    {       
+    { 
+        let title = $("#title").val();
+        let content = $("#content").val();
+ 
+        if (title == "")
+        {
+            alert("Please enter title");
+            document.writeForm.title.focus();
+            return;
+        }
+
+        if (content == "")
+        {
+            alert("Please enter content");
+            document.writeForm.content.focus();
+            return;
+        }
+
         let boardDto = 
         {
-            title: $("#title").val(),
-            content: $("#content").val(), 
+            title: title,
+            content: content, 
         };     
  
         var formData = new FormData(document.getElementById("writeForm"));    
@@ -45,12 +62,28 @@ let board = {
     updateBoardDto: function() 
     {
         let boardNo = $("#boardNo").val();
+        let title = $("#title").val();
+        let content = $("#content").val();
+
+        if (title == "")
+        {
+            alert("Please enter title");
+            document.writeForm.title.focus();
+            return;
+        }
+
+        if (content == "")
+        {
+            alert("Please enter content");
+            document.writeForm.content.focus();
+            return;
+        }
 
         let boardDto = 
         {
             boardNo: boardNo,
-            title: $("#title").val(),
-            content: $("#content").val(),
+            title: title,
+            content: content,
         }; 
 
         var formData = new FormData(document.getElementById("writeForm"));    
@@ -83,6 +116,20 @@ let board = {
         }).done(function(resp) {
             alert("Post Delete Successful!");
             location.href="/";
+        }).fail(function(error) {
+            alert(JSON.stringify(error));
+        });
+    }, 
+
+    deleteFileDto: function(boardNo, fileNo)
+    {
+        $.ajax({
+            type: "POST",
+            url: "/post/" + boardNo + "/update/" + fileNo,
+            dataType:"json"
+        }).done(function(resp) {
+            alert("File Delete Successful!");
+            // location.href="/post/" + boardNo + "update";
         }).fail(function(error) {
             alert(JSON.stringify(error));
         });
@@ -119,6 +166,7 @@ let board = {
     {
         let boardNo = $("#boardNo").val();
         let parent = $("#parent" + commentNo).val();
+
         let data = 
         {
             boardNo: boardNo,
@@ -142,12 +190,14 @@ let board = {
     updateCommentReplyDto: function(commentNo) 
     { 
         let boardNo = $("#boardNo").val();
+        let content = $("#contentUpdate" + commentNo).val();
+        let depth = $("#depth" + commentNo).val();
 
         let data = {
             boardNo: boardNo,
             commentNo: commentNo,
-            content: $("#contentUpdate" + commentNo).val(),
-            depth: $("#depth" + commentNo).val(),
+            content: content,
+            depth: depth,
         };  
 
         $.ajax({

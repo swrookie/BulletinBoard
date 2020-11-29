@@ -2,10 +2,11 @@
 pageEncoding="UTF-8"%> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
 uri="http://java.sun.com/jsp/jstl/fmt" %> <%@ taglib prefix="sec"
-uri="http://www.springframework.org/security/tags" %>
+uri="http://www.springframework.org/security/tags" %><%@ taglib prefix="form"
+uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="en" style="position: relative; min-height: 100%; margin: 0">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -33,18 +34,23 @@ uri="http://www.springframework.org/security/tags" %>
     />
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
   </head>
-  <body>
+  <body class="bg-light" style="min-height: 100%">
     <%@ include file="/WEB-INF/view/navbar.jsp" %>
     <br />
     <div class="container">
-      <form name="writeForm" id="writeForm" enctype="multipart/form-data">
+      <form
+        name="writeForm"
+        id="writeForm"
+        enctype="multipart/form-data"
+        accept-charset="UTF-8"
+      >
         <div class="form-group">
           <input
             type="text"
             class="form-control"
             placeholder="Enter title"
             id="title"
-            maxlength="50"
+            maxlength="30"
           />
         </div>
         <div class="form-group">
@@ -54,22 +60,23 @@ uri="http://www.springframework.org/security/tags" %>
             id="content"
           ></textarea>
         </div>
-        <div class="form-group">
-          <div class="col-sm-10">
-            <input
-              name="files"
-              multiple="multiple"
-              type="file"
-              class="custom-file-input"
-              id="customFile"
-            />
-            <label class="custom-file-label" for="customFile"
-              >Choose files</label
-            >
-          </div>
+        <div class="custom-file">
+          <input
+            type="file"
+            class="custom-file-input"
+            id="customFile"
+            name="files"
+            multiple="multiple"
+          />
+          <label class="custom-file-label" for="customFile">Choose files</label>
         </div>
       </form>
-      <button id="btn-createPost" class="btn btn-primary">POST</button>
+      <br />
+      <div class="text-right">
+        <button type="button" id="btn-createPost" class="btn btn-primary">
+          POST
+        </button>
+      </div>
     </div>
     <script>
       $(".summernote").summernote({
@@ -89,11 +96,6 @@ uri="http://www.springframework.org/security/tags" %>
     </script>
     <script src="${pageContext.request.contextPath}/resources/js/board.js"></script>
     <br />
-    <footer>
-      <div class="jumbotron text-center" style="margin-bottom: 0">
-        <p>Bulletin Board Project by swrookie</p>
-        <p>dpdjflr@gmail.com</p>
-      </div>
-    </footer>
+    <%@ include file="/WEB-INF/view/footer.jsp" %>
   </body>
 </html>

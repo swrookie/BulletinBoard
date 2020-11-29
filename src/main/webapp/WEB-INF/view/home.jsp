@@ -2,12 +2,11 @@
 pageEncoding="UTF-8"%> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
 uri="http://java.sun.com/jsp/jstl/fmt" %> <%@ taglib prefix="sec"
-uri="http://www.springframework.org/security/tags" %> <%@ taglib
-uri="http://www.springframework.org/tags" prefix="spring" %> <%@ taglib
-prefix="form" uri="http://www.springframework.org/tags/form" %>
+uri="http://www.springframework.org/security/tags" %><%@ taglib prefix="form"
+uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="en" style="position: relative; min-height: 100%; margin: 0">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -35,11 +34,15 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
     />
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
   </head>
-  <body>
+  <body class="bg-light" style="min-height: 100%">
     <!-- 게시판 -->
     <%@ include file="/WEB-INF/view/navbar.jsp" %>
     <br />
-    <div class="container">
+    <div
+      class="container"
+      style="min-height: 100%; position: relative; padding-bottom: 100px"
+    >
+      <h1>Bulletin Board</h1>
       <div class="d-flex justify-content-between">
         <div class="dropdown">
           <a
@@ -89,7 +92,7 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
           </button>
         </form>
       </div>
-      <table class="table table-bordered table-striped table-hover">
+      <table class="table table-striped table-hover">
         <thead class="thead-dark">
           <tr>
             <th scope="col">#</th>
@@ -134,103 +137,93 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
           </tr>
         </tbody>
       </table>
-    </div>
-    <nav aria-label="Page Navigation">
-      <ul class="pagination justify-content-center">
-        <li class="page-item enabled">
-          <a class="page-link" href="?page=0">First</a>
-        </li>
-        <c:choose>
-          <c:when test="${currentPage != 0}">
-            <li class="page-item">
-              <a
-                class="page-link"
-                href="?page=${currentPage - 1}"
-                tabindex="-1"
-                aria-disabled="true"
-                aria-label="Previous"
-              >
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-          </c:when>
-          <c:otherwise>
-            <li class="page-item disabled">
-              <a
-                class="page-link"
-                href="?page=${currentPage - 1}"
-                tabindex="-1"
-                aria-disabled="true"
-                aria-label="Previous"
-              >
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-          </c:otherwise>
-        </c:choose>
-        <c:forEach var="pageNum" begin="${startPage}" end="${endPage}">
+      <div class="text-right">
+        <sec:authorize access="isAuthenticated()">
+          <button
+            class="btn btn-primary"
+            type="button"
+            onclick="location.href='/post/write'"
+          >
+            WRITE
+          </button>
+        </sec:authorize>
+      </div>
+      <nav aria-label="Page Navigation">
+        <ul class="pagination justify-content-center">
+          <li class="page-item enabled">
+            <a class="page-link" href="?page=0">First</a>
+          </li>
           <c:choose>
-            <c:when test="${currentPage eq pageNum}">
-              <li class="page-item active">
-                <a class="page-link" name="page" href="?page=${pageNum}">
-                  ${pageNum + 1}
+            <c:when test="${currentPage != 0}">
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  href="?page=${currentPage - 1}"
+                  tabindex="-1"
+                  aria-disabled="true"
+                  aria-label="Previous"
+                >
+                  <span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
             </c:when>
             <c:otherwise>
-              <li class="page-item">
-                <a class="page-link" name="page" href="?page=${pageNum}">
-                  ${pageNum + 1}
+              <li class="page-item disabled">
+                <a
+                  class="page-link"
+                  href="?page=${currentPage - 1}"
+                  tabindex="-1"
+                  aria-disabled="true"
+                  aria-label="Previous"
+                >
+                  <span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
             </c:otherwise>
           </c:choose>
-        </c:forEach>
-        <c:choose>
-          <c:when test="${currentPage lt lastPage - 1}">
-            <li class="page-item">
-              <a
-                class="page-link"
-                href="?page=${currentPage + 1}"
-                aria-label="Next"
-              >
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </c:when>
-          <c:otherwise>
-            <li class="page-item disabled">
-              <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </c:otherwise>
-        </c:choose>
-        <li class="page-item">
-          <a class="page-link" href="?page=${lastPage - 1}">Last</a>
-        </li>
-      </ul>
-    </nav>
-    <div class="text-center">
-      <sec:authorize access="isAnonymous()">
-        <button
-          class="btn btn-primary"
-          type="button"
-          onclick="location.href='/post/write'"
-          disabled
-        >
-          WRITE
-        </button>
-      </sec:authorize>
-      <sec:authorize access="isAuthenticated()">
-        <button
-          class="btn btn-primary"
-          type="button"
-          onclick="location.href='/post/write'"
-        >
-          WRITE
-        </button>
-      </sec:authorize>
+          <c:forEach var="pageNum" begin="${startPage}" end="${endPage}">
+            <c:choose>
+              <c:when test="${currentPage eq pageNum}">
+                <li class="page-item active">
+                  <a class="page-link" name="page" href="?page=${pageNum}">
+                    ${pageNum + 1}
+                  </a>
+                </li>
+              </c:when>
+              <c:otherwise>
+                <li class="page-item">
+                  <a class="page-link" name="page" href="?page=${pageNum}">
+                    ${pageNum + 1}
+                  </a>
+                </li>
+              </c:otherwise>
+            </c:choose>
+          </c:forEach>
+          <c:choose>
+            <c:when test="${currentPage lt lastPage - 1}">
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  href="?page=${currentPage + 1}"
+                  aria-label="Next"
+                >
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </c:when>
+            <c:otherwise>
+              <li class="page-item disabled">
+                <a class="page-link" href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </c:otherwise>
+          </c:choose>
+          <li class="page-item">
+            <a class="page-link" href="?page=${lastPage - 1}">Last</a>
+          </li>
+        </ul>
+      </nav>
     </div>
     <script>
       $("#dropdownSort a").click(function () {
@@ -252,12 +245,6 @@ prefix="form" uri="http://www.springframework.org/tags/form" %>
       }
     </script>
     <br />
+    <%@ include file="/WEB-INF/view/footer.jsp" %>
   </body>
-  <footer>
-    <div class="jumbotron text-center" style="margin-bottom: 0">
-      <p>Bulletin Board Project by swrookie</p>
-      <p>dpdjflr@gmail.com</p>
-      <p>@2020 Copyrights Reserved</p>
-    </div>
-  </footer>
 </html>
