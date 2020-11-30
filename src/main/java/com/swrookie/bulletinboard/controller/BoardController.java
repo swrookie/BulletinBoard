@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,7 +58,7 @@ public class BoardController
 					String origFileName = file.getOriginalFilename();
 					if (origFileName.equals(""))
 						continue;
-//					System.out.println("Original file name: " + origFileName);
+					System.out.println("Original file name: " + origFileName);
 					String fileName = new MD5Generator(origFileName).toString();
 					String savePath = System.getProperty("user.dir") + "\\files";
 					
@@ -130,11 +131,20 @@ public class BoardController
 	@PostMapping("/post/write")
 	@ResponseBody
 	public ResponseEntity<Integer> createPost(@RequestPart("boardDto") BoardDTO boardDto, 
-											  @RequestPart("files") List<MultipartFile> files)
+											  @RequestPart("files[]") List<MultipartFile> files)
 	{
 		boardService.createPost(boardDto);
-		this.createFile(files);
+		//this.createFile(files);
 		
+		return new ResponseEntity<Integer>(1, HttpStatus.OK);
+	}
+	
+	@PostMapping("/upload")
+	@ResponseBody
+	public ResponseEntity<Integer> asyncFileUpload(@RequestParam("files[]") List<MultipartFile> files)
+	{
+		System.out.println("File content: " + files.toString());
+		this.createFile(files);
 		return new ResponseEntity<Integer>(1, HttpStatus.OK);
 	}
 	
@@ -154,13 +164,12 @@ public class BoardController
 							 + origFileName + "\"").body(resource);                  
 	}
 	
-	@PostMapping("/post/{boardNo}/udpate/{fileNo}")
-	@ResponseBody
-	public ResponseEntity<Integer> deleteFile(@PathVariable("fileNo") Long fileNo, 
+	@GetMapping("/post/{boardNo}/udpate/{fileNo}")
+	public String deleteFile(@PathVariable("fileNo") Long fileNo, 
 			@PathVariable("boardNo") Long boardNo, Model model) throws IOException
 	{
-		FileDTO fileDto = fileService.getFile(fileNo);		
-		File file = new File(fileDto.getFilePath());
+		System.out.println("Starting file deletion");
+		File file = new File(fileService.getFile(fileNo).getFilePath());
 		
 		if (file.exists())
 			file.delete();
@@ -168,7 +177,7 @@ public class BoardController
 		
 		model.addAttribute("fileList", fileService.readFile(boardNo));
 		
-		return new ResponseEntity<>(1, HttpStatus.OK);
+		return "/";
 	}
 	
 	// View details of the post by clicking link on the title

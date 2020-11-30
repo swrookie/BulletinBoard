@@ -1,4 +1,4 @@
-let board = {  
+let board = {        
     init: function() 
     {           
         $("#btn-createPost").on("click", () => {
@@ -39,10 +39,15 @@ let board = {
             title: title,
             content: content, 
         };     
- 
+        
         var formData = new FormData(document.getElementById("writeForm"));    
         formData.append("boardDto", new Blob([JSON.stringify(boardDto)], {type : "application/json"}));
-   
+		
+		for (var value of formData.values())
+		{
+			console.log("Data to be sent from AJAX to BoardController: " + value);
+		}
+       
         $.ajax({ 
             type: "POST",
             enctype: "multipart/form-data",
@@ -120,33 +125,42 @@ let board = {
             alert(JSON.stringify(error));
         });
     }, 
-
+ 
     deleteFileDto: function(boardNo, fileNo)
-    {
+    {  
+        let url = "/post/" + boardNo + "/update/" + fileNo;
+        console.log(url);
+
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: "/post/" + boardNo + "/update/" + fileNo,
             dataType:"json"
         }).done(function(resp) {
             alert("File Delete Successful!");
-            // location.href="/post/" + boardNo + "update";
+            location.href="/post/" + boardNo + "/update";
         }).fail(function(error) {
             alert(JSON.stringify(error));
+            return;
         });
     },
 
     createCommentDto: function()
     {
         let boardNo = $("#boardNo").val();
+        let content = $("#content").val();
+
+        if (content == "")
+        {
+            alert("Please enter content");
+            document.writeForm.content.focus();
+            return;
+        }
 
         let data = 
         {
             boardNo: boardNo,
-            content: $("#content").val(),
+            content: content,
         };
-
-        let url = "/post/" + boardNo + "/save";
-        console.log(url);
 
         $.ajax({
             type: "POST",
@@ -166,11 +180,19 @@ let board = {
     {
         let boardNo = $("#boardNo").val();
         let parent = $("#parent" + commentNo).val();
+        let content = $("#contentReply" + commentNo).val();
+
+        if (content == "")
+        {
+            alert("Please enter content");
+            document.writeForm.content.focus();
+            return;
+        }
 
         let data = 
         {
             boardNo: boardNo,
-            content: $("#contentReply" + commentNo).val(),
+            content: content,
         };
   
         $.ajax({ 
@@ -193,7 +215,15 @@ let board = {
         let content = $("#contentUpdate" + commentNo).val();
         let depth = $("#depth" + commentNo).val();
 
-        let data = {
+        if (content == "")
+        {
+            alert("Please enter content");
+            document.writeForm.content.focus();
+            return;
+        }
+
+        let data = 
+        {
             boardNo: boardNo,
             commentNo: commentNo,
             content: content,

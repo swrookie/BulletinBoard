@@ -34,7 +34,7 @@ uri="http://www.springframework.org/tags/form" %>
     />
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
   </head>
-  <body class="bg-light" style="min-height: 100%">
+  <body class="bg-light" style="min-height: 100%; overflow-y: scroll">
     <!-- 게시판 -->
     <%@ include file="/WEB-INF/view/navbar.jsp" %>
     <br />
@@ -225,6 +225,8 @@ uri="http://www.springframework.org/tags/form" %>
         </ul>
       </nav>
     </div>
+    <br />
+    <br />
     <script>
       $("#dropdownSort a").click(function () {
         $("#sortSelected").text($(this).text());

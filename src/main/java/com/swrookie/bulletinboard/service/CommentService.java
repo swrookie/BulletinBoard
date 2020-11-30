@@ -36,7 +36,10 @@ public class CommentService
 				         .build();
 	}
 	
-	private void addEntityToDtoDfs(List<Comment> comments, List<CommentDTO> commentDtoList, List<Long> commentNoList)
+	// Add dto to the list for displaying comments on the view with DFS
+	private void addEntityToDtoDfs(List<Comment> comments, 
+								   List<CommentDTO> commentDtoList, 
+								   List<Long> commentNoList)
 	{
 		for (Comment comment : comments)
 		{
