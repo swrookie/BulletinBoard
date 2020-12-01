@@ -27,6 +27,7 @@ public class Board extends BaseTime
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long boardNo;			// Post Number
+	private Long memberNo;
 	private String author;			// Post Author
 	private String title;			// Post Title
 	@Lob
@@ -37,9 +38,10 @@ public class Board extends BaseTime
 	private List<File> files = new ArrayList<File>();
 
 	@Builder
-	public Board(Long boardNo,  String title, String author, String content)
+	public Board(Long boardNo,  Long memberNo, String author, String title, String content)
 	{
 		this.boardNo = boardNo;
+		this.memberNo = memberNo;
 		this.author = author;
 		this.title = title;
 		this.content = content;

@@ -43,6 +43,7 @@ uri="http://www.springframework.org/tags/form" %>
       <button class="btn btn-secondary" onclick="">LIST</button>
       <sec:authorize access="isAuthenticated()">
         <sec:authentication var="username" property="principal.username" />
+        <input id="author" type="hidden" value="${username}" />
         <c:if test="${username eq boardDto.author}">
           <a class="btn btn-warning" href="/post/${boardDto.boardNo}/update"
             >EDIT</a
@@ -113,13 +114,15 @@ uri="http://www.springframework.org/tags/form" %>
               <div class="d-flex justify-content-end">
                 <div class="font-italic">Author: ${comment.author} &nbsp;</div>
                 <sec:authorize access="isAuthenticated()">
-                  <button
-                    class="badge"
-                    data-toggle="collapse"
-                    data-target="#collapseCommentReply${comment.commentNo}"
-                  >
-                    REPLY
-                  </button>
+                  <c:if test="${comment.depth lt 2}">
+                    <button
+                      class="badge"
+                      data-toggle="collapse"
+                      data-target="#collapseCommentReply${comment.commentNo}"
+                    >
+                      REPLY
+                    </button>
+                  </c:if>
                   <c:if test="${username eq comment.author}">
                     <button
                       class="badge"

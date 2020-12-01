@@ -51,7 +51,6 @@ public class CommentController
 	@ResponseBody
 	public ResponseEntity<Integer> updateComment(@RequestBody CommentDTO commentDto)
 	{
-		System.out.println(commentDto.toString());
 		commentService.createComment(commentDto);
 		
 		return new ResponseEntity<>(1, HttpStatus.OK);

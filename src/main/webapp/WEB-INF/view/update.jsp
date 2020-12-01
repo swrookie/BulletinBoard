@@ -98,6 +98,8 @@ uri="http://www.springframework.org/tags/form" %>
       >
         <div class="form-group">
           <input id="boardNo" type="hidden" value="${boardDto.boardNo}" />
+          <input id="memberNo" type="hidden" value="${boardDto.memberNo}" />
+          <input id="author" type="hidden" value="${boardDto.author}" />
           <input
             id="title"
             type="text"

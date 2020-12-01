@@ -1,11 +1,5 @@
 package com.swrookie.bulletinboard.dto;
 
-import java.sql.Timestamp;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import com.swrookie.bulletinboard.entity.Comment;
 
 import lombok.Builder;
@@ -24,42 +18,39 @@ public class CommentDTO
 	private Long boardNo;			// Post(Parent) number that contains comment(child) 
 	private String author;			// Comment Author
 	private String content;			// Comment content
-	@CreationTimestamp
-	private Timestamp createDate;	// LocalDateTime during create
-	private Comment parent;
-	private Integer depth;
+	private Comment parent;			// Child comment's parent comment
+	private Integer depth;			// Comment's depth in hierarchy
 	
 	@Builder
-	public CommentDTO(Long commentNo, Long boardNo, String author, String content, Timestamp createDate,
-					  Comment parent, Integer depth)
+	public CommentDTO(Long commentNo, Long boardNo, String author, 
+					  String content, Comment parent, Integer depth)
 	{
 		this.commentNo = commentNo;
 		this.boardNo = boardNo;
 		this.author = author;
 		this.content = content;
-		this.createDate = createDate;
 		this.parent = parent;
 		this.depth = depth;
 	}
 	
-	public String getAuthorFromSecurity()
-	{
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
-		if (principal instanceof UserDetails)
-			author = ((UserDetails) principal).getUsername();
-		else
-			author = principal.toString();
-		
-		return author;
-	}
+//	public String getAuthorFromSecurity()
+//	{
+//		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		
+//		if (principal instanceof UserDetails)
+//			author = ((UserDetails) principal).getUsername();
+//		else
+//			author = principal.toString();
+//		
+//		return author;
+//	}
 	
 	public Comment toEntity()
 	{
 		Comment commentEntity = Comment.builder()
 									   .commentNo(commentNo)
 									   .boardNo(boardNo)
-									   .author(this.getAuthorFromSecurity())
+									   .author(author)
 									   .content(content)
 									   .parent(parent)
 									   .depth(depth)

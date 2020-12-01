@@ -37,10 +37,13 @@ import com.swrookie.bulletinboard.security.MD5Generator;
 import com.swrookie.bulletinboard.service.BoardService;
 import com.swrookie.bulletinboard.service.CommentService;
 import com.swrookie.bulletinboard.service.FileService;
+import com.swrookie.bulletinboard.service.MemberService;
 
 @Controller
 public class BoardController 
 {
+	@Autowired
+	private MemberService memberService;
 	@Autowired
 	private BoardService boardService;
 	@Autowired
@@ -187,6 +190,7 @@ public class BoardController
 	@ResponseBody
 	public ResponseEntity<Integer> createPost(@RequestBody BoardDTO boardDto)
 	{
+		boardDto.setMemberNo(memberService.findByUserName(boardDto.getAuthor()).getMemberNo());
 		boardService.createPost(boardDto);
 		this.processFileCreate();
 		

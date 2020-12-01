@@ -1,11 +1,6 @@
 package com.swrookie.bulletinboard.dto;
 
-import java.sql.Timestamp;
-
-import javax.persistence.Lob;
-
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import java.sql.Timestamp; 
 
 import com.swrookie.bulletinboard.entity.Board;
 
@@ -21,19 +16,21 @@ import lombok.ToString;
 @NoArgsConstructor
 public class BoardDTO
 {
-	private Long boardNo;								// Table PK Instance Field
-	private String title;								// Table Title Column Instance Field
-	private String author;								// Table Author Column Instance Field
-	@Lob
-	private String content;								// Table Content Column Instance Field
+	private Long boardNo;
+	private Long memberNo;
+	private String title;								
+	private String author;								
+	private String content;
 	private Timestamp createdDate;
 	private Timestamp modifiedDate;
 	private Integer count;
 	
 	@Builder
-	public BoardDTO(Long boardNo, String title, String author, String content, Timestamp createdDate, Timestamp modifiedDate)
+	public BoardDTO(Long boardNo, Long memberNo, String author, String title, String content,
+					Timestamp createdDate, Timestamp modifiedDate)
 	{
 		this.boardNo = boardNo;
+		this.memberNo = memberNo;
 		this.author = author;
 		this.title = title;
 		this.content = content;
@@ -41,23 +38,12 @@ public class BoardDTO
 		this.modifiedDate = modifiedDate;
 	}
 	
-	public String getAuthorFromSecurity()
-	{
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
-		if (principal instanceof UserDetails)
-			author = ((UserDetails) principal).getUsername();
-		else
-			author = principal.toString();
-		
-		return author;
-	}
-	
 	public Board toEntity()
 	{
 		Board boardEntity = Board.builder()
 								 .boardNo(boardNo)
-								 .author(this.getAuthorFromSecurity())
+								 .memberNo(memberNo)
+								 .author(author)
 								 .title(title)
 								 .content(content)
 								 .build();

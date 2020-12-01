@@ -96,6 +96,8 @@ uri="http://www.springframework.org/tags/form" %>
         enctype="multipart/form-data"
         accept-charset="UTF-8"
       >
+        <sec:authentication var="username" property="principal.username" />
+        <input type="hidden" id="author" value="${username}" />
         <div class="form-group">
           <input
             type="text"

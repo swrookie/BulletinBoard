@@ -1,4 +1,4 @@
-let board = {          
+let board = {           
     init: function() 
     {           
         $("#btn-createPost").on("click", () => {
@@ -16,9 +16,10 @@ let board = {
     },                  
     
     createBoardDto: function() 
-    { 
+    {   
+        let author = $("#author").val(); 
         let title = $("#title").val();
-        let content = $("#content").val();
+        let content = $("#content").val(); 
  
         if (title == "")
         {
@@ -36,6 +37,7 @@ let board = {
 
         let boardDto = 
         {
+            author: author,
             title: title,
             content: content, 
         };
@@ -80,6 +82,8 @@ let board = {
     updateBoardDto: function() 
     {
         let boardNo = $("#boardNo").val();
+        let memberNo = $("#memberNo").val();
+        let author = $("#author").val();
         let title = $("#title").val();
         let content = $("#content").val();
         
@@ -100,6 +104,8 @@ let board = {
         let boardDto = 
         {
             boardNo: boardNo,
+            memberNo: memberNo,
+            author: author,
             title: title,
             content: content,
         }; 
@@ -193,6 +199,7 @@ let board = {
     createCommentDto: function()
     {
         let boardNo = $("#boardNo").val();
+        let author = $("#author").val();
         let content = $("#content").val();
 
         if (content == "")
@@ -205,6 +212,7 @@ let board = {
         let data = 
         {
             boardNo: boardNo,
+            author: author,
             content: content,
         };
 
@@ -225,6 +233,7 @@ let board = {
     createCommentReplyDto: function (commentNo) 
     {
         let boardNo = $("#boardNo").val();
+        let author = $("#author").val();
         let parent = $("#parent" + commentNo).val();
         let content = $("#contentReply" + commentNo).val();
 
@@ -238,6 +247,7 @@ let board = {
         let data = 
         {
             boardNo: boardNo,
+            author: author,
             content: content,
         };
   

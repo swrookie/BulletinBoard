@@ -1,12 +1,18 @@
 package com.swrookie.bulletinboard.entity;
 
+import java.util.ArrayList; 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column; 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.swrookie.bulletinboard.enumeration.MemberRole;
@@ -36,6 +42,8 @@ public class Member extends BaseTime
 	@Column(unique=true)
 	private String email;
 	private String password;
+	@OneToMany(mappedBy="memberNo", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	private List<Board> boards = new ArrayList<Board>();
 	
 	@Builder
 	public Member(Long memberNo, String firstName, String lastName, MemberRole role,

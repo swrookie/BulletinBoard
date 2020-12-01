@@ -100,6 +100,7 @@ public class BoardService
 
 		BoardDTO boardDto = BoardDTO.builder()
 									.boardNo(board.getBoardNo())
+									.memberNo(board.getMemberNo())
 									.author(board.getAuthor())
 									.title(board.getTitle())
 									.content(board.getContent())
