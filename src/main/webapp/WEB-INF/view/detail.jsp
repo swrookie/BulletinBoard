@@ -40,7 +40,7 @@ uri="http://www.springframework.org/tags/form" %>
     <br />
     <div class="container bg-light">
       <input id="boardNo" type="hidden" value="${boardDto.boardNo}" />
-      <button class="btn btn-secondary" onclick="history.back()">LIST</button>
+      <button class="btn btn-secondary" onclick="">LIST</button>
       <sec:authorize access="isAuthenticated()">
         <sec:authentication var="username" property="principal.username" />
         <c:if test="${username eq boardDto.author}">

@@ -27,14 +27,14 @@ public class Comment extends BaseTime
 {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long commentNo;			// Comment Number
-	private Long boardNo;			// Post(Parent) number that contains comment(child) 
+	private Long commentNo;			// Comment Number (Primary Key)
+	private Long boardNo;			// Board Number (Foreign Key)
 	private String author;			// Comment Author
 	@Lob
 	private String content;			// Comment content
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="parent", updatable=false, nullable=true)
-	private Comment parent;
+	private Comment parent;			// Post(Parent) number that contains comment(child) 
 	@OneToMany(mappedBy="parent", cascade=CascadeType.ALL)
 	private List<Comment> children = new ArrayList<Comment>();
 	private Integer depth;

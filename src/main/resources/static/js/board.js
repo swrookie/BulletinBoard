@@ -1,8 +1,8 @@
-let board = {        
+let board = {          
     init: function() 
     {           
         $("#btn-createPost").on("click", () => {
-            this.createBoardDtoAndFile();
+            this.createBoardDto();
         });
         $("#btn-updatePost").on("click", () => {
             this.updateBoardDto();
@@ -13,9 +13,9 @@ let board = {
         $("#btn-createComment").on("click", () => {
             this.createCommentDto();
         });
-    },          
+    },                  
     
-    createBoardDtoAndFile: function() 
+    createBoardDto: function() 
     { 
         let title = $("#title").val();
         let content = $("#content").val();
@@ -30,7 +30,7 @@ let board = {
         if (content == "")
         {
             alert("Please enter content");
-            document.writeForm.content.focus();
+            // document.writeForm.content.focus();
             return;
         }
 
@@ -38,23 +38,13 @@ let board = {
         {
             title: title,
             content: content, 
-        };     
-        
-        var formData = new FormData(document.getElementById("writeForm"));    
-        formData.append("boardDto", new Blob([JSON.stringify(boardDto)], {type : "application/json"}));
-		
-		for (var value of formData.values())
-		{
-			console.log("Data to be sent from AJAX to BoardController: " + value);
-		}
-       
+        };
+
         $.ajax({ 
             type: "POST",
-            enctype: "multipart/form-data",
             url: "/post/write",
-            data: formData,
-            contentType: false,
-            processData: false,
+            data: JSON.stringify(boardDto),
+            contentType: "application/json; charset=utf-8",
             dataType: "json",
         }).done(function(resp) {
             alert("Post Successful!");
@@ -62,6 +52,29 @@ let board = {
         }).fail(function(error) {
             alert(JSON.stringify(error));
         }); 
+
+        // var formData = new FormData(document.getElementById("writeForm"));    
+        // formData.append("boardDto", new Blob([JSON.stringify(boardDto)], {type : "application/json"}));
+		
+		// for (var value of formData.values())
+		// {
+		// 	console.log("Data to be sent from AJAX to BoardController: " + value);
+		// }
+       
+        // $.ajax({ 
+        //     type: "POST",
+        //     enctype: "multipart/form-data",
+        //     url: "/post/write",
+        //     data: formData,
+        //     contentType: false,
+        //     processData: false,
+        //     dataType: "json",
+        // }).done(function(resp) {
+        //     alert("Post Successful!");
+        //     location.href = "/";
+        // }).fail(function(error) {
+        //     alert(JSON.stringify(error));
+        // }); 
     },
  
     updateBoardDto: function() 
@@ -69,7 +82,7 @@ let board = {
         let boardNo = $("#boardNo").val();
         let title = $("#title").val();
         let content = $("#content").val();
-
+        
         if (title == "")
         {
             alert("Please enter title");
@@ -90,10 +103,18 @@ let board = {
             title: title,
             content: content,
         }; 
+   
+        var filesToBeDeleted = document.getElementsByClassName("fileToBeDeleted");
+        var arr = [];
+        for (i = 0; i < filesToBeDeleted.length; i++) 
+        {
+            arr.push(filesToBeDeleted[i].value);
+        }  
 
-        var formData = new FormData(document.getElementById("writeForm"));    
+        var formData = new FormData(document.getElementById("writeForm"));  
         formData.append("boardDto", new Blob([JSON.stringify(boardDto)], {type : "application/json"}));
- 
+        formData.append("fileNoList", new Blob([JSON.stringify(arr)], {type : "application/json"}));
+
         $.ajax({
             type: "PUT",
             enctype: "multipart/form-data",
@@ -108,6 +129,28 @@ let board = {
         }).fail(function(error) {
             alert(JSON.stringify(error));
         });
+
+        // $.ajax({ 
+        //     type: "PUT",
+        //     url: "/post/" + boardNo + "/update",
+        //     data: formData,
+        //     contentType: "application/json; charset=utf-8",
+        //     dataType: "json"
+        // }).done(function(resp){
+        //     alert("Post Update Successful!");
+        //     location.href = "/";
+        // }).fail(function(error){
+        //     alert(JSON.stringify(error));
+        // }); 
+
+        // var formData = new FormData(document.getElementById("writeForm"));    
+        // formData.append("boardDto", new Blob([JSON.stringify(boardDto)], {type : "application/json"}));
+        // formData.append("fileNoList", new Blob([JSON.stringify(arr)], {type : "application/json"}));
+
+        // for (var pair of formData.entries())
+        // {
+        //     console.log(pair[0] + ', ' + pair[1]);
+        // }
     },  
    
     deleteBoardDto: function() 
@@ -126,23 +169,26 @@ let board = {
         });
     }, 
  
-    deleteFileDto: function(boardNo, fileNo)
-    {  
-        let url = "/post/" + boardNo + "/update/" + fileNo;
-        console.log(url);
+    // deleteFileDto: function(boardNo, fileNo)
+    // {  
+    //     let url = "/post/" + boardNo + "/update/" + fileNo;
+    //     console.log(url);
 
-        $.ajax({
-            type: "GET",
-            url: "/post/" + boardNo + "/update/" + fileNo,
-            dataType:"json"
-        }).done(function(resp) {
-            alert("File Delete Successful!");
-            location.href="/post/" + boardNo + "/update";
-        }).fail(function(error) {
-            alert(JSON.stringify(error));
-            return;
-        });
-    },
+    //     $.ajax({
+    //         type: "DELETE",
+    //         url: "/post/" + boardNo + "/update/" + fileNo,
+    //         dataType:"json",
+    //         // success: function(resp) {
+    //         //     alert("File Delete Successful!");
+    //         // },
+    //     }).done(function(resp) {
+    //         alert("File Delete Successful!");
+    //         location.href="/post/" + boardNo + "/update";
+    //     }).fail(function(error) {
+    //         alert(JSON.stringify(error));
+    //         return;
+    //     });
+    // },
 
     createCommentDto: function()
     {

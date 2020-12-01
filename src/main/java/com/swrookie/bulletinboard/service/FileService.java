@@ -18,6 +18,17 @@ public class FileService
 	@Autowired
 	private FileRepository fileRepository;
 	
+	private FileDTO convertEntityToDto(File file)
+	{
+		return FileDTO.builder()
+		   		  .fileNo(file.getFileNo())
+		   		  .boardNo(file.getBoardNo())
+		   		  .origFileName(file.getOrigFileName())
+		   		  .fileName(file.getFileName())
+		   		  .filePath(file.getFilePath())
+				  .build();
+	}
+	
 	public FileService(FileRepository fileRepository)
 	{
 		this.fileRepository = fileRepository;
@@ -50,7 +61,7 @@ public class FileService
 	}
 	
 	@Transactional
-	public FileDTO getFile(Long fileNo)
+	public FileDTO findByFileNo(Long fileNo)
 	{
 		File file = fileRepository.findById(fileNo).get();
 		
@@ -61,6 +72,19 @@ public class FileService
      		   		  .fileName(file.getFileName())
      		   		  .filePath(file.getFilePath())
      				  .build();
+	}
+	
+	@Transactional
+	public List<FileDTO> getFileDtoByBoardNo(Long boardNo)
+	{
+		List<FileDTO> fileDtoList = new ArrayList<FileDTO>();
+		List<File> files = fileRepository.findByBoardNo(boardNo);
+		for (File file : files)
+		{
+			fileDtoList.add(this.convertEntityToDto(file));
+		}
+		
+		return fileDtoList;
 	}
 	
 	@Transactional

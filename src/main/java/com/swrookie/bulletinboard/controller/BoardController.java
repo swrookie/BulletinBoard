@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -46,8 +48,10 @@ public class BoardController
 	@Autowired
 	private FileService fileService;
 	
+	private static List<FileDTO> asyncFileDtoList = new ArrayList<FileDTO>();
+	
 	// Attach file on the post and upload
-	private void createFile(List<MultipartFile> files)
+	private void addFileToDto(List<MultipartFile> files)
 	{
 		try
 		{
@@ -58,7 +62,6 @@ public class BoardController
 					String origFileName = file.getOriginalFilename();
 					if (origFileName.equals(""))
 						continue;
-					System.out.println("Original file name: " + origFileName);
 					String fileName = new MD5Generator(origFileName).toString();
 					String savePath = System.getProperty("user.dir") + "\\files";
 					
@@ -78,19 +81,44 @@ public class BoardController
 					file.transferTo(new File(filePath));
 					
 					FileDTO fileDto = FileDTO.builder()
-											 .boardNo(boardService.getRecentBoardNo())
 											 .origFileName(origFileName)
 											 .fileName(fileName)
 											 .filePath(filePath)
 											 .build();
 					
-					 fileService.createFile(fileDto);
+					asyncFileDtoList.add(fileDto);
+//					fileService.createFile(fileDto);
 				}
 			}
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		}
+	}
+	
+	private void processFileDelete(List<Long> fileNoList)
+	{
+		for (Long fileNo : fileNoList)
+		{
+			File file = new File(fileService.findByFileNo(fileNo).getFilePath());
+			
+			if (file.exists())
+				file.delete();
+			fileService.deleteFile(fileNo);
+		}
+	}
+	
+	private void processFileCreate() 
+	{
+		if (!asyncFileDtoList.isEmpty())
+		{
+			for (FileDTO fileDto : asyncFileDtoList)
+			{
+				fileDto.setBoardNo(boardService.getRecentBoardNo());
+				fileService.createFile(fileDto);
+			}
+			asyncFileDtoList.clear();
 		}
 	}
 	
@@ -127,24 +155,41 @@ public class BoardController
 		return "write";
 	}
 	
-	// Create post by clicking write button and return to home page
-	@PostMapping("/post/write")
-	@ResponseBody
-	public ResponseEntity<Integer> createPost(@RequestPart("boardDto") BoardDTO boardDto, 
-											  @RequestPart("files[]") List<MultipartFile> files)
-	{
-		boardService.createPost(boardDto);
-		//this.createFile(files);
-		
-		return new ResponseEntity<Integer>(1, HttpStatus.OK);
-	}
+//	@PostMapping("/post/write")
+//	@ResponseBody
+//	public ResponseEntity<Integer> createPost(@RequestPart("boardDto") BoardDTO boardDto, 
+//											  @RequestPart("files[]") List<MultipartFile> files)
+//	{
+//		boardService.createPost(boardDto);
+//		fileService.createFile(fileDto);
+//
+//		return new ResponseEntity<Integer>(1, HttpStatus.OK);
+//	}
 	
 	@PostMapping("/upload")
 	@ResponseBody
-	public ResponseEntity<Integer> asyncFileUpload(@RequestParam("files[]") List<MultipartFile> files)
+	public ResponseEntity<Integer> asyncFileUpload(@RequestParam("files[]") List<MultipartFile> file)
 	{
-		System.out.println("File content: " + files.toString());
-		this.createFile(files);
+		this.addFileToDto(file);
+
+		return new ResponseEntity<Integer>(1, HttpStatus.OK);
+	}
+	
+	@GetMapping("/escaped")
+	public ResponseEntity<String> escaped()
+	{
+		asyncFileDtoList.clear();
+		return new ResponseEntity<String>("Page left without saving contents", HttpStatus.OK);
+	}
+	
+	// Create post by clicking write button and return to home page
+	@PostMapping("/post/write")
+	@ResponseBody
+	public ResponseEntity<Integer> createPost(@RequestBody BoardDTO boardDto)
+	{
+		boardService.createPost(boardDto);
+		this.processFileCreate();
+		
 		return new ResponseEntity<Integer>(1, HttpStatus.OK);
 	}
 	
@@ -152,11 +197,11 @@ public class BoardController
 	@GetMapping("/post/{boardNo}/download/{fileNo}")
 	public ResponseEntity<Resource> downloadFile(@PathVariable("fileNo") Long fileNo) throws IOException
 	{
-		FileDTO fileDto = fileService.getFile(fileNo);
+		FileDTO fileDto = fileService.findByFileNo(fileNo);
 		Path path = Paths.get(fileDto.getFilePath());
 		Resource resource = new InputStreamResource(Files.newInputStream(path));
 		
-		String contentType="application/octet-stream";
+		String contentType = "application/octet-stream";
 		String origFileName = new String(fileDto.getOrigFileName().getBytes("UTF-8"), "ISO-8859-1");
 
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
@@ -164,21 +209,22 @@ public class BoardController
 							 + origFileName + "\"").body(resource);                  
 	}
 	
-	@GetMapping("/post/{boardNo}/udpate/{fileNo}")
-	public String deleteFile(@PathVariable("fileNo") Long fileNo, 
-			@PathVariable("boardNo") Long boardNo, Model model) throws IOException
-	{
-		System.out.println("Starting file deletion");
-		File file = new File(fileService.getFile(fileNo).getFilePath());
-		
-		if (file.exists())
-			file.delete();
-		fileService.deleteFile(fileNo);
-		
-		model.addAttribute("fileList", fileService.readFile(boardNo));
-		
-		return "/";
-	}
+//	@DeleteMapping("/post/{boardNo}/update/{fileNo}")
+//	@ResponseBody
+//	public ResponseEntity<Integer> deleteFile(@PathVariable("fileNo") Long fileNo, 
+//			@PathVariable("boardNo") Long boardNo, Model model) throws IOException
+//	{
+//		System.out.println("Starting file deletion");
+//		File file = new File(fileService.getFile(fileNo).getFilePath());
+//		
+//		if (file.exists())
+//			file.delete();
+//		fileService.deleteFile(fileNo);
+//		
+//		model.addAttribute("fileList", fileService.readFile(boardNo));
+//		
+//		return new ResponseEntity<Integer>(1, HttpStatus.OK);
+//	}
 	
 	// View details of the post by clicking link on the title
 	@GetMapping("/post/{boardNo}")
@@ -201,14 +247,40 @@ public class BoardController
 		return "update";
 	}
 	
+//	@PutMapping("/post/{boardNo}/update")
+//	@ResponseBody
+//	public ResponseEntity<Integer> updatePost(@RequestPart BoardDTO boardDto, 
+//											  @RequestPart List<MultipartFile> files,
+//											  @RequestPart List<Long> fileNoList) throws IOException
+//	{
+//		System.out.println("Files that are to be deleted: " + fileNoList.toString());
+//		if (fileNoList != null)
+//		{
+//			for (Long fileNo : fileNoList)
+//			{
+//				File file = new File(fileService.getFile(fileNo).getFilePath());
+//				
+//				if (file.exists())
+//					file.delete();
+//				fileService.deleteFile(fileNo);
+//			}
+//		}
+//		boardService.createPost(boardDto);
+//		this.addFileToDto(files);
+//		
+//		return new ResponseEntity<Integer>(1, HttpStatus.OK);
+//	}
+	
 	// Update post by clicking update button and return to home page
 	@PutMapping("/post/{boardNo}/update")
 	@ResponseBody
 	public ResponseEntity<Integer> updatePost(@RequestPart BoardDTO boardDto, 
-											  @RequestPart List<MultipartFile> files)
+											  @RequestPart List<Long> fileNoList) throws IOException
 	{
+		if (fileNoList != null)
+			this.processFileDelete(fileNoList);
 		boardService.createPost(boardDto);
-		this.createFile(files);
+		this.processFileCreate();
 		
 		return new ResponseEntity<Integer>(1, HttpStatus.OK);
 	}
@@ -217,7 +289,16 @@ public class BoardController
 	@DeleteMapping("/post/{boardNo}")
 	@ResponseBody
 	public ResponseEntity<Integer> delete(@PathVariable("boardNo") Long boardNo)
-	{
+	{	
+		List<FileDTO> fileDtoList= fileService.getFileDtoByBoardNo(boardNo);
+		List<Long> fileNoList = new ArrayList<Long>();
+		for (FileDTO fileDto : fileDtoList)
+		{
+			fileNoList.add(fileDto.getFileNo());
+		}
+		System.out.println(fileNoList.toString());
+		this.processFileDelete(fileNoList);
+		
 		boardService.deletePost(boardNo);
 		
 		return new ResponseEntity<Integer>(1, HttpStatus.OK);

@@ -22,10 +22,10 @@ public class BoardService
 	private BoardRepository boardRepository;
 	
 	private static final int PAGE_BLOCK_COUNT = 5;		// Max number of pages visible on block
-	private static int startPage = 0;
-	private static int endPage = 0;
-	private static int currentPage = 0;
-	private static int lastPage = 0;
+	private static int startPage = 0;					// Starting page number of the block
+	private static int endPage = 0;						// Ending page number of the block
+	private static int currentPage = 0;					// Page number of the current list
+	private static int lastPage = 0;					// Last page of the total pages
 	
 	private BoardDTO convertEntityToDto(Board board)
 	{
@@ -38,6 +38,7 @@ public class BoardService
 					   .build();
 	}
 	
+	// Determine page numbers for jsp view
 	private void getPaging(Page<Board> page)
 	{
 		currentPage = page.getPageable().getPageNumber();
@@ -50,7 +51,7 @@ public class BoardService
 				endPage = lastPage;
 			else
 				endPage = lastPage - 1;
-			}
+		}
 		else
 		{
 			if (lastPage - PAGE_BLOCK_COUNT > startPage)

@@ -114,7 +114,6 @@ uri="http://www.springframework.org/tags/form" %>
             multiple="multiple"
           />
         </div>
-        <br />
         <div class="form-group">
           <textarea
             class="form-control summernote"
@@ -165,11 +164,22 @@ uri="http://www.springframework.org/tags/form" %>
       });
     </script>
     <script>
+      var escaped = true;
       $(document).ready(function () {
         $(window).on("beforeunload", function () {
-          return "Any changes will be lost";
+          if (escaped) return warning();
         });
-        $(document).on("click", "form", function (event) {
+        function warning() {
+          $.ajax({
+            type: "GET",
+            url: "/escaped",
+            success: function (data) {
+              alert(data);
+            },
+          });
+        }
+        $("#btn-createPost").on("click", function () {
+          escaped = false;
           $(window).off("beforeunload");
         });
       });
