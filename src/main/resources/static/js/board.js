@@ -100,7 +100,7 @@ let board = {
             document.writeForm.content.focus();
             return;
         }
-
+ 
         let boardDto = 
         {
             boardNo: boardNo,
@@ -194,18 +194,18 @@ let board = {
     //         alert(JSON.stringify(error));
     //         return;
     //     });
-    // },
+    // },        
 
     createCommentDto: function()
     {
         let boardNo = $("#boardNo").val();
         let author = $("#author").val();
         let content = $("#content").val();
-
+ 
         if (content == "")
         {
             alert("Please enter content");
-            document.writeForm.content.focus();
+            document.writeParentComment.content.focus();
             return;
         }
 
@@ -236,11 +236,12 @@ let board = {
         let author = $("#author").val();
         let parent = $("#parent" + commentNo).val();
         let content = $("#contentReply" + commentNo).val();
+        let contentForm = document.getElementById("contentReply" + commentNo);
 
         if (content == "")
         {
             alert("Please enter content");
-            document.writeForm.content.focus();
+            contentForm.focus();
             return;
         }
 
@@ -270,11 +271,12 @@ let board = {
         let boardNo = $("#boardNo").val();
         let content = $("#contentUpdate" + commentNo).val();
         let depth = $("#depth" + commentNo).val();
+        let contentForm = document.getElementById("contentUpdate" + commentNo);
 
         if (content == "")
         {
             alert("Please enter content");
-            document.writeForm.content.focus();
+            contentForm.focus();
             return;
         }
 

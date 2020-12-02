@@ -179,6 +179,7 @@ public class BoardController
 	}
 	
 	@GetMapping("/escaped")
+	@ResponseBody
 	public ResponseEntity<String> escaped()
 	{
 		asyncFileDtoList.clear();
@@ -300,7 +301,7 @@ public class BoardController
 		{
 			fileNoList.add(fileDto.getFileNo());
 		}
-		System.out.println(fileNoList.toString());
+//		System.out.println(fileNoList.toString());
 		this.processFileDelete(fileNoList);
 		
 		boardService.deletePost(boardNo);

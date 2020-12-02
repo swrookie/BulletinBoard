@@ -40,7 +40,7 @@ uri="http://www.springframework.org/tags/form" %>
     <br />
     <div class="container bg-light">
       <input id="boardNo" type="hidden" value="${boardDto.boardNo}" />
-      <button class="btn btn-secondary" onclick="">LIST</button>
+      <!-- <button class="btn btn-secondary" onclick="">LIST</button> -->
       <sec:authorize access="isAuthenticated()">
         <sec:authentication var="username" property="principal.username" />
         <input id="author" type="hidden" value="${username}" />
@@ -82,9 +82,14 @@ uri="http://www.springframework.org/tags/form" %>
       <hr />
       <sec:authorize access="isAuthenticated()">
         <div class="card bg-light shadow-lg p-3">
-          <form>
+          <form id="writeParentComment" name="writeParentComment">
             <div class="card-body">
-              <textarea id="content" class="form-control" row="1"></textarea>
+              <textarea
+                id="content"
+                class="form-control"
+                row="1"
+                required
+              ></textarea>
             </div>
           </form>
           <div class="card-footer">
@@ -143,7 +148,10 @@ uri="http://www.springframework.org/tags/form" %>
             </li>
             <div class="collapse" id="collapseCommentReply${comment.commentNo}">
               <li class="list-group-item" id="commentReplyBlock">
-                <form>
+                <form
+                  id="writeReply${comment.commentNo}"
+                  name="writeReply${comment.commentNo}"
+                >
                   <input
                     type="hidden"
                     id="parent${comment.commentNo}"

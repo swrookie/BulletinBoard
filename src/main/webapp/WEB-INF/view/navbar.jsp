@@ -31,7 +31,13 @@ uri="http://www.springframework.org/tags/form" %>
           aria-expanded="false"
           style="color:rgb(250,230,0); font-weight: bold;"
         >
+        <sec:authorize access="isAuthenticated()">
+          <sec:authentication var="username" property="principal.username" />
+            Welcome ${username}!
+        </sec:authorize>
+        <sec:authorize access="isAnonymous()">
           Menu
+        </sec:authorize>
         </a>
         <div class="dropdown-menu bg-light" aria-labelledby="navbarDropdown">
           <sec:authorize access="isAnonymous()">

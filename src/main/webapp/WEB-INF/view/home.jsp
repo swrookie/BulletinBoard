@@ -43,8 +43,8 @@ uri="http://www.springframework.org/tags/form" %>
       style="min-height: 100%; position: relative; padding-bottom: 100px"
     >
       <h1>Bulletin Board</h1>
-      <div class="d-flex justify-content-between">
-        <div class="dropdown">
+      <div class="d-flex justify-content-end">
+        <!-- <div class="dropdown">
           <a
             aria-expanded="false"
             aria-haspopup="true"
@@ -67,7 +67,7 @@ uri="http://www.springframework.org/tags/form" %>
             <a class="dropdown-item">Posted Date Desc</a>
             <a class="dropdown-item">Most Comments</a>
           </div>
-        </div>
+        </div> -->
         <form class="form-inline" method="GET" action="/search">
           <div class="form-group">
             <select class="form-control" id="searchType" name="searchType">
