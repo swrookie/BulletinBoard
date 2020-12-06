@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
 
+import com.hankcs.hanlp.HanLP;
 import com.swrookie.bulletinboard.dto.BoardDTO;
 import com.swrookie.bulletinboard.entity.Board;
 import com.swrookie.bulletinboard.repository.BoardRepository;
@@ -97,7 +98,9 @@ public class BoardService
 	public BoardDTO showPostDetail(Long boardNo)
 	{
 		Board board =  boardRepository.findById(boardNo).get();
-
+		//NLP used: https://github.com/hankcs/HanLP
+		//Alternative: https://github.com/lionsoul2014/jcseg
+		List<String> contentSummary = HanLP.extractSummary(board.getContent(), 3);
 		BoardDTO boardDto = BoardDTO.builder()
 									.boardNo(board.getBoardNo())
 									.memberNo(board.getMemberNo())
@@ -105,6 +108,9 @@ public class BoardService
 									.title(board.getTitle())
 									.content(board.getContent())
 									.build();
+		
+		boardDto.setContentSummary(contentSummary);
+		System.out.println("Article summary: " + boardDto.getContentSummary());
 		
 		return boardDto;
 	}
