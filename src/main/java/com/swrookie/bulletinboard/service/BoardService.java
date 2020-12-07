@@ -21,8 +21,11 @@ import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
 
+import com.hankcs.hanlp.HanLP;
 import com.swrookie.bulletinboard.dto.BoardDTO;
 import com.swrookie.bulletinboard.entity.Board;
+import com.swrookie.bulletinboard.nlp.CardKeyword;
+import com.swrookie.bulletinboard.nlp.KeywordsExtractor;
 import com.swrookie.bulletinboard.repository.BoardRepository;
 
 @Service
@@ -63,22 +66,29 @@ public class BoardService
 		ADictionary dic = DictionaryFactory.createSingletonDictionary(config);
 		ISegment seg = ISegment.COMPLEX.factory.create(config, dic);
 		
-		TextRankKeywordsExtractor keywordsExtractor = new TextRankKeywordsExtractor(seg);
+		//TextRankKeywordsExtractor keywordsExtractor = new TextRankKeywordsExtractor(seg);
 		TextRankSummaryExtractor keySentencesExtractor = new TextRankSummaryExtractor(seg, new SentenceSeg());
+
+		//keySentencesExtractor.setSentenceNum(3);
 		
-		keySentencesExtractor.setSentenceNum(3);
+		//List<String> contentKeywordList = keywordsExtractor.getKeywords(new StringReader(content));
+		//List<String> contentSummaryList = keySentencesExtractor.getKeySentence(new StringReader(content));
 		
-		List<String> contentKeywordList = keywordsExtractor.getKeywords(new StringReader(content));
-		List<String> contentSummaryList = keySentencesExtractor.getKeySentence(new StringReader(content));
-		
-		String contentKeyword = String.join(" ", contentKeywordList);
-		String contentSummary = String.join("", contentSummaryList);
+		//String contentKeyword = String.join(", ", contentKeywordList);
+		//String contentSummary = String.join("", contentSummaryList);
+		//String contentKeyword = String.join(", ", HanLP.extractKeyword(content, 5));
+		List<CardKeyword> keywordsList = KeywordsExtractor.getKeywordsList(content);
+		String contentSummary = keySentencesExtractor.getSummary(new StringReader(content), 1000);
 				
 		boardDto.setContentSummary(contentSummary);
-		boardDto.setContentKeyword(contentKeyword);
+		//boardDto.setContentKeyword(contentKeyword);
 		
 		System.out.println("Content after parsing html: " + content);
 		System.out.println("Article summary: " + contentSummary);
+		for (CardKeyword keywords : keywordsList)
+		{
+			System.out.println("Keywords: " + keywords.getStem());
+		}
 	}
 	
 	// Determine page numbers for jsp view
@@ -179,7 +189,10 @@ public class BoardService
 		
 		for (Board board : boards)
 		{
-			boardDtoList.add(this.convertEntityToDto(board));
+			Integer count = board.getComments().size();
+			BoardDTO boardDto = this.convertEntityToDto(board);
+			boardDto.setCount(count);
+			boardDtoList.add(boardDto);
 		}
 		
 		return boardDtoList;

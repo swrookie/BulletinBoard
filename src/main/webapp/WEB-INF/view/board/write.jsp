@@ -158,6 +158,7 @@ uri="http://www.springframework.org/tags/form" %>
     <script>
       $(document).ready(function () {
         $("#customFile").fileinput({
+          theme: "fas",
           uploadUrl: "/upload",
           maxFileCount: 5,
           showBrowse: false,
