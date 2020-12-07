@@ -39,16 +39,16 @@ public class CommentService
 	// Add dto to the list for displaying comments on the view with DFS
 	private void addEntityToDtoDfs(List<Comment> comments, 
 								   List<CommentDTO> commentDtoList, 
-								   List<Long> commentNoList)
+								   List<Long> processedCommentNoList)
 	{
 		for (Comment comment : comments)
 		{
-			if (!commentNoList.contains(comment.getCommentNo()))
+			if (!processedCommentNoList.contains(comment.getCommentNo()))
 			{
 				commentDtoList.add(this.convertEntityToDto(comment));
-				commentNoList.add(comment.getCommentNo());
+				processedCommentNoList.add(comment.getCommentNo());
 				if (!comment.getChildren().isEmpty())
-					addEntityToDtoDfs(comment.getChildren(), commentDtoList, commentNoList);
+					addEntityToDtoDfs(comment.getChildren(), commentDtoList, processedCommentNoList);
 			}
 		}
 	}

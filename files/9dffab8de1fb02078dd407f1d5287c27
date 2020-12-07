@@ -1,0 +1,2 @@
+@RequestParam: href="?page=${pageNum}"
+@PathVariable: href="/go_home_post_read/${pageNum}"

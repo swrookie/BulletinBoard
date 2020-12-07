@@ -46,8 +46,11 @@ public class RememberMeTokenService implements PersistentTokenRepository
 	{
 		RememberMeToken token = this.rememberMeTokenRepository.findBySeries(seriesId);
 		
-		return new PersistentRememberMeToken(token.getUserName(), token.getSeries(), 
-											 token.getToken(), token.getLastUsed());
+		if (token != null)
+			return new PersistentRememberMeToken(token.getUserName(), token.getSeries(), 
+												 token.getToken(), token.getLastUsed());
+		else
+			return null;
 	}
 	
 	@Override

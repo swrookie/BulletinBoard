@@ -1,7 +1,6 @@
 package com.swrookie.bulletinboard.dto;
 
-import java.sql.Timestamp;
-import java.util.List;
+import java.sql.Timestamp; 
 
 import com.swrookie.bulletinboard.entity.Board;
 
@@ -25,7 +24,8 @@ public class BoardDTO
 	private Timestamp createdDate;
 	private Timestamp modifiedDate;
 	private Integer count;
-	private List<String> contentSummary;
+	private String contentSummary;
+	private String contentKeyword;
 	
 	@Builder
 	public BoardDTO(Long boardNo, Long memberNo, String author, String title, String content,

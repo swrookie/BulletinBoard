@@ -1,9 +1,19 @@
 package com.swrookie.bulletinboard.service;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.*;   
 
 import javax.transaction.Transactional;
 
+import org.jsoup.Jsoup;
+import org.lionsoul.jcseg.ISegment;
+import org.lionsoul.jcseg.dic.ADictionary;
+import org.lionsoul.jcseg.dic.DictionaryFactory;
+import org.lionsoul.jcseg.extractor.impl.TextRankKeywordsExtractor;
+import org.lionsoul.jcseg.extractor.impl.TextRankSummaryExtractor;
+import org.lionsoul.jcseg.segmenter.SegmenterConfig;
+import org.lionsoul.jcseg.sentence.SentenceSeg;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
@@ -11,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
 
-import com.hankcs.hanlp.HanLP;
 import com.swrookie.bulletinboard.dto.BoardDTO;
 import com.swrookie.bulletinboard.entity.Board;
 import com.swrookie.bulletinboard.repository.BoardRepository;
@@ -37,6 +46,39 @@ public class BoardService
 					   .createdDate(board.getCreatedDate())
 					   .modifiedDate(board.getModifiedDate())
 					   .build();
+	}
+	
+	private void extractContent(BoardDTO boardDto) throws IOException
+	{
+		/*NLP Alternative API (HanLP): https://github.com/hankcs/HanLP
+		  NLP API used (Jcseg): https://github.com/lionsoul2014/jcseg */
+		
+		String content = Jsoup.parse(boardDto.getContent()).text();
+				
+		SegmenterConfig config = new SegmenterConfig(true);
+		config.setClearStopwords(true);							// Set filter stop words
+		config.setAppendCJKSyn(false);							// Set close synonyms append
+		config.setKeepUnregWords(false);						// Set remove unrecognized terms
+		
+		ADictionary dic = DictionaryFactory.createSingletonDictionary(config);
+		ISegment seg = ISegment.COMPLEX.factory.create(config, dic);
+		
+		TextRankKeywordsExtractor keywordsExtractor = new TextRankKeywordsExtractor(seg);
+		TextRankSummaryExtractor keySentencesExtractor = new TextRankSummaryExtractor(seg, new SentenceSeg());
+		
+		keySentencesExtractor.setSentenceNum(3);
+		
+		List<String> contentKeywordList = keywordsExtractor.getKeywords(new StringReader(content));
+		List<String> contentSummaryList = keySentencesExtractor.getKeySentence(new StringReader(content));
+		
+		String contentKeyword = String.join(" ", contentKeywordList);
+		String contentSummary = String.join("", contentSummaryList);
+				
+		boardDto.setContentSummary(contentSummary);
+		boardDto.setContentKeyword(contentKeyword);
+		
+		System.out.println("Content after parsing html: " + content);
+		System.out.println("Article summary: " + contentSummary);
 	}
 	
 	// Determine page numbers for jsp view
@@ -95,12 +137,9 @@ public class BoardService
 	}
 	
 	@Transactional
-	public BoardDTO showPostDetail(Long boardNo)
+	public BoardDTO showPostDetail(Long boardNo) throws IOException
 	{
 		Board board =  boardRepository.findById(boardNo).get();
-		//NLP used: https://github.com/hankcs/HanLP
-		//Alternative: https://github.com/lionsoul2014/jcseg
-		List<String> contentSummary = HanLP.extractSummary(board.getContent(), 3);
 		BoardDTO boardDto = BoardDTO.builder()
 									.boardNo(board.getBoardNo())
 									.memberNo(board.getMemberNo())
@@ -109,8 +148,7 @@ public class BoardService
 									.content(board.getContent())
 									.build();
 		
-		boardDto.setContentSummary(contentSummary);
-		System.out.println("Article summary: " + boardDto.getContentSummary());
+		this.extractContent(boardDto);
 		
 		return boardDto;
 	}

@@ -80,7 +80,11 @@ uri="http://www.springframework.org/tags/form" %>
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="modal-body">${boardDto.contentSummary}</div>
+            <div class="modal-body">
+              <div>${boardDto.contentSummary}</div>
+              <hr />
+              <div>${boardDto.contentKeyword}</div>
+            </div>
             <div class="modal-footer">
               <button
                 type="button"

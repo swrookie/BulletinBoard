@@ -155,7 +155,7 @@ public class BoardController
 	@GetMapping("/post/write")
 	public String createPost()
 	{
-		return "write";
+		return "board/write";
 	}
 	
 //	@PostMapping("/post/write")
@@ -233,23 +233,23 @@ public class BoardController
 	
 	// View details of the post by clicking link on the title
 	@GetMapping("/post/{boardNo}")
-	public String showDetail(@PathVariable("boardNo") Long boardNo, Model model)
+	public String showDetail(@PathVariable("boardNo") Long boardNo, Model model) throws IOException
 	{
 		model.addAttribute("boardDto", boardService.showPostDetail(boardNo));
 		model.addAttribute("fileList", fileService.readFile(boardNo));
 		model.addAttribute("commentList", commentService.readComment(boardNo));
 		
-		return "detail";
+		return "board/detail";
 	}
 	
 	// Transfer to post editing page from post detail page by clicking editing button
 	@GetMapping("/post/{boardNo}/update")
-	public String editPost(@PathVariable("boardNo") Long boardNo, Model model)
+	public String editPost(@PathVariable("boardNo") Long boardNo, Model model) throws IOException
 	{
 		model.addAttribute("boardDto", boardService.showPostDetail(boardNo));
 		model.addAttribute("fileList", fileService.readFile(boardNo));
 		
-		return "update";
+		return "board/update";
 	}
 	
 //	@PutMapping("/post/{boardNo}/update")
