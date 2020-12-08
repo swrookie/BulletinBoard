@@ -183,6 +183,7 @@ public class BoardController
 	public ResponseEntity<String> escaped()
 	{
 		asyncFileDtoList.clear();
+		
 		return new ResponseEntity<String>("Page left without saving contents", HttpStatus.OK);
 	}
 	

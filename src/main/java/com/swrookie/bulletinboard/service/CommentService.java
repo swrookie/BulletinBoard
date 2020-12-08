@@ -36,10 +36,10 @@ public class CommentService
 				         .build();
 	}
 	
-	// Add dto to the list for displaying comments on the view with DFS
-	private void addEntityToDtoDfs(List<Comment> comments, 
-								   List<CommentDTO> commentDtoList, 
-								   List<Long> processedCommentNoList)
+	// Add dto to the list for displaying comments on the view
+	private void addEntityToDtoList(List<Comment> comments, 
+								    List<CommentDTO> commentDtoList, 
+								    List<Long> processedCommentNoList)
 	{
 		for (Comment comment : comments)
 		{
@@ -48,7 +48,7 @@ public class CommentService
 				commentDtoList.add(this.convertEntityToDto(comment));
 				processedCommentNoList.add(comment.getCommentNo());
 				if (!comment.getChildren().isEmpty())
-					addEntityToDtoDfs(comment.getChildren(), commentDtoList, processedCommentNoList);
+					addEntityToDtoList(comment.getChildren(), commentDtoList, processedCommentNoList);
 			}
 		}
 	}
@@ -74,7 +74,7 @@ public class CommentService
 		List<CommentDTO> commentDtoList = new ArrayList<CommentDTO>();
 		List<Long> noList = new ArrayList<Long>();
 		
-		this.addEntityToDtoDfs(comments, commentDtoList, noList);
+		this.addEntityToDtoList(comments, commentDtoList, noList);
 		
 		return commentDtoList;
 	}

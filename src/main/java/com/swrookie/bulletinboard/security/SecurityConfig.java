@@ -32,6 +32,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 		// CSRF Disabled
 		http.csrf().disable().authorizeRequests()
 			.antMatchers("/admin/**").hasRole("ADMIN")
+			.antMatchers("/post/write/**").hasRole("MEMBER")
+			.antMatchers("/post/**/update/**").hasRole("MEMBER")
 			.antMatchers("/**").permitAll()
 			.anyRequest().authenticated()
 				.and()
@@ -44,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 			.failureHandler(customAuthenticationFailureHandler())
 			.permitAll()
 				.and()
-			.exceptionHandling().accessDeniedHandler(MemberAccessDeniedHandler())
+			.exceptionHandling().accessDeniedHandler(memberAccessDeniedHandler())
 				.and()
 			.logout()
 			.invalidateHttpSession(true)
@@ -59,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 			.rememberMeCookieName("swrookiecookie")
 			.tokenValiditySeconds(86400)
 			.tokenRepository(rememberMeTokenService())
-			.userDetailsService(userDetailsService());
+			.userDetailsService(myUserService());
 	}
 	
 	@Override
@@ -105,7 +107,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	}
 	
 	@Bean
-	public MemberAccessDeniedHandler MemberAccessDeniedHandler() throws Exception
+	public MemberAccessDeniedHandler memberAccessDeniedHandler() throws Exception
 	{
 		return new MemberAccessDeniedHandler();
 	}

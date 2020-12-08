@@ -10,7 +10,7 @@ import org.jsoup.Jsoup;
 import org.lionsoul.jcseg.ISegment;
 import org.lionsoul.jcseg.dic.ADictionary;
 import org.lionsoul.jcseg.dic.DictionaryFactory;
-import org.lionsoul.jcseg.extractor.impl.TextRankKeywordsExtractor;
+//import org.lionsoul.jcseg.extractor.impl.TextRankKeywordsExtractor;
 import org.lionsoul.jcseg.extractor.impl.TextRankSummaryExtractor;
 import org.lionsoul.jcseg.segmenter.SegmenterConfig;
 import org.lionsoul.jcseg.sentence.SentenceSeg;
@@ -21,11 +21,8 @@ import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
 
-import com.hankcs.hanlp.HanLP;
 import com.swrookie.bulletinboard.dto.BoardDTO;
 import com.swrookie.bulletinboard.entity.Board;
-import com.swrookie.bulletinboard.nlp.CardKeyword;
-import com.swrookie.bulletinboard.nlp.KeywordsExtractor;
 import com.swrookie.bulletinboard.repository.BoardRepository;
 
 @Service
@@ -77,7 +74,6 @@ public class BoardService
 		//String contentKeyword = String.join(", ", contentKeywordList);
 		//String contentSummary = String.join("", contentSummaryList);
 		//String contentKeyword = String.join(", ", HanLP.extractKeyword(content, 5));
-		List<CardKeyword> keywordsList = KeywordsExtractor.getKeywordsList(content);
 		String contentSummary = keySentencesExtractor.getSummary(new StringReader(content), 1000);
 				
 		boardDto.setContentSummary(contentSummary);
@@ -85,10 +81,6 @@ public class BoardService
 		
 		System.out.println("Content after parsing html: " + content);
 		System.out.println("Article summary: " + contentSummary);
-		for (CardKeyword keywords : keywordsList)
-		{
-			System.out.println("Keywords: " + keywords.getStem());
-		}
 	}
 	
 	// Determine page numbers for jsp view

@@ -12,7 +12,7 @@ let board = {
         });
         $("#btn-createComment").on("click", () => {
             this.createCommentDto();
-        });
+        });    
     },                  
     
     createBoardDto: function() 
@@ -97,7 +97,7 @@ let board = {
         if (content == "")
         {
             alert("Please enter content");
-            document.writeForm.content.focus();
+            // $("#content").trigger('focus'); 
             return;
         }
  
